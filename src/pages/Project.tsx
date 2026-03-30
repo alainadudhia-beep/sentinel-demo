@@ -429,11 +429,11 @@ export default function Project() {
                   <p className="text-sm text-foreground">{selectedRisk.whoShouldAct}</p>
                 </section>
 
-                {isModelStalled ? (
+                {hasOptions ? (
                   <section>
                     <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Choose an action</h4>
                     <div className="space-y-3">
-                      {MODEL_STALLED_OPTIONS.map((opt, idx) => (
+                      {currentOptions!.map((opt, idx) => (
                         <button
                           key={opt.id}
                           onClick={() => setSelectedOption(opt.id)}
