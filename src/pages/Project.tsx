@@ -208,7 +208,8 @@ export default function Project() {
     }
   };
 
-  const isModelStalled = selectedRisk?.id === "r4";
+  const currentOptions = selectedRisk ? RISK_OPTIONS[selectedRisk.id] : undefined;
+  const hasOptions = !!currentOptions && currentOptions.length > 0;
 
   const totalAtRisk = new Set(
     OUTCOME_GROUPS.flatMap(o => o.affectedTaskIds.filter(id => allItems[id]?.status === "at-risk"))
