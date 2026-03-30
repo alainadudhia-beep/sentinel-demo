@@ -47,6 +47,15 @@ function getFlaggedItems() {
   return items;
 }
 
+// Map flagged task IDs to related risk IDs based on content overlap
+const TASK_RISK_MAP: Record<string, string> = {
+  s2: "r1", // Launch survey → Survey response volume
+  s3: "r1", // Collect responses → Survey response volume
+  s5: "r1", // Run analysis blocked → Survey response volume
+  mm2: "r4", // Build model structure (Priya sick) → Priya off sick
+  ia2: "r3", // Conduct sessions rescheduled → Management interview timing
+};
+
 export default function Project() {
   const [selectedRisk, setSelectedRisk] = useState<Risk | null>(null);
   const [handled, setHandled] = useState<Set<string>>(new Set());
@@ -63,6 +72,17 @@ export default function Project() {
       else next.add(id);
       return next;
     });
+  };
+
+  const handleTaskClick = (taskId: string) => {
+    const riskId = TASK_RISK_MAP[taskId];
+    if (riskId) {
+      setExpandedRisks((prev) => new Set(prev).add(riskId));
+      // Scroll the risk into view
+      setTimeout(() => {
+        document.getElementById(`risk-${riskId}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 50);
+    }
   };
 
   return (
@@ -109,12 +129,23 @@ export default function Project() {
                 {flaggedItems.map((item) => {
                   const sc = statusConfig[item.status];
                   return (
-                    <tr key={item.id} className="border-b border-border last:border-0 hover:bg-accent/50 transition-colors">
+                     <tr
+                       key={item.id}
+                       className={`border-b border-border last:border-0 hover:bg-accent/50 transition-colors ${TASK_RISK_MAP[item.id] ? "cursor-pointer" : ""}`}
+                       onClick={() => handleTaskClick(item.id)}
+                     >
                       <td className="px-4 py-3">
-                        <p className="text-xs font-medium text-foreground">{item.task}</p>
-                        {item.notes && (
-                          <p className="text-[10px] text-muted-foreground mt-0.5">{item.notes}</p>
-                        )}
+                        <div className="flex items-center gap-1.5">
+                          <div>
+                            <p className="text-xs font-medium text-foreground">{item.task}</p>
+                            {item.notes && (
+                              <p className="text-[10px] text-muted-foreground mt-0.5">{item.notes}</p>
+                            )}
+                          </div>
+                          {TASK_RISK_MAP[item.id] && (
+                            <ArrowUpRight className="w-3 h-3 text-muted-foreground/50 shrink-0 ml-auto" />
+                          )}
+                        </div>
                       </td>
                       <td className="px-3 py-3 text-xs text-muted-foreground">{item.workstream}</td>
                       <td className="px-3 py-3 text-xs text-muted-foreground">{item.owner}</td>
@@ -148,7 +179,8 @@ export default function Project() {
               return (
                 <div
                   key={risk.id}
-                  className={`border border-border rounded-lg bg-card overflow-hidden transition-opacity ${isHandled ? "opacity-50" : ""}`}
+                  id={`risk-${risk.id}`}
+                  className={`border border-border rounded-lg bg-card overflow-hidden transition-all ${isHandled ? "opacity-50" : ""}`}
                 >
                   {/* Risk header */}
                   <button
