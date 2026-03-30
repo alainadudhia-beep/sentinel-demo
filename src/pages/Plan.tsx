@@ -428,7 +428,7 @@ export default function Plan() {
                     <GripVertical className="w-3 h-3 text-muted-foreground/30 shrink-0 cursor-grab active:cursor-grabbing opacity-0 group-hover/item:opacity-100 transition-opacity" />
                     <StatusPicker
                       currentStatus={item.status}
-                      onChangeStatus={(status) => updateItem(ws.id, item.id, { status })}
+                      onChangeStatus={(status) => updateItem(ws.id, item.id, { status: status as GanttItem["status"] })}
                     />
                     {editingId === item.id ? (
                       <input
