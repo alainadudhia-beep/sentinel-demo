@@ -422,7 +422,7 @@ export default function Plan() {
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold bg-rag-red/15 text-rag-red border border-rag-red/25 hover:bg-rag-red/25 transition-colors cursor-pointer"
         >
           <AlertTriangle className="w-4 h-4" />
-          Project at risk: potential for +2 day delay (buffer exhausted)
+          Project at risk! If unresolved, synthesis delayed +2 days → partner review at risk
         </button>
       </div>
 
