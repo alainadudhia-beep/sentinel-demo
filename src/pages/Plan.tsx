@@ -78,19 +78,92 @@ interface DragState {
 function GanttBar({
   item,
   onDragStart,
+  onUpdateNotes,
 }: {
   item: GanttItem;
   onDragStart?: (e: React.MouseEvent, mode: DragMode) => void;
+  onUpdateNotes?: (notes: string) => void;
 }) {
+  const [hovered, setHovered] = useState(false);
+  const [editingNotes, setEditingNotes] = useState(false);
+  const [notesDraft, setNotesDraft] = useState(item.notes || "");
+  const hoverTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showPopover = hovered || editingNotes;
+
+  const handleMouseEnter = () => {
+    hoverTimeout.current = setTimeout(() => setHovered(true), 300);
+  };
+  const handleMouseLeave = () => {
+    if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
+    if (!editingNotes) setHovered(false);
+  };
+
+  const saveNotes = () => {
+    onUpdateNotes?.(notesDraft);
+    setEditingNotes(false);
+    setHovered(false);
+  };
+
+  const popoverContent = showPopover ? (
+    <div
+      className="absolute z-30 bg-popover border border-border rounded-lg shadow-lg p-3 w-56 text-xs"
+      style={{ bottom: "calc(100% + 6px)", left: "50%", transform: "translateX(-50%)" }}
+      onMouseEnter={() => { if (hoverTimeout.current) clearTimeout(hoverTimeout.current); setHovered(true); }}
+      onMouseLeave={() => { if (!editingNotes) setHovered(false); }}
+    >
+      <p className="font-medium text-foreground mb-1">{item.label}</p>
+      {editingNotes ? (
+        <div className="space-y-1.5">
+          <Textarea
+            autoFocus
+            value={notesDraft}
+            onChange={(e) => setNotesDraft(e.target.value)}
+            className="text-xs min-h-[60px] resize-none"
+            placeholder="Add notes…"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) saveNotes();
+              if (e.key === "Escape") { setEditingNotes(false); setHovered(false); }
+            }}
+          />
+          <div className="flex justify-end gap-1">
+            <Button variant="ghost" size="sm" className="h-6 text-[10px] px-2" onClick={() => { setEditingNotes(false); setHovered(false); }}>
+              Cancel
+            </Button>
+            <Button size="sm" className="h-6 text-[10px] px-2" onClick={saveNotes}>
+              Save
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <>
+          <p className="text-muted-foreground leading-relaxed">
+            {item.notes || <span className="italic">No notes</span>}
+          </p>
+          <button
+            className="flex items-center gap-1 text-[10px] text-muted-foreground hover:text-foreground mt-1.5 transition-colors"
+            onClick={(e) => { e.stopPropagation(); setNotesDraft(item.notes || ""); setEditingNotes(true); }}
+          >
+            <MessageSquare className="w-3 h-3" />
+            {item.notes ? "Edit notes" : "Add notes"}
+          </button>
+        </>
+      )}
+    </div>
+  ) : null;
+
   if (item.type === "milestone") {
     const left = ((item.startDay - 1) / TOTAL_DAYS) * 100;
     return (
       <div
         className="absolute top-1/2 -translate-y-1/2 cursor-grab active:cursor-grabbing"
         style={{ left: `${left}%` }}
-        onMouseDown={(e) => onDragStart?.(e, "move")}
+        onMouseDown={(e) => { if (!editingNotes) onDragStart?.(e, "move"); }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         <Diamond className={`w-3.5 h-3.5 fill-current ${milestoneColors[item.status]}`} />
+        {popoverContent}
       </div>
     );
   }
@@ -102,8 +175,9 @@ function GanttBar({
     <div
       className={`absolute top-1/2 -translate-y-1/2 h-5 rounded-sm ${statusColors[item.status]} cursor-grab active:cursor-grabbing group/bar`}
       style={{ left: `${left}%`, width: `${width}%`, minWidth: "6px" }}
-      title={`${item.label}${item.notes ? ` — ${item.notes}` : ""}`}
-      onMouseDown={(e) => onDragStart?.(e, "move")}
+      onMouseDown={(e) => { if (!editingNotes) onDragStart?.(e, "move"); }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <div
         className="absolute left-0 top-0 bottom-0 w-1.5 cursor-col-resize opacity-0 group-hover/bar:opacity-100 bg-foreground/20 rounded-l-sm"
@@ -113,6 +187,7 @@ function GanttBar({
         className="absolute right-0 top-0 bottom-0 w-1.5 cursor-col-resize opacity-0 group-hover/bar:opacity-100 bg-foreground/20 rounded-r-sm"
         onMouseDown={(e) => { e.stopPropagation(); onDragStart?.(e, "resize-right"); }}
       />
+      {popoverContent}
     </div>
   );
 }
