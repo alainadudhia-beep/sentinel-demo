@@ -34,6 +34,15 @@ const OUTCOME_GROUPS: OutcomeGroup[] = [
   },
   {
     id: "o3",
+    outcome: "Market model initial slides missing",
+    severity: "medium",
+    cause: "Priya off sick — market model slides not started, no draft available for partner review",
+    projectImpact: "Partner review deck incomplete, risks credibility of market sizing narrative",
+    riskId: "r5",
+    actionBy: "today",
+  },
+  {
+    id: "o4",
     outcome: "Management interview slipped",
     severity: "medium",
     cause: "Session 2 rescheduled from Tuesday to Thursday",
