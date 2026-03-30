@@ -54,7 +54,7 @@ export interface GanttItem {
   owner: string;
   startDay: number; // 1-15 (3 weeks × 5 days)
   endDay: number;   // same as startDay for milestones
-  status: "on-track" | "at-risk" | "complete" | "not-started";
+  status: "on-track" | "at-risk" | "complete" | "not-started" | "blocked";
   notes?: string;
   critical?: boolean;
 }
