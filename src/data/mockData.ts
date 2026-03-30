@@ -56,6 +56,8 @@ export interface GanttItem {
   endDay: number;   // same as startDay for milestones
   status: "on-track" | "at-risk" | "complete" | "not-started" | "blocked";
   notes?: string;
+  dependency?: string;
+  dueDate?: string;
   critical?: boolean;
 }
 
