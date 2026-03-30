@@ -34,6 +34,15 @@ const OUTCOME_GROUPS: OutcomeGroup[] = [
   },
   {
     id: "o3",
+    outcome: "Market model initial slides missing",
+    severity: "medium",
+    cause: "Priya off sick — market model slides not started, no draft available for partner review",
+    projectImpact: "Partner review deck incomplete, risks credibility of market sizing narrative",
+    riskId: "r5",
+    actionBy: "today",
+  },
+  {
+    id: "o4",
     outcome: "Management interview slipped",
     severity: "medium",
     cause: "Session 2 rescheduled from Tuesday to Thursday",
@@ -111,6 +120,39 @@ const RISK_OPTIONS: Record<string, RecommendationOption[]> = {
       steps: ["Currently have 2 available Associates in the pool"],
       rationale: "Keeps model on track",
       risk: "Requires onboarding, may delay partner review",
+    },
+  ],
+  r5: [
+    {
+      id: "r5-opt1",
+      title: "AI-generate slides for review",
+      recommended: true,
+      steps: [
+        "Use AI to draft market model slides from existing data inputs",
+        "Route to partner for rapid review and markup",
+      ],
+      rationale: "Fastest path to a reviewable draft, keeps timeline intact",
+      risk: "AI output may need significant manual refinement",
+    },
+    {
+      id: "r5-opt2",
+      title: "Reuse previous project slides",
+      steps: [
+        "Pull market model template from last comparable engagement",
+        "Update with FreshCart-specific data points",
+      ],
+      rationale: "Proven structure, reduces design effort",
+      risk: "May not reflect current market dynamics, requires careful updating",
+    },
+    {
+      id: "r5-opt3",
+      title: "Create placeholders for interim meeting",
+      steps: [
+        "Build slide shells with section headers and data callouts",
+        "Flag as draft/placeholder for partner awareness",
+      ],
+      rationale: "Sets expectations, keeps meeting productive",
+      risk: "Partner may push back on incomplete content",
     },
   ],
   r3: [
@@ -208,7 +250,7 @@ export default function Project() {
            </span>
            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-amber/15 text-rag-amber border border-rag-amber/20">
              <AlertTriangle className="w-4 h-4" />
-             1 Medium Risk
+             2 Medium Risks
            </span>
         </div>
       </div>
