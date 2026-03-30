@@ -58,7 +58,7 @@ const RISK_OPTIONS: Record<string, RecommendationOption[]> = {
         "Contact panel provider for priority escalation",
         "Request expedited recruitment for remaining 38% of target",
       ],
-      rationale: "Directly addresses root cause, minimal disruption to plan",
+      rationale: "Fastest fix, minimal disruption",
       risk: "Provider may not be able to accelerate",
     },
     {
