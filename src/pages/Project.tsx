@@ -155,7 +155,9 @@ export default function Project() {
         {OUTCOME_GROUPS.map((group) => {
           const isExpanded = expandedOutcomes.has(group.id);
           const isHandled_ = handled.has(group.riskId);
-          const severityClass = group.severity === "high"
+          const severityClass = group.severity === "critical"
+            ? "border-rag-critical/20 bg-rag-critical/[0.04]"
+            : group.severity === "high"
             ? "border-rag-red/20 bg-rag-red/[0.02]"
             : "border-rag-amber/20 bg-rag-amber/[0.02]";
 
