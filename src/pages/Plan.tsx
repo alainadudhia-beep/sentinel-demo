@@ -115,10 +115,21 @@ export default function Plan() {
   const [workstreams, setWorkstreams] = useState<Workstream[]>(
     () => JSON.parse(JSON.stringify(ganttWorkstreams))
   );
+  const [customColors, setCustomColors] = useState<Record<string, string | null>>(
+    () => Object.fromEntries(STATUS_KEYS.map((k) => [k, null]))
+  );
   const [editingId, setEditingId] = useState<string | null>(null);
   const [rowDrag, setRowDrag] = useState<{ wsId: string; itemId: string; overItemId: string | null } | null>(null);
   const dragRef = useRef<DragState | null>(null);
   const timelineRef = useRef<HTMLDivElement | null>(null);
+
+  const getSwatchStyle = (status: string) => {
+    const c = customColors[status];
+    return c ? { backgroundColor: c } : undefined;
+  };
+  const getSwatchClass = (status: string) => {
+    return customColors[status] ? "" : defaultStatusClasses[status];
+  };
 
   const toggleWorkstream = (id: string) =>
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
