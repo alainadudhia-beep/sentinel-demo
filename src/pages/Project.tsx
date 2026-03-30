@@ -135,7 +135,7 @@ export default function Project() {
           </span>
         </div>
         <div className="flex items-center gap-3 mt-3">
-           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-red/15 text-rag-red border border-rag-red/20">
+           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-critical/15 text-rag-critical border border-rag-critical/20">
              <AlertTriangle className="w-4 h-4" />
              1 critical risk
            </span>
@@ -181,7 +181,7 @@ export default function Project() {
                     <span
                       className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold ${
                         group.severity === "critical"
-                          ? "bg-rag-red/20 text-rag-red"
+                          ? "bg-rag-critical/20 text-rag-critical"
                           : group.severity === "high"
                           ? "bg-rag-red/10 text-rag-red"
                           : "bg-rag-amber/10 text-rag-amber"
@@ -290,7 +290,7 @@ export default function Project() {
                   <span
                     className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
                       selectedRisk.severity === "critical"
-                        ? "bg-rag-red/20 text-rag-red"
+                        ? "bg-rag-critical/20 text-rag-critical"
                         : selectedRisk.severity === "high"
                         ? "bg-rag-red/10 text-rag-red"
                         : "bg-rag-amber/10 text-rag-amber"
