@@ -282,29 +282,33 @@ export default function Plan() {
         </span>
       </div>
 
-      {/* Legend */}
+      {/* Legend with color pickers */}
       <div className="flex items-center gap-5 mb-4 text-xs text-muted-foreground flex-wrap">
-        <span className="flex items-center gap-1.5">
-          <span className="w-8 h-3 rounded-sm bg-rag-green inline-block" /> Complete
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-8 h-3 rounded-sm bg-rag-green-light inline-block" /> On track
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-8 h-3 rounded-sm bg-rag-amber inline-block" /> At risk
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-8 h-3 rounded-sm bg-rag-red inline-block" /> Blocked
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-8 h-3 rounded-sm bg-muted-foreground/30 inline-block" /> Not started
-        </span>
+        {STATUS_KEYS.map((status) => (
+          <label key={status} className="flex items-center gap-1.5 cursor-pointer relative">
+            <span
+              className={`w-8 h-3 rounded-sm inline-block ${getSwatchClass(status)}`}
+              style={getSwatchStyle(status)}
+            />
+            <input
+              type="color"
+              className="absolute left-0 top-0 w-8 h-3 opacity-0 cursor-pointer"
+              value={customColors[status] || DEFAULT_STATUS_COLORS[status]}
+              onChange={(e) => setCustomColors((prev) => ({ ...prev, [status]: e.target.value }))}
+            />
+            {STATUS_LABELS[status]}
+          </label>
+        ))}
         <span className="flex items-center gap-1.5">
           <Diamond className="w-3 h-3 fill-current text-muted-foreground" /> Milestone
         </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-4 h-3 rounded-sm bg-rag-amber ring-1 ring-rag-red/40 inline-block" /> Critical path
-        </span>
+        <button
+          className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors ml-2"
+          onClick={() => setCustomColors(Object.fromEntries(STATUS_KEYS.map((k) => [k, null])))}
+          title="Reset colors to defaults"
+        >
+          <Palette className="w-3 h-3" /> Reset
+        </button>
       </div>
 
       {/* Gantt Chart */}
