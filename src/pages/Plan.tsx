@@ -1,8 +1,9 @@
 import { useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ganttWorkstreams, GanttItem, Workstream } from "@/data/mockData";
-import { ArrowRight, Clock, Sparkles, ChevronRight, ChevronDown, Diamond, Check, AlertTriangle, Plus, X, GripVertical } from "lucide-react";
+import { ArrowRight, Clock, Sparkles, ChevronRight, ChevronDown, Diamond, Check, AlertTriangle, Plus, X, GripVertical, Palette } from "lucide-react";
 
 const TOTAL_DAYS = 15;
 const WEEKS = [
@@ -11,7 +12,26 @@ const WEEKS = [
   { label: "Week 3 · 31 Mar–4 Apr", days: ["Mon", "Tue", "Wed", "Thu", "Fri"] },
 ];
 
-const statusColors: Record<string, string> = {
+const STATUS_KEYS = ["complete", "on-track", "at-risk", "blocked", "not-started"] as const;
+type StatusKey = typeof STATUS_KEYS[number];
+
+const STATUS_LABELS: Record<StatusKey, string> = {
+  complete: "Complete",
+  "on-track": "On track",
+  "at-risk": "At risk",
+  blocked: "Blocked",
+  "not-started": "Not started",
+};
+
+const DEFAULT_STATUS_COLORS: Record<StatusKey, string> = {
+  complete: "#2d8a4e",
+  "on-track": "#5cb87a",
+  "at-risk": "#e8a317",
+  blocked: "#e04040",
+  "not-started": "#9ca3af",
+};
+
+const defaultStatusClasses: Record<string, string> = {
   complete: "bg-rag-green",
   "on-track": "bg-rag-green-light",
   "at-risk": "bg-rag-amber",
@@ -41,9 +61,11 @@ interface DragState {
 function GanttBar({
   item,
   onDragStart,
+  customColors,
 }: {
   item: GanttItem;
   onDragStart?: (e: React.MouseEvent, mode: DragMode) => void;
+  customColors?: Record<string, string | null>;
 }) {
   if (item.type === "milestone") {
     const left = ((item.startDay - 1) / TOTAL_DAYS) * 100;
