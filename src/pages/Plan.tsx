@@ -417,31 +417,31 @@ export default function Plan() {
             Commercial DD — Project Falcon · FreshCart Ltd · 3 weeks
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col items-end gap-1.5">
           {(() => {
             const atRiskCount = workstreams.reduce((sum, ws) => sum + ws.items.filter(i => i.status === "at-risk").length, 0);
             const blockedCount = workstreams.reduce((sum, ws) => sum + ws.items.filter(i => i.status === "blocked").length, 0);
-            const flagged = atRiskCount + blockedCount;
-            const total = workstreams.reduce((sum, ws) => sum + ws.items.length, 0);
-            const isOverallOnTrack = flagged < total / 3;
             return (
               <>
-                {atRiskCount > 0 && (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-rag-amber/10 text-rag-amber">
-                    <AlertTriangle className="w-3 h-3" />
-                    {atRiskCount} at risk
-                  </span>
-                )}
-                {blockedCount > 0 && (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-rag-red/10 text-rag-red">
-                    <AlertTriangle className="w-3 h-3" />
-                    {blockedCount} blocked
-                  </span>
-                )}
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-rag-amber/10 text-rag-amber">
+                <button
+                  onClick={() => navigate("/project")}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-rag-amber/10 text-rag-amber hover:bg-rag-amber/20 transition-colors cursor-pointer"
+                >
                   <AlertTriangle className="w-3 h-3" />
                   Project at risk: potential for +2 day delay (buffer exhausted)
-                </span>
+                </button>
+                <div className="flex items-center gap-2">
+                  {atRiskCount > 0 && (
+                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-xs font-medium bg-rag-amber/10 text-rag-amber">
+                      {atRiskCount} at risk
+                    </span>
+                  )}
+                  {blockedCount > 0 && (
+                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-xs font-medium bg-rag-red/10 text-rag-red">
+                      {blockedCount} blocked
+                    </span>
+                  )}
+                </div>
               </>
             );
           })()}
