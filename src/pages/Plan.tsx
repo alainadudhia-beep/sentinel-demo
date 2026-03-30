@@ -400,9 +400,8 @@ export default function Plan() {
                 className="absolute top-0 bottom-0"
                 style={{
                   left: `${left}%`,
-                  borderLeft: `1.5px dashed`,
-                  borderColor: `var(--${marker.color.replace("text-", "")})`.replace("rag-", "rag-"),
-                  opacity: 0.4,
+                  borderLeft: `1.5px dashed hsl(var(${marker.cssVar}))`,
+                  opacity: 0.35,
                 }}
               />
             );
