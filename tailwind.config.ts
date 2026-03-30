@@ -50,6 +50,7 @@ export default {
         rag: {
           green: "hsl(var(--rag-green))",
           "green-light": "hsl(var(--rag-green-light))",
+          amber: "hsl(var(--rag-amber))",
           red: "hsl(var(--rag-red))",
           blue: "hsl(var(--rag-blue))",
           blocked: "hsl(var(--rag-blocked))",
