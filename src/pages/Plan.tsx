@@ -357,7 +357,7 @@ export default function Plan() {
         <div className="flex border-b border-border bg-secondary/30">
           <div className="w-[520px] min-w-[520px] shrink-0" />
           <div className="flex-1 relative h-7">
-            {MEETING_MARKERS.map((marker, i) => {
+            {markers.map((marker, i) => {
               const left = ((marker.day - 1 + 0.5) / TOTAL_DAYS) * 100;
               return (
                 <div
@@ -406,7 +406,7 @@ export default function Plan() {
 
         {/* Vertical dotted lines for meeting markers (full chart height) */}
         <div className="absolute top-0 bottom-0 pointer-events-none z-10" style={{ left: '520px', right: 0 }}>
-          {MEETING_MARKERS.map((marker, i) => {
+          {markers.map((marker, i) => {
             const left = ((marker.day - 1 + 0.5) / TOTAL_DAYS) * 100;
             return (
               <div
