@@ -491,7 +491,7 @@ export default function Plan() {
 
         {/* Timeline header */}
         <div className="flex border-b border-border bg-secondary/50">
-          <div className="w-[620px] min-w-[620px] shrink-0 flex text-[10px] font-medium text-muted-foreground">
+          <div className="w-[460px] min-w-[460px] shrink-0 flex text-[10px] font-medium text-muted-foreground">
             <div className="w-[240px] px-4 py-2">Task</div>
             <div className="w-[60px] px-2 py-2">Due</div>
             <div className="w-[160px] px-2 py-2">Dependency</div>
