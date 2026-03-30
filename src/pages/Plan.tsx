@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ganttWorkstreams, GanttItem, Workstream } from "@/data/mockData";
-import { ArrowRight, Clock, Sparkles, ChevronRight, ChevronDown, Diamond, Check, AlertTriangle, Plus, X, GripVertical } from "lucide-react";
+import { ArrowRight, Clock, Sparkles, ChevronRight, ChevronDown, Diamond, Check, AlertTriangle, Plus, X, GripVertical, Circle } from "lucide-react";
 
 const TOTAL_DAYS = 15;
 const WEEKS = [
@@ -108,8 +108,10 @@ function StatusPicker({
   onChangeStatus: (status: string) => void;
 }) {
   const icon =
-    currentStatus === "complete" || currentStatus === "on-track" ? (
+    currentStatus === "complete" ? (
       <Check className={`w-3.5 h-3.5 ${statusIconColors[currentStatus]}`} />
+    ) : currentStatus === "on-track" ? (
+      <Circle className={`w-3 h-3 fill-current ${statusIconColors[currentStatus]}`} />
     ) : currentStatus === "at-risk" || currentStatus === "blocked" ? (
       <AlertTriangle className={`w-3 h-3 ${statusIconColors[currentStatus]}`} />
     ) : (
