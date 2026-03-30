@@ -12,6 +12,16 @@ const WEEKS = [
   { label: "Week 3 · 31 Mar–4 Apr", days: ["Mon", "Tue", "Wed", "Thu", "Fri"] },
 ];
 
+// Key client meetings as vertical markers on the Gantt
+const MEETING_MARKERS = [
+  { day: 1, label: "Status Update", color: "text-rag-blue" },
+  { day: 6, label: "Status Update", color: "text-rag-blue" },
+  { day: 10, label: "Interim", color: "text-rag-amber" },
+  { day: 11, label: "Status Update", color: "text-rag-blue" },
+  { day: 13, label: "Draft Review", color: "text-rag-amber" },
+  { day: 15, label: "Final Readout", color: "text-rag-green" },
+];
+
 const STATUS_KEYS = ["complete", "on-track", "at-risk", "blocked", "not-started"] as const;
 type StatusKey = typeof STATUS_KEYS[number];
 
