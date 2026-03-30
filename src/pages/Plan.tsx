@@ -12,16 +12,18 @@ const WEEKS = [
 ];
 
 const statusColors: Record<string, string> = {
-  complete: "bg-rag-green",
+  complete: "bg-rag-blue",
   "on-track": "bg-rag-green",
   "at-risk": "bg-rag-amber",
+  blocked: "bg-rag-blocked",
   "not-started": "bg-muted-foreground/30",
 };
 
 const milestoneColors: Record<string, string> = {
-  complete: "text-rag-green",
+  complete: "text-rag-blue",
   "on-track": "text-rag-green",
   "at-risk": "text-rag-amber",
+  blocked: "text-rag-blocked",
   "not-started": "text-muted-foreground",
 };
 
@@ -29,6 +31,7 @@ const statusLabels: Record<string, string> = {
   complete: "Complete",
   "on-track": "On track",
   "at-risk": "At risk",
+  blocked: "Blocked",
   "not-started": "Not started",
 };
 
