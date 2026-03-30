@@ -32,7 +32,7 @@ const OUTCOME_GROUPS: OutcomeGroup[] = [
   {
     id: "o1",
     outcome: "Survey delayed",
-    severity: "high",
+    severity: "critical",
     cause: "Panel recruitment delayed 1 day, response rate at 62% of target",
     projectImpact: "Survey critical path blocked, synthesis deck pushed +2 days, removes partner review buffer",
     recommendedAction: "Send follow-up reminder to panel provider requesting priority boost. Consider extending survey by 1 day with adjusted synthesis timeline.",
