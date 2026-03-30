@@ -14,7 +14,7 @@ export default function Scope() {
 
   const handleGenerate = () => {
     setLoading(true);
-    setTimeout(() => navigate("/plan"), 1800);
+    setTimeout(() => navigate("/scope-review"), 1800);
   };
 
   return (
@@ -45,11 +45,11 @@ export default function Scope() {
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              Generating plan…
+              Analysing scope…
             </>
           ) : (
             <>
-              Generate project plan
+              Analyse scope
               <ArrowRight className="w-4 h-4" />
             </>
           )}
