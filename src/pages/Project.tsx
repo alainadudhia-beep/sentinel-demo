@@ -55,6 +55,7 @@ const OUTCOME_GROUPS: OutcomeGroup[] = [
     severity: "medium",
     cause: "Session 2 rescheduled from Tuesday to Thursday",
     projectImpact: "Expert interview synthesis missing management cross-references, competitive dynamics section weakened",
+    recommendedAction: "Ask Tom to draft expert interview section with placeholders for management inputs, to be filled Thursday evening.",
     riskId: "r3",
     affectedTaskIds: ["ia2"],
   },
