@@ -356,10 +356,13 @@ export default function Plan() {
                   className="absolute top-0 flex flex-col items-center -translate-x-1/2"
                   style={{ left: `${left}%` }}
                 >
-                  <span className={`text-[9px] font-semibold whitespace-nowrap px-1.5 py-0.5 rounded ${marker.color} bg-background border border-border shadow-sm`}>
+                  <span
+                    className="text-[9px] font-semibold whitespace-nowrap px-1.5 py-0.5 rounded bg-background border border-border shadow-sm"
+                    style={{ color: `hsl(var(${marker.cssVar}))` }}
+                  >
                     {marker.label}
                   </span>
-                  <div className={`w-px h-1.5 ${marker.color.replace("text-", "bg-")} opacity-60`} />
+                  <div className="w-px h-1.5 opacity-60" style={{ backgroundColor: `hsl(var(${marker.cssVar}))` }} />
                 </div>
               );
             })}
