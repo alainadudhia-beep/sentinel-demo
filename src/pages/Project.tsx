@@ -122,6 +122,39 @@ const RISK_OPTIONS: Record<string, RecommendationOption[]> = {
       risk: "Requires onboarding, may delay partner review",
     },
   ],
+  r5: [
+    {
+      id: "r5-opt1",
+      title: "AI-generate slides for review",
+      recommended: true,
+      steps: [
+        "Use AI to draft market model slides from existing data inputs",
+        "Route to partner for rapid review and markup",
+      ],
+      rationale: "Fastest path to a reviewable draft, keeps timeline intact",
+      risk: "AI output may need significant manual refinement",
+    },
+    {
+      id: "r5-opt2",
+      title: "Reuse previous project slides",
+      steps: [
+        "Pull market model template from last comparable engagement",
+        "Update with FreshCart-specific data points",
+      ],
+      rationale: "Proven structure, reduces design effort",
+      risk: "May not reflect current market dynamics, requires careful updating",
+    },
+    {
+      id: "r5-opt3",
+      title: "Create placeholders for interim meeting",
+      steps: [
+        "Build slide shells with section headers and data callouts",
+        "Flag as draft/placeholder for partner awareness",
+      ],
+      rationale: "Sets expectations, keeps meeting productive",
+      risk: "Partner may push back on incomplete content",
+    },
+  ],
   r3: [
     {
       id: "r3-opt1",
