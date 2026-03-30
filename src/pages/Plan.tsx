@@ -464,7 +464,7 @@ export default function Plan() {
         <div className="min-w-[1200px] relative">
         {/* Meeting marker callouts row */}
         <div className="flex border-b border-border bg-secondary/30">
-          <div className="w-[620px] min-w-[620px] shrink-0" />
+          <div className="w-[460px] min-w-[460px] shrink-0" />
           <div className="flex-1 relative h-7" ref={markerTimelineRef}>
             {markers.map((marker) => {
               const left = ((marker.day - 1 + 0.5) / TOTAL_DAYS) * 100;
