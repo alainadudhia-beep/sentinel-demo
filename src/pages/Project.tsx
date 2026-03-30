@@ -10,6 +10,7 @@ interface OutcomeGroup {
   cause: string;
   projectImpact: string;
   riskId: string;
+  actionBy: "now" | "today" | "this week";
 }
 
 const OUTCOME_GROUPS: OutcomeGroup[] = [
