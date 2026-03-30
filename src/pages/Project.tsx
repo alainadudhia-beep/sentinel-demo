@@ -233,7 +233,7 @@ export default function Project() {
             </div>
             <div className="mt-4">
               <span className="text-lg font-bold text-rag-red tracking-tight">
-                +2 day delay → partner review at risk → likely overrun
+                Potential +2 day delay → partner review at risk → likely overrun
               </span>
             </div>
           </div>
