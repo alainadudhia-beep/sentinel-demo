@@ -12,16 +12,16 @@ const WEEKS = [
 ];
 
 const statusColors: Record<string, string> = {
-  complete: "bg-rag-blue",
-  "on-track": "bg-rag-green",
+  complete: "bg-rag-green",
+  "on-track": "bg-rag-green-light",
   "at-risk": "bg-rag-amber",
   blocked: "bg-rag-red",
   "not-started": "bg-muted-foreground/30",
 };
 
 const milestoneColors: Record<string, string> = {
-  complete: "text-rag-blue",
-  "on-track": "text-rag-green",
+  complete: "text-rag-green",
+  "on-track": "text-rag-green-light",
   "at-risk": "text-rag-amber",
   blocked: "text-rag-red",
   "not-started": "text-muted-foreground",
@@ -255,10 +255,10 @@ export default function Plan() {
       {/* Legend */}
       <div className="flex items-center gap-5 mb-4 text-xs text-muted-foreground flex-wrap">
         <span className="flex items-center gap-1.5">
-          <span className="w-8 h-3 rounded-sm bg-rag-blue inline-block" /> Complete
+          <span className="w-8 h-3 rounded-sm bg-rag-green inline-block" /> Complete
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="w-8 h-3 rounded-sm bg-rag-green inline-block" /> On track
+          <span className="w-8 h-3 rounded-sm bg-rag-green-light inline-block" /> On track
         </span>
         <span className="flex items-center gap-1.5">
           <span className="w-8 h-3 rounded-sm bg-rag-amber inline-block" /> At risk
@@ -371,9 +371,9 @@ export default function Plan() {
                   <div className="w-64 min-w-[256px] shrink-0 px-4 py-2 pl-7 flex items-center gap-1.5">
                     <GripVertical className="w-3 h-3 text-muted-foreground/30 shrink-0 cursor-grab active:cursor-grabbing opacity-0 group-hover/item:opacity-100 transition-opacity" />
                     {item.status === "complete" ? (
-                      <Check className="w-3.5 h-3.5 text-rag-blue shrink-0" />
-                    ) : item.status === "on-track" ? (
                       <Check className="w-3.5 h-3.5 text-rag-green shrink-0" />
+                    ) : item.status === "on-track" ? (
+                      <Check className="w-3.5 h-3.5 text-rag-green-light shrink-0" />
                     ) : item.status === "at-risk" ? (
                       <AlertTriangle className="w-3 h-3 text-rag-amber shrink-0" />
                     ) : item.status === "blocked" ? (
