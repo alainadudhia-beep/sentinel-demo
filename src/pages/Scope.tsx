@@ -49,7 +49,7 @@ export default function Scope() {
             </>
           ) : (
             <>
-              Generate project plan
+              Analyse scope
               <ArrowRight className="w-4 h-4" />
             </>
           )}
