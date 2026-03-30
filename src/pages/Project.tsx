@@ -191,11 +191,8 @@ export default function Project() {
                     >
                       {group.severity === "critical" ? "Critical" : group.severity === "high" ? "High" : "Medium"}
                     </span>
-                    <span className="text-[11px] text-muted-foreground">
-                      {group.affectedTaskIds.length} tasks affected
-                    </span>
+                    <h3 className="text-sm font-semibold text-foreground">{group.outcome}</h3>
                   </div>
-                  <h3 className="text-sm font-semibold text-foreground">{group.outcome}</h3>
                   <p className="text-xs text-muted-foreground mt-1">{group.cause}</p>
                   <p className="text-xs text-foreground mt-1.5">
                     <span className="font-medium text-muted-foreground">Recommended Action: </span>
