@@ -466,27 +466,35 @@ export default function Plan() {
         {/* Meeting marker callouts row */}
         <div className="flex border-b border-border bg-secondary/30">
           <div className="w-[460px] min-w-[460px] shrink-0" />
-          <div className="flex-1 relative h-7" ref={markerTimelineRef}>
+          <div className="flex-1 relative h-6" ref={markerTimelineRef}>
             {markers.map((marker) => {
               const left = ((marker.day - 1 + 0.5) / TOTAL_DAYS) * 100;
               return (
                 <div
                   key={marker.id}
-                  className="absolute top-0 flex flex-col items-center -translate-x-1/2 cursor-grab active:cursor-grabbing"
+                  className="absolute bottom-0 flex flex-col items-center -translate-x-1/2 cursor-grab active:cursor-grabbing"
                   style={{ left: `${left}%` }}
                   onMouseDown={(e) => startMarkerDrag(e, marker)}
                   title="Drag to move"
                 >
                   <span
-                    className="text-[9px] font-semibold whitespace-nowrap px-1.5 py-0.5 rounded bg-background border border-border shadow-sm select-none"
-                    style={{ color: `hsl(var(${marker.cssVar}))` }}
+                    className="text-[8px] font-semibold whitespace-nowrap px-1 py-px rounded select-none"
+                    style={{ color: `hsl(var(${marker.cssVar}))`, backgroundColor: `hsl(var(${marker.cssVar}) / 0.1)` }}
                   >
                     {marker.label}
                   </span>
-                  <div className="w-px h-1.5 opacity-60" style={{ backgroundColor: `hsl(var(${marker.cssVar}))` }} />
                 </div>
               );
             })}
+            {/* Today marker label */}
+            <div
+              className="absolute bottom-0 flex flex-col items-center -translate-x-1/2 z-20"
+              style={{ left: `${((TODAY_DAY - 1 + 0.5) / TOTAL_DAYS) * 100}%` }}
+            >
+              <span className="text-[8px] font-bold whitespace-nowrap px-1.5 py-px rounded bg-primary text-primary-foreground">
+                Today
+              </span>
+            </div>
           </div>
         </div>
 
@@ -516,7 +524,7 @@ export default function Plan() {
           </div>
         </div>
 
-        {/* Vertical dotted lines for meeting markers (full chart height) */}
+        {/* Vertical dotted lines for meeting markers + Today line */}
         <div className="absolute top-0 bottom-0 pointer-events-none z-10" style={{ left: '460px', right: 0 }}>
           {markers.map((marker, i) => {
             const left = ((marker.day - 1 + 0.5) / TOTAL_DAYS) * 100;
@@ -527,11 +535,20 @@ export default function Plan() {
                 style={{
                   left: `${left}%`,
                   borderLeft: `1.5px dashed hsl(var(${marker.cssVar}))`,
-                  opacity: 0.35,
+                  opacity: 0.25,
                 }}
               />
             );
           })}
+          {/* Today vertical line */}
+          <div
+            className="absolute top-0 bottom-0"
+            style={{
+              left: `${((TODAY_DAY - 1 + 0.5) / TOTAL_DAYS) * 100}%`,
+              borderLeft: `2px solid hsl(var(--primary))`,
+              opacity: 0.6,
+            }}
+          />
         </div>
 
         {/* Workstream rows */}
