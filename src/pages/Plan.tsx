@@ -589,7 +589,7 @@ export default function Plan() {
                 </div>
                 {!expanded[ws.id] &&
                   ws.items.map((item) => (
-                    <GanttBar key={item.id} item={item} />
+                    <GanttBar key={item.id} item={item} onUpdateNotes={(notes) => updateItem(ws.id, item.id, { notes })} />
                   ))}
               </div>
             </div>
