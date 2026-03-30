@@ -346,7 +346,7 @@ export default function Plan() {
       <div className="border border-border rounded-lg overflow-hidden bg-card relative">
         {/* Meeting marker callouts row */}
         <div className="flex border-b border-border bg-secondary/30">
-          <div className="w-64 min-w-[256px] shrink-0" />
+          <div className="w-[520px] min-w-[520px] shrink-0" />
           <div className="flex-1 relative h-7">
             {MEETING_MARKERS.map((marker, i) => {
               const left = ((marker.day - 1 + 0.5) / TOTAL_DAYS) * 100;
@@ -371,7 +371,12 @@ export default function Plan() {
 
         {/* Timeline header */}
         <div className="flex border-b border-border bg-secondary/50">
-          <div className="w-64 min-w-[256px] shrink-0 px-4 py-2" />
+          <div className="w-[520px] min-w-[520px] shrink-0 flex text-[10px] font-medium text-muted-foreground">
+            <div className="w-[200px] px-4 py-2">Task</div>
+            <div className="w-[60px] px-2 py-2">Due</div>
+            <div className="w-[130px] px-2 py-2">Dependency</div>
+            <div className="flex-1 px-2 py-2">Notes</div>
+          </div>
           <div className="flex-1 flex" ref={timelineRef}>
             {WEEKS.map((week, wi) => (
               <div key={wi} className="flex-1 border-l border-border">
@@ -391,7 +396,7 @@ export default function Plan() {
         </div>
 
         {/* Vertical dotted lines for meeting markers (full chart height) */}
-        <div className="absolute top-0 bottom-0 left-64 right-0 pointer-events-none z-10">
+        <div className="absolute top-0 bottom-0 pointer-events-none z-10" style={{ left: '520px', right: 0 }}>
           {MEETING_MARKERS.map((marker, i) => {
             const left = ((marker.day - 1 + 0.5) / TOTAL_DAYS) * 100;
             return (
@@ -416,7 +421,7 @@ export default function Plan() {
               className="flex border-b border-border hover:bg-accent/50 transition-colors cursor-pointer group/ws"
               onClick={() => toggleWorkstream(ws.id)}
             >
-              <div className="w-64 min-w-[256px] shrink-0 px-4 py-2.5 flex items-center gap-2">
+              <div className="w-[520px] min-w-[520px] shrink-0 px-4 py-2.5 flex items-center gap-2">
                 {expanded[ws.id] ? (
                   <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
                 ) : (
@@ -476,42 +481,57 @@ export default function Plan() {
                       : ""
                   }`}
                 >
-                  <div className="w-64 min-w-[256px] shrink-0 px-4 py-2 pl-7 flex items-center gap-1.5">
-                    <GripVertical className="w-3 h-3 text-muted-foreground/30 shrink-0 cursor-grab active:cursor-grabbing opacity-0 group-hover/item:opacity-100 transition-opacity" />
-                    <StatusPicker
-                      currentStatus={item.status}
-                      onChangeStatus={(status) => updateItem(ws.id, item.id, { status: status as GanttItem["status"] })}
-                    />
-                    {editingId === item.id ? (
-                      <input
-                        autoFocus
-                        defaultValue={item.label}
-                        className="text-xs text-foreground bg-transparent border-b border-primary outline-none w-full"
-                        onBlur={(e) => handleLabelChange(ws.id, item.id, e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            handleLabelChange(ws.id, item.id, (e.target as HTMLInputElement).value);
-                          } else if (e.key === "Escape") {
-                            setEditingId(null);
-                          }
-                        }}
+                  <div className="w-[520px] min-w-[520px] shrink-0 flex items-center">
+                    {/* Task name column */}
+                    <div className="w-[200px] px-4 py-2 pl-7 flex items-center gap-1.5">
+                      <GripVertical className="w-3 h-3 text-muted-foreground/30 shrink-0 cursor-grab active:cursor-grabbing opacity-0 group-hover/item:opacity-100 transition-opacity" />
+                      <StatusPicker
+                        currentStatus={item.status}
+                        onChangeStatus={(status) => updateItem(ws.id, item.id, { status: status as GanttItem["status"] })}
                       />
-                    ) : (
-                      <span
-                        className="text-xs text-foreground truncate cursor-text hover:text-primary transition-colors"
-                        onDoubleClick={() => setEditingId(item.id)}
-                        title="Double-click to edit"
+                      {editingId === item.id ? (
+                        <input
+                          autoFocus
+                          defaultValue={item.label}
+                          className="text-xs text-foreground bg-transparent border-b border-primary outline-none w-full"
+                          onBlur={(e) => handleLabelChange(ws.id, item.id, e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              handleLabelChange(ws.id, item.id, (e.target as HTMLInputElement).value);
+                            } else if (e.key === "Escape") {
+                              setEditingId(null);
+                            }
+                          }}
+                        />
+                      ) : (
+                        <span
+                          className="text-xs text-foreground truncate cursor-text hover:text-primary transition-colors"
+                          onDoubleClick={() => setEditingId(item.id)}
+                          title="Double-click to edit"
+                        >
+                          {item.label}
+                        </span>
+                      )}
+                      <button
+                        className="ml-auto opacity-0 group-hover/item:opacity-100 transition-opacity p-0.5 rounded hover:bg-destructive/10 shrink-0"
+                        onClick={() => removeItem(ws.id, item.id)}
+                        title="Remove task"
                       >
-                        {item.label}
-                      </span>
-                    )}
-                    <button
-                      className="ml-auto opacity-0 group-hover/item:opacity-100 transition-opacity p-0.5 rounded hover:bg-destructive/10 shrink-0"
-                      onClick={() => removeItem(ws.id, item.id)}
-                      title="Remove task"
-                    >
-                      <X className="w-3 h-3 text-muted-foreground hover:text-destructive" />
-                    </button>
+                        <X className="w-3 h-3 text-muted-foreground hover:text-destructive" />
+                      </button>
+                    </div>
+                    {/* Due date column */}
+                    <div className="w-[60px] px-2 py-2">
+                      <span className="text-[10px] text-muted-foreground whitespace-nowrap">{item.dueDate || "—"}</span>
+                    </div>
+                    {/* Dependency column */}
+                    <div className="w-[130px] px-2 py-2">
+                      <span className="text-[10px] text-muted-foreground truncate block">{item.dependency || "—"}</span>
+                    </div>
+                    {/* Notes column */}
+                    <div className="flex-1 px-2 py-2">
+                      <span className="text-[10px] text-muted-foreground truncate block">{item.notes || "—"}</span>
+                    </div>
                   </div>
                   <div className="flex-1 relative py-1">
                     <div className="absolute inset-0 flex">
