@@ -94,12 +94,18 @@ export default function Plan() {
       </div>
 
       {/* Legend */}
-      <div className="flex items-center gap-5 mb-4 text-xs text-muted-foreground">
+      <div className="flex items-center gap-5 mb-4 text-xs text-muted-foreground flex-wrap">
         <span className="flex items-center gap-1.5">
-          <span className="w-8 h-3 rounded-sm bg-rag-green inline-block" /> On track / Complete
+          <span className="w-8 h-3 rounded-sm bg-rag-blue inline-block" /> Complete
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="w-8 h-3 rounded-sm bg-rag-green inline-block" /> On track
         </span>
         <span className="flex items-center gap-1.5">
           <span className="w-8 h-3 rounded-sm bg-rag-amber inline-block" /> At risk
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="w-8 h-3 rounded-sm bg-rag-blocked inline-block" /> Blocked
         </span>
         <span className="flex items-center gap-1.5">
           <span className="w-8 h-3 rounded-sm bg-muted-foreground/30 inline-block" /> Not started
