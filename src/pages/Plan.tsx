@@ -83,7 +83,7 @@ function GanttBar({
 
   return (
     <div
-      className={`absolute top-1/2 -translate-y-1/2 h-5 rounded-sm ${statusColors[item.status]} ${item.critical ? "ring-1 ring-rag-red/40" : ""} cursor-grab active:cursor-grabbing group/bar`}
+      className={`absolute top-1/2 -translate-y-1/2 h-5 rounded-sm ${statusColors[item.status]} cursor-grab active:cursor-grabbing group/bar`}
       style={{ left: `${left}%`, width: `${width}%`, minWidth: "6px" }}
       title={`${item.label}${item.notes ? ` — ${item.notes}` : ""}`}
       onMouseDown={(e) => onDragStart?.(e, "move")}
@@ -329,9 +329,6 @@ export default function Plan() {
         </span>
         <span className="flex items-center gap-1.5">
           <Diamond className="w-3 h-3 fill-current text-muted-foreground" /> Milestone
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-4 h-3 rounded-sm bg-rag-amber ring-1 ring-rag-red/40 inline-block" /> Critical path
         </span>
       </div>
 
