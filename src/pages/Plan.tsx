@@ -118,6 +118,37 @@ export default function Plan() {
     );
   }, []);
 
+  const addItem = useCallback((wsId: string) => {
+    setWorkstreams((prev) =>
+      prev.map((ws) => {
+        if (ws.id !== wsId) return ws;
+        const lastItem = ws.items[ws.items.length - 1];
+        const startDay = lastItem ? Math.min(lastItem.endDay + 1, TOTAL_DAYS) : 1;
+        const newItem: GanttItem = {
+          id: `new-${Date.now()}`,
+          label: "New task",
+          type: "task",
+          owner: ws.owner,
+          startDay,
+          endDay: Math.min(startDay + 1, TOTAL_DAYS),
+          status: "not-started",
+        };
+        return { ...ws, items: [...ws.items, newItem] };
+      })
+    );
+    setExpanded((prev) => ({ ...prev, [wsId]: true }));
+  }, []);
+
+  const removeItem = useCallback((wsId: string, itemId: string) => {
+    setWorkstreams((prev) =>
+      prev.map((ws) =>
+        ws.id === wsId
+          ? { ...ws, items: ws.items.filter((item) => item.id !== itemId) }
+          : ws
+      )
+    );
+  }, []);
+
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
       const drag = dragRef.current;
