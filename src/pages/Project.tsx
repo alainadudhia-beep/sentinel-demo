@@ -129,7 +129,11 @@ export default function Project() {
                 {flaggedItems.map((item) => {
                   const sc = statusConfig[item.status];
                   return (
-                    <tr key={item.id} className="border-b border-border last:border-0 hover:bg-accent/50 transition-colors">
+                     <tr
+                       key={item.id}
+                       className={`border-b border-border last:border-0 hover:bg-accent/50 transition-colors ${TASK_RISK_MAP[item.id] ? "cursor-pointer" : ""}`}
+                       onClick={() => handleTaskClick(item.id)}
+                     >
                       <td className="px-4 py-3">
                         <p className="text-xs font-medium text-foreground">{item.task}</p>
                         {item.notes && (
