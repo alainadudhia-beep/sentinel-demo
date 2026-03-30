@@ -83,7 +83,7 @@ function GanttBar({
 
   return (
     <div
-      className={`absolute top-1/2 -translate-y-1/2 h-5 rounded-sm ${statusColors[item.status]} ${item.critical ? "ring-1 ring-rag-red/40" : ""} cursor-grab active:cursor-grabbing group/bar`}
+      className={`absolute top-1/2 -translate-y-1/2 h-5 rounded-sm ${statusColors[item.status]} cursor-grab active:cursor-grabbing group/bar`}
       style={{ left: `${left}%`, width: `${width}%`, minWidth: "6px" }}
       title={`${item.label}${item.notes ? ` — ${item.notes}` : ""}`}
       onMouseDown={(e) => onDragStart?.(e, "move")}
