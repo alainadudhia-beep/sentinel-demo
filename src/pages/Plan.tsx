@@ -326,7 +326,7 @@ export default function Plan() {
               ws.items.map((item) => (
                 <div
                   key={item.id}
-                  className="flex border-b border-border/50 hover:bg-accent/30 transition-colors group"
+                  className="flex border-b border-border/50 hover:bg-accent/30 transition-colors group/item"
                 >
                   <div className="w-64 min-w-[256px] shrink-0 px-4 py-2 pl-10 flex items-center gap-2">
                     {item.status === "complete" ? (
