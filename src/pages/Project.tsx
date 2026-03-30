@@ -200,33 +200,34 @@ export default function Project() {
                 </div>
               </button>
 
-              {/* Expanded: affected tasks + action */}
+              {/* Actions bar - always visible */}
+              <div className="px-5 py-3 border-t border-border/50 flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-1.5 h-7 text-xs"
+                  onClick={(e) => { e.stopPropagation(); openRisk(group.riskId); }}
+                >
+                  <ArrowUpRight className="w-3 h-3" />
+                  View AI recommendation
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-1.5 h-7 text-xs"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setHandled((prev) => new Set(prev).add(group.riskId));
+                  }}
+                >
+                  <CircleCheck className="w-3 h-3" />
+                  Handled
+                </Button>
+              </div>
+
+              {/* Expanded: affected tasks */}
               {isExpanded && (
                 <div className="border-t border-border/50">
-                  {/* Actions bar */}
-                  <div className="px-5 py-3 flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="gap-1.5 h-7 text-xs"
-                      onClick={(e) => { e.stopPropagation(); openRisk(group.riskId); }}
-                    >
-                      <ArrowUpRight className="w-3 h-3" />
-                      View AI recommendation
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="gap-1.5 h-7 text-xs"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setHandled((prev) => new Set(prev).add(group.riskId));
-                      }}
-                    >
-                      <CircleCheck className="w-3 h-3" />
-                      Handled
-                    </Button>
-                  </div>
 
                   {/* Affected tasks sub-table */}
                   <div className="px-5 py-3 border-t border-border/30">
