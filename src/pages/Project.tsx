@@ -47,6 +47,15 @@ function getFlaggedItems() {
   return items;
 }
 
+// Map flagged task IDs to related risk IDs based on content overlap
+const TASK_RISK_MAP: Record<string, string> = {
+  s2: "r1", // Launch survey → Survey response volume
+  s3: "r1", // Collect responses → Survey response volume
+  s5: "r1", // Run analysis blocked → Survey response volume
+  mm2: "r4", // Build model structure (Priya sick) → Priya off sick
+  ia2: "r3", // Conduct sessions rescheduled → Management interview timing
+};
+
 export default function Project() {
   const [selectedRisk, setSelectedRisk] = useState<Risk | null>(null);
   const [handled, setHandled] = useState<Set<string>>(new Set());
@@ -63,6 +72,17 @@ export default function Project() {
       else next.add(id);
       return next;
     });
+  };
+
+  const handleTaskClick = (taskId: string) => {
+    const riskId = TASK_RISK_MAP[taskId];
+    if (riskId) {
+      setExpandedRisks((prev) => new Set(prev).add(riskId));
+      // Scroll the risk into view
+      setTimeout(() => {
+        document.getElementById(`risk-${riskId}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 50);
+    }
   };
 
   return (
