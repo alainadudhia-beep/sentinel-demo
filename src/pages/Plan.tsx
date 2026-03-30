@@ -385,17 +385,19 @@ export default function Plan() {
         {/* Meeting marker callouts row */}
         <div className="flex border-b border-border bg-secondary/30">
           <div className="w-[520px] min-w-[520px] shrink-0" />
-          <div className="flex-1 relative h-7">
-            {markers.map((marker, i) => {
+          <div className="flex-1 relative h-7" ref={markerTimelineRef}>
+            {markers.map((marker) => {
               const left = ((marker.day - 1 + 0.5) / TOTAL_DAYS) * 100;
               return (
                 <div
-                  key={i}
-                  className="absolute top-0 flex flex-col items-center -translate-x-1/2"
+                  key={marker.id}
+                  className="absolute top-0 flex flex-col items-center -translate-x-1/2 cursor-grab active:cursor-grabbing"
                   style={{ left: `${left}%` }}
+                  onMouseDown={(e) => startMarkerDrag(e, marker)}
+                  title="Drag to move"
                 >
                   <span
-                    className="text-[9px] font-semibold whitespace-nowrap px-1.5 py-0.5 rounded bg-background border border-border shadow-sm"
+                    className="text-[9px] font-semibold whitespace-nowrap px-1.5 py-0.5 rounded bg-background border border-border shadow-sm select-none"
                     style={{ color: `hsl(var(${marker.cssVar}))` }}
                   >
                     {marker.label}
