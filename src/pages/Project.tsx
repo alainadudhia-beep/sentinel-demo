@@ -131,7 +131,7 @@ export default function Project() {
 
         <div className="mt-4 flex items-center gap-4 flex-wrap">
           <span className="text-lg font-bold text-rag-red tracking-tight">
-            If unresolved, synthesis delayed +2 days → partner review at risk → increased risk of overrun
+            +2 day delay → partner review at risk → likely overrun
           </span>
         </div>
         <div className="flex items-center gap-3 mt-3">
