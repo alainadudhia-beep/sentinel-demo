@@ -7,6 +7,7 @@ import { ganttWorkstreams, GanttItem, Workstream } from "@/data/mockData";
 import { ArrowRight, Clock, Sparkles, ChevronRight, ChevronDown, Diamond, Check, AlertTriangle, Plus, X, GripVertical, Circle, MessageSquare } from "lucide-react";
 
 const TOTAL_DAYS = 15;
+const TODAY_DAY = 8; // Wednesday Week 2 (26 Mar)
 const WEEKS = [
   { label: "Week 1 · 17–21 Mar", days: ["Mon", "Tue", "Wed", "Thu", "Fri"] },
   { label: "Week 2 · 24–28 Mar", days: ["Mon", "Tue", "Wed", "Thu", "Fri"] },
