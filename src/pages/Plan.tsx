@@ -191,9 +191,11 @@ export default function Plan() {
                       <span
                         className={`text-[10px] px-1.5 py-0.5 rounded font-medium shrink-0 ${
                           item.status === "complete"
-                            ? "bg-rag-green/10 text-rag-green"
+                            ? "bg-rag-blue/10 text-rag-blue"
                             : item.status === "at-risk"
                             ? "bg-rag-amber/10 text-rag-amber"
+                            : item.status === "blocked"
+                            ? "bg-rag-blocked/10 text-rag-blocked"
                             : "bg-rag-green/10 text-rag-green"
                         }`}
                       >
