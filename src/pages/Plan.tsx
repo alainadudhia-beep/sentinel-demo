@@ -573,7 +573,7 @@ export default function Plan() {
                         />
                       ) : (
                         <span
-                          className="text-xs text-foreground truncate cursor-text hover:text-primary transition-colors"
+                          className="text-xs text-foreground cursor-text hover:text-primary transition-colors break-words"
                           onDoubleClick={() => setEditingId(item.id)}
                           title="Double-click to edit"
                         >
