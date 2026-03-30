@@ -2,7 +2,7 @@ import { useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ganttWorkstreams, GanttItem, Workstream } from "@/data/mockData";
-import { ArrowRight, Clock, Sparkles, ChevronRight, ChevronDown, Diamond, Check, AlertTriangle } from "lucide-react";
+import { ArrowRight, Clock, Sparkles, ChevronRight, ChevronDown, Diamond, Check, AlertTriangle, Plus, X } from "lucide-react";
 
 const TOTAL_DAYS = 15;
 const WEEKS = [
@@ -113,6 +113,37 @@ export default function Plan() {
                 item.id === itemId ? { ...item, ...updates } : item
               ),
             }
+          : ws
+      )
+    );
+  }, []);
+
+  const addItem = useCallback((wsId: string) => {
+    setWorkstreams((prev) =>
+      prev.map((ws) => {
+        if (ws.id !== wsId) return ws;
+        const lastItem = ws.items[ws.items.length - 1];
+        const startDay = lastItem ? Math.min(lastItem.endDay + 1, TOTAL_DAYS) : 1;
+        const newItem: GanttItem = {
+          id: `new-${Date.now()}`,
+          label: "New task",
+          type: "task",
+          owner: ws.owner,
+          startDay,
+          endDay: Math.min(startDay + 1, TOTAL_DAYS),
+          status: "not-started",
+        };
+        return { ...ws, items: [...ws.items, newItem] };
+      })
+    );
+    setExpanded((prev) => ({ ...prev, [wsId]: true }));
+  }, []);
+
+  const removeItem = useCallback((wsId: string, itemId: string) => {
+    setWorkstreams((prev) =>
+      prev.map((ws) =>
+        ws.id === wsId
+          ? { ...ws, items: ws.items.filter((item) => item.id !== itemId) }
           : ws
       )
     );
@@ -258,7 +289,7 @@ export default function Plan() {
           <div key={ws.id}>
             {/* Workstream header row */}
             <div
-              className="flex border-b border-border hover:bg-accent/50 transition-colors cursor-pointer"
+              className="flex border-b border-border hover:bg-accent/50 transition-colors cursor-pointer group/ws"
               onClick={() => toggleWorkstream(ws.id)}
             >
               <div className="w-64 min-w-[256px] shrink-0 px-4 py-2.5 flex items-center gap-2">
@@ -269,6 +300,13 @@ export default function Plan() {
                 )}
                 <span className="text-xs font-semibold text-foreground">{ws.name}</span>
                 <span className="text-[10px] text-muted-foreground ml-1">{ws.owner}</span>
+                <button
+                  className="ml-auto opacity-0 group-hover/ws:opacity-100 transition-opacity p-0.5 rounded hover:bg-accent"
+                  onClick={(e) => { e.stopPropagation(); addItem(ws.id); }}
+                  title="Add task"
+                >
+                  <Plus className="w-3 h-3 text-muted-foreground" />
+                </button>
               </div>
               <div className="flex-1 relative">
                 <div className="absolute inset-0 flex">
@@ -288,7 +326,7 @@ export default function Plan() {
               ws.items.map((item) => (
                 <div
                   key={item.id}
-                  className="flex border-b border-border/50 hover:bg-accent/30 transition-colors group"
+                  className="flex border-b border-border/50 hover:bg-accent/30 transition-colors group/item"
                 >
                   <div className="w-64 min-w-[256px] shrink-0 px-4 py-2 pl-10 flex items-center gap-2">
                     {item.status === "complete" ? (
@@ -327,6 +365,13 @@ export default function Plan() {
                         {item.label}
                       </span>
                     )}
+                    <button
+                      className="ml-auto opacity-0 group-hover/item:opacity-100 transition-opacity p-0.5 rounded hover:bg-destructive/10 shrink-0"
+                      onClick={() => removeItem(ws.id, item.id)}
+                      title="Remove task"
+                    >
+                      <X className="w-3 h-3 text-muted-foreground hover:text-destructive" />
+                    </button>
                   </div>
                   <div className="flex-1 relative py-1">
                     <div className="absolute inset-0 flex">
