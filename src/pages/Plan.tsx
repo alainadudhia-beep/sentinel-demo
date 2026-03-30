@@ -2,8 +2,9 @@ import { useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Textarea } from "@/components/ui/textarea";
 import { ganttWorkstreams, GanttItem, Workstream } from "@/data/mockData";
-import { ArrowRight, Clock, Sparkles, ChevronRight, ChevronDown, Diamond, Check, AlertTriangle, Plus, X, GripVertical, Circle } from "lucide-react";
+import { ArrowRight, Clock, Sparkles, ChevronRight, ChevronDown, Diamond, Check, AlertTriangle, Plus, X, GripVertical, Circle, MessageSquare } from "lucide-react";
 
 const TOTAL_DAYS = 15;
 const WEEKS = [
