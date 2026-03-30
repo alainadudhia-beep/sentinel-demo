@@ -250,7 +250,7 @@ export default function Project() {
            </span>
            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-amber/15 text-rag-amber border border-rag-amber/20">
              <AlertTriangle className="w-4 h-4" />
-             1 Medium Risk
+             2 Medium Risks
            </span>
         </div>
       </div>
