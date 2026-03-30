@@ -548,6 +548,21 @@ export default function Plan() {
                   <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
                 )}
                 <span className="text-xs font-semibold text-foreground">{ws.name}</span>
+                {ws.id === "ws-survey" && (
+                  <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-rag-critical/20 text-rag-critical">
+                    <AlertTriangle className="w-3 h-3" />Critical
+                  </span>
+                )}
+                {ws.id === "ws-market" && (
+                  <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-rag-red/10 text-rag-red">
+                    <AlertTriangle className="w-3 h-3" />High
+                  </span>
+                )}
+                {ws.id === "ws-internal" && (
+                  <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-rag-amber/10 text-rag-amber">
+                    <AlertTriangle className="w-3 h-3" />Medium
+                  </span>
+                )}
                 <span className="text-[10px] text-muted-foreground ml-1">{ws.owner}</span>
                 <button
                   className="ml-auto opacity-0 group-hover/ws:opacity-100 transition-opacity p-0.5 rounded hover:bg-accent"
