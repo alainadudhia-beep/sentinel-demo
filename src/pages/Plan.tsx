@@ -150,6 +150,21 @@ export default function Plan() {
     );
   }, []);
 
+  const handleRowDrop = useCallback((wsId: string, dragItemId: string, dropItemId: string) => {
+    setWorkstreams((prev) =>
+      prev.map((ws) => {
+        if (ws.id !== wsId) return ws;
+        const items = [...ws.items];
+        const fromIdx = items.findIndex((i) => i.id === dragItemId);
+        const toIdx = items.findIndex((i) => i.id === dropItemId);
+        if (fromIdx === -1 || toIdx === -1 || fromIdx === toIdx) return ws;
+        const [moved] = items.splice(fromIdx, 1);
+        items.splice(toIdx, 0, moved);
+        return { ...ws, items };
+      })
+    );
+  }, []);
+
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
       const drag = dragRef.current;
