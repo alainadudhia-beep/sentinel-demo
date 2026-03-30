@@ -120,7 +120,7 @@ export default function Project() {
                 <ShieldAlert className="w-6 h-6 text-rag-red" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-foreground">Risk Review</h2>
+                <h2 className="text-xl font-bold text-foreground">Project at Risk</h2>
                 <p className="text-sm text-muted-foreground">
                   Project Falcon · FreshCart DD · Week 2 of 3
                 </p>
