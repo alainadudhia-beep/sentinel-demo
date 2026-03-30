@@ -182,44 +182,6 @@ export default function Project() {
         </div>
       </div>
 
-      {/* AI Risk Detections as clickable cards */}
-      <div>
-        <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-1.5">
-          AI Early Warnings
-          <span className="text-xs font-normal text-muted-foreground ml-1">· {risks.length} detected</span>
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {risks.map((risk) => {
-            const isHandled = handled.has(risk.id);
-            return (
-              <button
-                key={risk.id}
-                onClick={() => handleRiskCardClick(risk)}
-                className={`text-left border border-border rounded-lg bg-card p-4 hover:bg-accent/30 transition-all ${isHandled ? "opacity-50" : ""}`}
-              >
-                <div className="flex items-center gap-2 mb-1.5">
-                  <div
-                    className={`w-2 h-2 rounded-full shrink-0 ${
-                      risk.severity === "high" ? "bg-rag-red" : "bg-rag-amber"
-                    }`}
-                  />
-                  <span
-                    className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium ${
-                      risk.severity === "high"
-                        ? "bg-rag-red/10 text-rag-red"
-                        : "bg-rag-amber/10 text-rag-amber"
-                    }`}
-                  >
-                    {risk.severity === "high" ? "High" : "Medium"}
-                  </span>
-                </div>
-                <p className="text-xs font-medium text-foreground leading-snug">{risk.title}</p>
-                <p className="text-[11px] text-muted-foreground mt-1 line-clamp-2">{risk.likelyImpact}</p>
-              </button>
-            );
-          })}
-        </div>
-      </div>
 
       {/* Overlay panel (Notion-style) */}
       {selectedRisk && (
