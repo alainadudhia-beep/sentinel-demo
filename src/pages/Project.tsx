@@ -59,7 +59,7 @@ const RISK_OPTIONS: Record<string, RecommendationOption[]> = {
         "Request expedited recruitment for remaining 38% of target",
       ],
       rationale: "Fastest fix, minimal disruption",
-      risk: "Provider may not be able to accelerate",
+      risk: "Dependent on provider",
     },
     {
       id: "r1-opt2",
