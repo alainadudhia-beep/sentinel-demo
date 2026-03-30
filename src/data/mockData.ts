@@ -231,7 +231,7 @@ export const liveWorkstreams: WorkstreamRow[] = [
 export interface Risk {
   id: string;
   title: string;
-  severity: "high" | "medium";
+  severity: "critical" | "high" | "medium";
   whyItMatters: string;
   likelyImpact: string;
   whoShouldAct: string;
