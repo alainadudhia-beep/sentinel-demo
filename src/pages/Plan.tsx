@@ -65,8 +65,10 @@ function GanttBar({
 }: {
   item: GanttItem;
   onDragStart?: (e: React.MouseEvent, mode: DragMode) => void;
-  customColors?: Record<string, string | null>;
+  customColors: Record<string, string | null>;
 }) {
+  const customColor = customColors[item.status];
+
   if (item.type === "milestone") {
     const left = ((item.startDay - 1) / TOTAL_DAYS) * 100;
     return (
@@ -75,7 +77,10 @@ function GanttBar({
         style={{ left: `${left}%` }}
         onMouseDown={(e) => onDragStart?.(e, "move")}
       >
-        <Diamond className={`w-3.5 h-3.5 fill-current ${milestoneColors[item.status]}`} />
+        <Diamond
+          className={`w-3.5 h-3.5 fill-current ${customColor ? "" : milestoneColors[item.status]}`}
+          style={customColor ? { color: customColor } : undefined}
+        />
       </div>
     );
   }
@@ -85,26 +90,18 @@ function GanttBar({
 
   return (
     <div
-      className={`absolute top-1/2 -translate-y-1/2 h-5 rounded-sm ${statusColors[item.status]} ${item.critical ? "ring-1 ring-rag-red/40" : ""} cursor-grab active:cursor-grabbing group/bar`}
-      style={{ left: `${left}%`, width: `${width}%`, minWidth: "6px" }}
+      className={`absolute top-1/2 -translate-y-1/2 h-5 rounded-sm ${customColor ? "" : defaultStatusClasses[item.status]} ${item.critical ? "ring-1 ring-rag-red/40" : ""} cursor-grab active:cursor-grabbing group/bar`}
+      style={{ left: `${left}%`, width: `${width}%`, minWidth: "6px", ...(customColor ? { backgroundColor: customColor } : {}) }}
       title={`${item.label}${item.notes ? ` — ${item.notes}` : ""}`}
       onMouseDown={(e) => onDragStart?.(e, "move")}
     >
-      {/* Left resize handle */}
       <div
         className="absolute left-0 top-0 bottom-0 w-1.5 cursor-col-resize opacity-0 group-hover/bar:opacity-100 bg-foreground/20 rounded-l-sm"
-        onMouseDown={(e) => {
-          e.stopPropagation();
-          onDragStart?.(e, "resize-left");
-        }}
+        onMouseDown={(e) => { e.stopPropagation(); onDragStart?.(e, "resize-left"); }}
       />
-      {/* Right resize handle */}
       <div
         className="absolute right-0 top-0 bottom-0 w-1.5 cursor-col-resize opacity-0 group-hover/bar:opacity-100 bg-foreground/20 rounded-r-sm"
-        onMouseDown={(e) => {
-          e.stopPropagation();
-          onDragStart?.(e, "resize-right");
-        }}
+        onMouseDown={(e) => { e.stopPropagation(); onDragStart?.(e, "resize-right"); }}
       />
     </div>
   );
