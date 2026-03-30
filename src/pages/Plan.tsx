@@ -12,16 +12,18 @@ const WEEKS = [
 ];
 
 const statusColors: Record<string, string> = {
-  complete: "bg-rag-green",
+  complete: "bg-rag-blue",
   "on-track": "bg-rag-green",
   "at-risk": "bg-rag-amber",
+  blocked: "bg-rag-blocked",
   "not-started": "bg-muted-foreground/30",
 };
 
 const milestoneColors: Record<string, string> = {
-  complete: "text-rag-green",
+  complete: "text-rag-blue",
   "on-track": "text-rag-green",
   "at-risk": "text-rag-amber",
+  blocked: "text-rag-blocked",
   "not-started": "text-muted-foreground",
 };
 
@@ -29,6 +31,7 @@ const statusLabels: Record<string, string> = {
   complete: "Complete",
   "on-track": "On track",
   "at-risk": "At risk",
+  blocked: "Blocked",
   "not-started": "Not started",
 };
 
@@ -91,12 +94,18 @@ export default function Plan() {
       </div>
 
       {/* Legend */}
-      <div className="flex items-center gap-5 mb-4 text-xs text-muted-foreground">
+      <div className="flex items-center gap-5 mb-4 text-xs text-muted-foreground flex-wrap">
         <span className="flex items-center gap-1.5">
-          <span className="w-8 h-3 rounded-sm bg-rag-green inline-block" /> On track / Complete
+          <span className="w-8 h-3 rounded-sm bg-rag-blue inline-block" /> Complete
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="w-8 h-3 rounded-sm bg-rag-green inline-block" /> On track
         </span>
         <span className="flex items-center gap-1.5">
           <span className="w-8 h-3 rounded-sm bg-rag-amber inline-block" /> At risk
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="w-8 h-3 rounded-sm bg-rag-blocked inline-block" /> Blocked
         </span>
         <span className="flex items-center gap-1.5">
           <span className="w-8 h-3 rounded-sm bg-muted-foreground/30 inline-block" /> Not started
@@ -182,9 +191,11 @@ export default function Plan() {
                       <span
                         className={`text-[10px] px-1.5 py-0.5 rounded font-medium shrink-0 ${
                           item.status === "complete"
-                            ? "bg-rag-green/10 text-rag-green"
+                            ? "bg-rag-blue/10 text-rag-blue"
                             : item.status === "at-risk"
                             ? "bg-rag-amber/10 text-rag-amber"
+                            : item.status === "blocked"
+                            ? "bg-rag-blocked/10 text-rag-blocked"
                             : "bg-rag-green/10 text-rag-green"
                         }`}
                       >

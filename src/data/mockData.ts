@@ -54,7 +54,7 @@ export interface GanttItem {
   owner: string;
   startDay: number; // 1-15 (3 weeks × 5 days)
   endDay: number;   // same as startDay for milestones
-  status: "on-track" | "at-risk" | "complete" | "not-started";
+  status: "on-track" | "at-risk" | "complete" | "not-started" | "blocked";
   notes?: string;
   critical?: boolean;
 }
@@ -76,7 +76,7 @@ export const ganttWorkstreams: Workstream[] = [
       { id: "s2", label: "Launch survey", type: "milestone", owner: "James Okafor", startDay: 4, endDay: 4, status: "at-risk", notes: "Panel recruitment delayed 1 day", critical: true },
       { id: "s3", label: "Collect responses", type: "task", owner: "James Okafor", startDay: 5, endDay: 9, status: "at-risk", notes: "62% of target responses" },
       { id: "s4", label: "Set up analysis framework", type: "task", owner: "James Okafor", startDay: 7, endDay: 8, status: "not-started" },
-      { id: "s5", label: "Run analysis (initial data)", type: "task", owner: "James Okafor", startDay: 9, endDay: 11, status: "not-started", critical: true },
+      { id: "s5", label: "Run analysis (initial data)", type: "task", owner: "James Okafor", startDay: 9, endDay: 11, status: "blocked", notes: "Blocked — waiting on survey responses", critical: true },
       { id: "s6", label: "Slide up analysis", type: "task", owner: "James Okafor", startDay: 11, endDay: 12, status: "not-started" },
       { id: "s7", label: "Run analysis (final data)", type: "task", owner: "James Okafor", startDay: 12, endDay: 13, status: "not-started", critical: true },
       { id: "s8", label: "Update slides", type: "task", owner: "James Okafor", startDay: 13, endDay: 14, status: "not-started" },

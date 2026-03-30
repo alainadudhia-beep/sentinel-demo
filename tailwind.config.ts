@@ -51,6 +51,8 @@ export default {
           green: "hsl(var(--rag-green))",
           amber: "hsl(var(--rag-amber))",
           red: "hsl(var(--rag-red))",
+          blue: "hsl(var(--rag-blue))",
+          blocked: "hsl(var(--rag-blocked))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
