@@ -1,11 +1,10 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { FileText, ListChecks, Monitor, AlertTriangle } from "lucide-react";
+import { FileText, ListChecks, AlertTriangle } from "lucide-react";
 
 const steps = [
   { label: "Add Scope", path: "/scope", icon: FileText },
   { label: "Project Plan", path: "/plan", icon: ListChecks },
-  { label: "Live Project", path: "/project", icon: Monitor },
-  { label: "Risk Review", path: "/project", icon: AlertTriangle, matchPrefix: "/risk" },
+  { label: "Risk Review", path: "/project", icon: AlertTriangle },
 ];
 
 const stepOrder = ["/scope", "/plan", "/project", "/risk"];
