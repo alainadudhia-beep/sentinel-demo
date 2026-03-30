@@ -362,7 +362,7 @@ export default function Plan() {
                 </div>
                 {!expanded[ws.id] &&
                   ws.items.map((item) => (
-                    <GanttBar key={item.id} item={item} />
+                    <GanttBar key={item.id} item={item} customColors={customColors} />
                   ))}
               </div>
             </div>
