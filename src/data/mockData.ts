@@ -45,6 +45,80 @@ Payment terms: 50% on engagement, 50% on delivery of final report.
   • Survey panel recruitment via established provider (5-day turnaround)
   • All deliverables subject to Apex quality review process`;
 
+export type ItemType = "task" | "milestone";
+
+export interface GanttItem {
+  id: string;
+  label: string;
+  type: ItemType;
+  owner: string;
+  startDay: number; // 1-15 (3 weeks × 5 days)
+  endDay: number;   // same as startDay for milestones
+  status: "on-track" | "at-risk" | "complete" | "not-started";
+  notes?: string;
+  critical?: boolean;
+}
+
+export interface Workstream {
+  id: string;
+  name: string;
+  owner: string;
+  items: GanttItem[];
+}
+
+export const ganttWorkstreams: Workstream[] = [
+  {
+    id: "ws-survey",
+    name: "Survey",
+    owner: "James Okafor",
+    items: [
+      { id: "s1", label: "Design questionnaire", type: "task", owner: "James Okafor", startDay: 1, endDay: 3, status: "complete" },
+      { id: "s2", label: "Launch survey", type: "milestone", owner: "James Okafor", startDay: 4, endDay: 4, status: "at-risk", notes: "Panel recruitment delayed 1 day", critical: true },
+      { id: "s3", label: "Collect responses", type: "task", owner: "James Okafor", startDay: 5, endDay: 9, status: "at-risk", notes: "62% of target responses" },
+      { id: "s4", label: "Set up analysis framework", type: "task", owner: "James Okafor", startDay: 7, endDay: 8, status: "not-started" },
+      { id: "s5", label: "Run analysis (initial data)", type: "task", owner: "James Okafor", startDay: 9, endDay: 11, status: "not-started", critical: true },
+      { id: "s6", label: "Slide up analysis", type: "task", owner: "James Okafor", startDay: 11, endDay: 12, status: "not-started" },
+      { id: "s7", label: "Run analysis (final data)", type: "task", owner: "James Okafor", startDay: 12, endDay: 13, status: "not-started", critical: true },
+      { id: "s8", label: "Update slides", type: "task", owner: "James Okafor", startDay: 13, endDay: 14, status: "not-started" },
+    ],
+  },
+  {
+    id: "ws-market",
+    name: "Market Model",
+    owner: "Priya Sharma",
+    items: [
+      { id: "mm1", label: "Collect data", type: "task", owner: "Priya Sharma", startDay: 1, endDay: 4, status: "complete" },
+      { id: "mm2", label: "Build model structure", type: "task", owner: "Priya Sharma", startDay: 3, endDay: 7, status: "at-risk", notes: "Priya off sick since Wednesday" },
+      { id: "mm3", label: "Update with inputs", type: "task", owner: "Priya Sharma", startDay: 8, endDay: 10, status: "not-started" },
+      { id: "mm4", label: "Schedule expert interviews", type: "task", owner: "Tom Bradley", startDay: 1, endDay: 3, status: "complete" },
+      { id: "mm5", label: "Complete expert interviews", type: "milestone", owner: "Tom Bradley", startDay: 10, endDay: 10, status: "on-track", notes: "6 of 10 completed" },
+    ],
+  },
+  {
+    id: "ws-internal",
+    name: "Internal Analysis",
+    owner: "Tom Bradley",
+    items: [
+      { id: "ia1", label: "Organise management sessions", type: "task", owner: "Tom Bradley", startDay: 1, endDay: 3, status: "complete" },
+      { id: "ia2", label: "Conduct sessions", type: "task", owner: "Tom Bradley", startDay: 4, endDay: 8, status: "at-risk", notes: "Session 2 rescheduled to Thursday" },
+    ],
+  },
+  {
+    id: "ws-presentation",
+    name: "Presentation",
+    owner: "Emma Wilson",
+    items: [
+      { id: "p1", label: "Synthesise deck", type: "task", owner: "Emma Wilson", startDay: 11, endDay: 13, status: "not-started", critical: true },
+      { id: "p2", label: "Partner review", type: "task", owner: "Sarah Chen", startDay: 13, endDay: 14, status: "not-started", critical: true },
+      { id: "p3", label: "Final presentation", type: "milestone", owner: "Sarah Chen", startDay: 15, endDay: 15, status: "not-started", notes: "Hard deadline — IC meeting", critical: true },
+      { id: "p4", label: "Weekly status call", type: "milestone", owner: "Sarah Chen", startDay: 1, endDay: 1, status: "complete" },
+      { id: "p5", label: "Weekly status call", type: "milestone", owner: "Sarah Chen", startDay: 6, endDay: 6, status: "on-track" },
+      { id: "p6", label: "Weekly status call", type: "milestone", owner: "Sarah Chen", startDay: 11, endDay: 11, status: "not-started" },
+    ],
+  },
+];
+
+// Keep backward compat for Project page
 export interface Milestone {
   id: string;
   workstream: string;
@@ -59,116 +133,14 @@ export interface Milestone {
 }
 
 export const generatedPlan: Milestone[] = [
-  {
-    id: "m1",
-    workstream: "Survey Design",
-    task: "Finalise survey questionnaire & sampling plan",
-    owner: "James Okafor",
-    dueDate: "19 Mar",
-    week: 1,
-    dependency: "Data room access",
-    status: "complete",
-    notes: "",
-    critical: false,
-  },
-  {
-    id: "m2",
-    workstream: "Survey Launch",
-    task: "Launch consumer survey (n=1,500)",
-    owner: "James Okafor",
-    dueDate: "24 Mar",
-    week: 2,
-    dependency: "Survey design sign-off",
-    status: "at-risk",
-    notes: "Panel recruitment delayed by 1 day",
-    critical: true,
-  },
-  {
-    id: "m3",
-    workstream: "Expert Interviews",
-    task: "Complete 8–10 expert interviews",
-    owner: "Tom Bradley",
-    dueDate: "28 Mar",
-    week: 2,
-    dependency: "None",
-    status: "on-track",
-    notes: "6 of 10 scheduled",
-    critical: false,
-  },
-  {
-    id: "m4",
-    workstream: "Market Model",
-    task: "Build bottom-up market sizing model",
-    owner: "Priya Sharma",
-    dueDate: "28 Mar",
-    week: 2,
-    dependency: "Data room access",
-    status: "at-risk",
-    notes: "Missing competitor pricing data",
-    critical: true,
-  },
-  {
-    id: "m5",
-    workstream: "Management Interviews",
-    task: "Complete 3 management sessions",
-    owner: "Tom Bradley",
-    dueDate: "26 Mar",
-    week: 2,
-    dependency: "Client scheduling",
-    status: "at-risk",
-    notes: "Session 2 rescheduled to Thursday",
-    critical: false,
-  },
-  {
-    id: "m6",
-    workstream: "Consumer Insights",
-    task: "Analyse survey data & produce insights pack",
-    owner: "James Okafor",
-    dueDate: "1 Apr",
-    week: 3,
-    dependency: "Survey close (28 Mar)",
-    status: "not-started",
-    notes: "Blocked until survey completes",
-    critical: true,
-  },
-  {
-    id: "m7",
-    workstream: "Synthesis Deck",
-    task: "Draft synthesis deck (40–50 slides)",
-    owner: "Emma Wilson",
-    dueDate: "2 Apr",
-    week: 3,
-    dependency: "All workstream inputs",
-    status: "not-started",
-    notes: "Critical path — requires all inputs by 31 Mar",
-    critical: true,
-  },
-  {
-    id: "m8",
-    workstream: "Partner Review",
-    task: "Partner review & final QA",
-    owner: "Sarah Chen",
-    dueDate: "3 Apr",
-    week: 3,
-    dependency: "Draft deck",
-    status: "not-started",
-    notes: "1-day buffer before IC presentation",
-    critical: true,
-  },
-  {
-    id: "m9",
-    workstream: "Final Presentation",
-    task: "Present to Investment Committee",
-    owner: "Sarah Chen",
-    dueDate: "4 Apr",
-    week: 3,
-    dependency: "Partner sign-off",
-    status: "not-started",
-    notes: "Hard deadline — no flexibility",
-    critical: true,
-  },
+  { id: "m1", workstream: "Survey", task: "Design questionnaire", owner: "James Okafor", dueDate: "19 Mar", week: 1, dependency: "Data room access", status: "complete", notes: "", critical: false },
+  { id: "m2", workstream: "Survey", task: "Launch survey (n=1,500)", owner: "James Okafor", dueDate: "20 Mar", week: 1, dependency: "Survey design", status: "at-risk", notes: "Panel recruitment delayed", critical: true },
+  { id: "m3", workstream: "Market Model", task: "Build market sizing model", owner: "Priya Sharma", dueDate: "28 Mar", week: 2, dependency: "Data room", status: "at-risk", notes: "Missing competitor pricing", critical: true },
+  { id: "m4", workstream: "Internal Analysis", task: "Conduct management sessions", owner: "Tom Bradley", dueDate: "26 Mar", week: 2, dependency: "Client scheduling", status: "at-risk", notes: "Session 2 rescheduled", critical: false },
+  { id: "m5", workstream: "Presentation", task: "Synthesise deck", owner: "Emma Wilson", dueDate: "2 Apr", week: 3, dependency: "All inputs", status: "not-started", notes: "Critical path", critical: true },
+  { id: "m6", workstream: "Presentation", task: "Partner review", owner: "Sarah Chen", dueDate: "3 Apr", week: 3, dependency: "Draft deck", status: "not-started", notes: "", critical: true },
+  { id: "m7", workstream: "Presentation", task: "Final presentation to IC", owner: "Sarah Chen", dueDate: "4 Apr", week: 3, dependency: "Partner sign-off", status: "not-started", notes: "Hard deadline", critical: true },
 ];
-
 export interface WorkstreamRow {
   id: string;
   workstream: string;
