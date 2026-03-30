@@ -69,33 +69,101 @@ interface RecommendationOption {
   risk: string;
 }
 
-const MODEL_STALLED_OPTIONS: RecommendationOption[] = [
-  {
-    id: "opt1",
-    title: "Reassign work",
-    recommended: true,
-    steps: [
-      "Move pricing layer to James",
-      "Ask Priya to share data and wish her better",
-    ],
-    rationale: "Keeps model on track, uses James' capacity given survey delays",
-    risk: "Increases later survey load",
-  },
-  {
-    id: "opt2",
-    title: "Simplify model scope",
-    steps: ["Reduce 5-year projection detail"],
-    rationale: "Maintains timeline",
-    risk: "Lowers precision, client may be unhappy with reduced scope",
-  },
-  {
-    id: "opt3",
-    title: "Recruit new resource",
-    steps: ["Currently have 2 available Associates in the pool"],
-    rationale: "Keeps model on track",
-    risk: "Requires onboarding, may delay partner review",
-  },
-];
+const RISK_OPTIONS: Record<string, RecommendationOption[]> = {
+  r1: [
+    {
+      id: "opt1",
+      title: "Send priority boost request",
+      recommended: true,
+      steps: [
+        "Contact panel provider for priority escalation",
+        "Request expedited recruitment for remaining 38% of target",
+      ],
+      rationale: "Directly addresses root cause, minimal disruption to plan",
+      risk: "Provider may not be able to accelerate",
+    },
+    {
+      id: "opt2",
+      title: "Extend survey by 1 day",
+      steps: [
+        "Push survey close by 1 day",
+        "Compress synthesis timeline by 1 day",
+      ],
+      rationale: "Allows more responses, improves data quality",
+      risk: "Synthesis timeline tighter, partner review buffer reduced further",
+    },
+    {
+      id: "opt3",
+      title: "Proceed with partial data",
+      steps: [
+        "Close survey on schedule with 62% response rate",
+        "Flag reduced confidence in synthesis deck",
+      ],
+      rationale: "Keeps all downstream dates intact",
+      risk: "Lower statistical confidence, partner may challenge findings",
+    },
+  ],
+  r4: [
+    {
+      id: "opt1",
+      title: "Reassign work",
+      recommended: true,
+      steps: [
+        "Move pricing layer to James",
+        "Ask Priya to share data and wish her better",
+      ],
+      rationale: "Keeps model on track, uses James' capacity given survey delays",
+      risk: "Increases later survey load",
+    },
+    {
+      id: "opt2",
+      title: "Simplify model scope",
+      steps: ["Reduce 5-year projection detail"],
+      rationale: "Maintains timeline",
+      risk: "Lowers precision, client may be unhappy with reduced scope",
+    },
+    {
+      id: "opt3",
+      title: "Recruit new resource",
+      steps: ["Currently have 2 available Associates in the pool"],
+      rationale: "Keeps model on track",
+      risk: "Requires onboarding, may delay partner review",
+    },
+  ],
+  r3: [
+    {
+      id: "opt1",
+      title: "Draft with placeholders",
+      recommended: true,
+      steps: [
+        "Ask Tom to draft expert interview section now",
+        "Add placeholders for management inputs to fill Thursday evening",
+      ],
+      rationale: "Keeps synthesis moving, minimises idle time",
+      risk: "Placeholder sections may need significant rework after Thursday",
+    },
+    {
+      id: "opt2",
+      title: "Reorder deliverable sections",
+      steps: [
+        "Move competitive dynamics to end of deck",
+        "Prioritise sections not dependent on management interview",
+      ],
+      rationale: "No content compromises, uses time efficiently",
+      risk: "Deck flow may feel disjointed if not restructured later",
+    },
+    {
+      id: "opt3",
+      title: "Request earlier interview slot",
+      steps: [
+        "Ask management team if Wednesday afternoon is possible",
+        "Offer flexible format (30 min call vs full session)",
+      ],
+      rationale: "Recovers lost day, keeps original plan intact",
+      risk: "Management may decline, wasting coordination effort",
+    },
+  ],
+};
 
 function getAllItems() {
   const map: Record<string, { id: string; label: string; workstream: string; owner: string; status: string; notes?: string; dueDate?: string }> = {};
@@ -140,7 +208,8 @@ export default function Project() {
     }
   };
 
-  const isModelStalled = selectedRisk?.id === "r4";
+  const currentOptions = selectedRisk ? RISK_OPTIONS[selectedRisk.id] : undefined;
+  const hasOptions = !!currentOptions && currentOptions.length > 0;
 
   const totalAtRisk = new Set(
     OUTCOME_GROUPS.flatMap(o => o.affectedTaskIds.filter(id => allItems[id]?.status === "at-risk"))
@@ -360,11 +429,11 @@ export default function Project() {
                   <p className="text-sm text-foreground">{selectedRisk.whoShouldAct}</p>
                 </section>
 
-                {isModelStalled ? (
+                {hasOptions ? (
                   <section>
                     <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Choose an action</h4>
                     <div className="space-y-3">
-                      {MODEL_STALLED_OPTIONS.map((opt, idx) => (
+                      {currentOptions!.map((opt, idx) => (
                         <button
                           key={opt.id}
                           onClick={() => setSelectedOption(opt.id)}
@@ -433,7 +502,7 @@ export default function Project() {
               </div>
 
               <div className="flex items-center gap-2 pt-6 mt-6 border-t border-border">
-                {isModelStalled ? (
+                {hasOptions ? (
                   <>
                     <Button
                       size="sm"
