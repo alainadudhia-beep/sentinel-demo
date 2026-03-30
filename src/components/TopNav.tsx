@@ -7,10 +7,9 @@ const steps = [
   { label: "Risk Review", path: "/project", icon: AlertTriangle },
 ];
 
-const stepOrder = ["/scope", "/plan", "/project", "/risk"];
+const stepOrder = ["/scope", "/plan", "/project"];
 
 function getStepIndex(pathname: string) {
-  if (pathname.startsWith("/risk")) return 3;
   const idx = stepOrder.findIndex((p) => pathname.startsWith(p));
   return idx >= 0 ? idx : -1;
 }
