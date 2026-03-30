@@ -12,14 +12,20 @@ const WEEKS = [
   { label: "Week 3 · 31 Mar–4 Apr", days: ["Mon", "Tue", "Wed", "Thu", "Fri"] },
 ];
 
-// Key client meetings as vertical markers on the Gantt
-const MEETING_MARKERS = [
-  { day: 1, label: "Status Update", cssVar: "--rag-blue" },
-  { day: 6, label: "Status Update", cssVar: "--rag-blue" },
-  { day: 10, label: "Interim", cssVar: "--rag-amber" },
-  { day: 11, label: "Status Update", cssVar: "--rag-blue" },
-  { day: 13, label: "Draft Review", cssVar: "--rag-amber" },
-  { day: 15, label: "Final Readout", cssVar: "--rag-green" },
+interface MeetingMarker {
+  id: string;
+  day: number;
+  label: string;
+  cssVar: string;
+}
+
+const INITIAL_MEETING_MARKERS: MeetingMarker[] = [
+  { id: "mk1", day: 1, label: "Status Update", cssVar: "--rag-blue" },
+  { id: "mk2", day: 6, label: "Status Update", cssVar: "--rag-blue" },
+  { id: "mk3", day: 10, label: "Interim", cssVar: "--rag-amber" },
+  { id: "mk4", day: 11, label: "Status Update", cssVar: "--rag-blue" },
+  { id: "mk5", day: 13, label: "Draft Review", cssVar: "--rag-amber" },
+  { id: "mk6", day: 15, label: "Final Readout", cssVar: "--rag-green" },
 ];
 
 const STATUS_KEYS = ["complete", "on-track", "at-risk", "blocked", "not-started"] as const;
@@ -164,10 +170,13 @@ export default function Plan() {
   const [workstreams, setWorkstreams] = useState<Workstream[]>(
     () => JSON.parse(JSON.stringify(ganttWorkstreams))
   );
+  const [markers, setMarkers] = useState<MeetingMarker[]>(() => [...INITIAL_MEETING_MARKERS]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [rowDrag, setRowDrag] = useState<{ wsId: string; itemId: string; overItemId: string | null } | null>(null);
   const dragRef = useRef<DragState | null>(null);
+  const markerDragRef = useRef<{ markerId: string; startX: number; originalDay: number } | null>(null);
   const timelineRef = useRef<HTMLDivElement | null>(null);
+  const markerTimelineRef = useRef<HTMLDivElement | null>(null);
 
   const toggleWorkstream = (id: string) =>
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -293,6 +302,35 @@ export default function Plan() {
     setEditingId(null);
   };
 
+  const handleMarkerMouseMove = useCallback((e: MouseEvent) => {
+    const md = markerDragRef.current;
+    const el = markerTimelineRef.current;
+    if (!md || !el) return;
+    const rect = el.getBoundingClientRect();
+    const dayWidth = rect.width / TOTAL_DAYS;
+    const deltaDays = Math.round((e.clientX - md.startX) / dayWidth);
+    if (deltaDays === 0) return;
+    const newDay = Math.max(1, Math.min(TOTAL_DAYS, md.originalDay + deltaDays));
+    setMarkers((prev) => prev.map((m) => m.id === md.markerId ? { ...m, day: newDay } : m));
+  }, []);
+
+  const handleMarkerMouseUp = useCallback(() => {
+    markerDragRef.current = null;
+    document.removeEventListener("mousemove", handleMarkerMouseMove);
+    document.removeEventListener("mouseup", handleMarkerMouseUp);
+    document.body.style.userSelect = "";
+    document.body.style.cursor = "";
+  }, [handleMarkerMouseMove]);
+
+  const startMarkerDrag = useCallback((e: React.MouseEvent, marker: MeetingMarker) => {
+    e.preventDefault();
+    markerDragRef.current = { markerId: marker.id, startX: e.clientX, originalDay: marker.day };
+    document.body.style.userSelect = "none";
+    document.body.style.cursor = "grabbing";
+    document.addEventListener("mousemove", handleMarkerMouseMove);
+    document.addEventListener("mouseup", handleMarkerMouseUp);
+  }, [handleMarkerMouseMove, handleMarkerMouseUp]);
+
   return (
     <div className="max-w-7xl mx-auto px-6 py-10">
       {/* Header */}
@@ -347,17 +385,19 @@ export default function Plan() {
         {/* Meeting marker callouts row */}
         <div className="flex border-b border-border bg-secondary/30">
           <div className="w-[520px] min-w-[520px] shrink-0" />
-          <div className="flex-1 relative h-7">
-            {MEETING_MARKERS.map((marker, i) => {
+          <div className="flex-1 relative h-7" ref={markerTimelineRef}>
+            {markers.map((marker) => {
               const left = ((marker.day - 1 + 0.5) / TOTAL_DAYS) * 100;
               return (
                 <div
-                  key={i}
-                  className="absolute top-0 flex flex-col items-center -translate-x-1/2"
+                  key={marker.id}
+                  className="absolute top-0 flex flex-col items-center -translate-x-1/2 cursor-grab active:cursor-grabbing"
                   style={{ left: `${left}%` }}
+                  onMouseDown={(e) => startMarkerDrag(e, marker)}
+                  title="Drag to move"
                 >
                   <span
-                    className="text-[9px] font-semibold whitespace-nowrap px-1.5 py-0.5 rounded bg-background border border-border shadow-sm"
+                    className="text-[9px] font-semibold whitespace-nowrap px-1.5 py-0.5 rounded bg-background border border-border shadow-sm select-none"
                     style={{ color: `hsl(var(${marker.cssVar}))` }}
                   >
                     {marker.label}
@@ -397,7 +437,7 @@ export default function Plan() {
 
         {/* Vertical dotted lines for meeting markers (full chart height) */}
         <div className="absolute top-0 bottom-0 pointer-events-none z-10" style={{ left: '520px', right: 0 }}>
-          {MEETING_MARKERS.map((marker, i) => {
+          {markers.map((marker, i) => {
             const left = ((marker.day - 1 + 0.5) / TOTAL_DAYS) * 100;
             return (
               <div
