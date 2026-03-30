@@ -65,8 +65,10 @@ function GanttBar({
 }: {
   item: GanttItem;
   onDragStart?: (e: React.MouseEvent, mode: DragMode) => void;
-  customColors?: Record<string, string | null>;
+  customColors: Record<string, string | null>;
 }) {
+  const customColor = customColors[item.status];
+
   if (item.type === "milestone") {
     const left = ((item.startDay - 1) / TOTAL_DAYS) * 100;
     return (
@@ -75,7 +77,10 @@ function GanttBar({
         style={{ left: `${left}%` }}
         onMouseDown={(e) => onDragStart?.(e, "move")}
       >
-        <Diamond className={`w-3.5 h-3.5 fill-current ${milestoneColors[item.status]}`} />
+        <Diamond
+          className={`w-3.5 h-3.5 fill-current ${customColor ? "" : milestoneColors[item.status]}`}
+          style={customColor ? { color: customColor } : undefined}
+        />
       </div>
     );
   }
@@ -85,26 +90,18 @@ function GanttBar({
 
   return (
     <div
-      className={`absolute top-1/2 -translate-y-1/2 h-5 rounded-sm ${statusColors[item.status]} ${item.critical ? "ring-1 ring-rag-red/40" : ""} cursor-grab active:cursor-grabbing group/bar`}
-      style={{ left: `${left}%`, width: `${width}%`, minWidth: "6px" }}
+      className={`absolute top-1/2 -translate-y-1/2 h-5 rounded-sm ${customColor ? "" : defaultStatusClasses[item.status]} ${item.critical ? "ring-1 ring-rag-red/40" : ""} cursor-grab active:cursor-grabbing group/bar`}
+      style={{ left: `${left}%`, width: `${width}%`, minWidth: "6px", ...(customColor ? { backgroundColor: customColor } : {}) }}
       title={`${item.label}${item.notes ? ` — ${item.notes}` : ""}`}
       onMouseDown={(e) => onDragStart?.(e, "move")}
     >
-      {/* Left resize handle */}
       <div
         className="absolute left-0 top-0 bottom-0 w-1.5 cursor-col-resize opacity-0 group-hover/bar:opacity-100 bg-foreground/20 rounded-l-sm"
-        onMouseDown={(e) => {
-          e.stopPropagation();
-          onDragStart?.(e, "resize-left");
-        }}
+        onMouseDown={(e) => { e.stopPropagation(); onDragStart?.(e, "resize-left"); }}
       />
-      {/* Right resize handle */}
       <div
         className="absolute right-0 top-0 bottom-0 w-1.5 cursor-col-resize opacity-0 group-hover/bar:opacity-100 bg-foreground/20 rounded-r-sm"
-        onMouseDown={(e) => {
-          e.stopPropagation();
-          onDragStart?.(e, "resize-right");
-        }}
+        onMouseDown={(e) => { e.stopPropagation(); onDragStart?.(e, "resize-right"); }}
       />
     </div>
   );
@@ -118,10 +115,21 @@ export default function Plan() {
   const [workstreams, setWorkstreams] = useState<Workstream[]>(
     () => JSON.parse(JSON.stringify(ganttWorkstreams))
   );
+  const [customColors, setCustomColors] = useState<Record<string, string | null>>(
+    () => Object.fromEntries(STATUS_KEYS.map((k) => [k, null]))
+  );
   const [editingId, setEditingId] = useState<string | null>(null);
   const [rowDrag, setRowDrag] = useState<{ wsId: string; itemId: string; overItemId: string | null } | null>(null);
   const dragRef = useRef<DragState | null>(null);
   const timelineRef = useRef<HTMLDivElement | null>(null);
+
+  const getSwatchStyle = (status: string) => {
+    const c = customColors[status];
+    return c ? { backgroundColor: c } : undefined;
+  };
+  const getSwatchClass = (status: string) => {
+    return customColors[status] ? "" : defaultStatusClasses[status];
+  };
 
   const toggleWorkstream = (id: string) =>
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -274,29 +282,33 @@ export default function Plan() {
         </span>
       </div>
 
-      {/* Legend */}
+      {/* Legend with color pickers */}
       <div className="flex items-center gap-5 mb-4 text-xs text-muted-foreground flex-wrap">
-        <span className="flex items-center gap-1.5">
-          <span className="w-8 h-3 rounded-sm bg-rag-green inline-block" /> Complete
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-8 h-3 rounded-sm bg-rag-green-light inline-block" /> On track
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-8 h-3 rounded-sm bg-rag-amber inline-block" /> At risk
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-8 h-3 rounded-sm bg-rag-red inline-block" /> Blocked
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-8 h-3 rounded-sm bg-muted-foreground/30 inline-block" /> Not started
-        </span>
+        {STATUS_KEYS.map((status) => (
+          <label key={status} className="flex items-center gap-1.5 cursor-pointer relative">
+            <span
+              className={`w-8 h-3 rounded-sm inline-block ${getSwatchClass(status)}`}
+              style={getSwatchStyle(status)}
+            />
+            <input
+              type="color"
+              className="absolute left-0 top-0 w-8 h-3 opacity-0 cursor-pointer"
+              value={customColors[status] || DEFAULT_STATUS_COLORS[status]}
+              onChange={(e) => setCustomColors((prev) => ({ ...prev, [status]: e.target.value }))}
+            />
+            {STATUS_LABELS[status]}
+          </label>
+        ))}
         <span className="flex items-center gap-1.5">
           <Diamond className="w-3 h-3 fill-current text-muted-foreground" /> Milestone
         </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-4 h-3 rounded-sm bg-rag-amber ring-1 ring-rag-red/40 inline-block" /> Critical path
-        </span>
+        <button
+          className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors ml-2"
+          onClick={() => setCustomColors(Object.fromEntries(STATUS_KEYS.map((k) => [k, null])))}
+          title="Reset colors to defaults"
+        >
+          <Palette className="w-3 h-3" /> Reset
+        </button>
       </div>
 
       {/* Gantt Chart */}
@@ -354,7 +366,7 @@ export default function Plan() {
                 </div>
                 {!expanded[ws.id] &&
                   ws.items.map((item) => (
-                    <GanttBar key={item.id} item={item} />
+                    <GanttBar key={item.id} item={item} customColors={customColors} />
                   ))}
               </div>
             </div>
@@ -393,13 +405,13 @@ export default function Plan() {
                   <div className="w-64 min-w-[256px] shrink-0 px-4 py-2 pl-7 flex items-center gap-1.5">
                     <GripVertical className="w-3 h-3 text-muted-foreground/30 shrink-0 cursor-grab active:cursor-grabbing opacity-0 group-hover/item:opacity-100 transition-opacity" />
                     {item.status === "complete" ? (
-                      <Check className="w-3.5 h-3.5 text-rag-green shrink-0" />
+                      <Check className={`w-3.5 h-3.5 shrink-0 ${customColors.complete ? "" : "text-rag-green"}`} style={customColors.complete ? { color: customColors.complete } : undefined} />
                     ) : item.status === "on-track" ? (
-                      <Check className="w-3.5 h-3.5 text-rag-green-light shrink-0" />
+                      <Check className={`w-3.5 h-3.5 shrink-0 ${customColors["on-track"] ? "" : "text-rag-green-light"}`} style={customColors["on-track"] ? { color: customColors["on-track"] } : undefined} />
                     ) : item.status === "at-risk" ? (
-                      <AlertTriangle className="w-3 h-3 text-rag-amber shrink-0" />
+                      <AlertTriangle className={`w-3 h-3 shrink-0 ${customColors["at-risk"] ? "" : "text-rag-amber"}`} style={customColors["at-risk"] ? { color: customColors["at-risk"] } : undefined} />
                     ) : item.status === "blocked" ? (
-                      <AlertTriangle className="w-3 h-3 text-rag-red shrink-0" />
+                      <AlertTriangle className={`w-3 h-3 shrink-0 ${customColors.blocked ? "" : "text-rag-red"}`} style={customColors.blocked ? { color: customColors.blocked } : undefined} />
                     ) : item.type === "milestone" ? (
                       <Diamond className="w-2.5 h-2.5 text-muted-foreground/40 shrink-0" />
                     ) : (
@@ -446,6 +458,7 @@ export default function Plan() {
                       <GanttBar
                         item={item}
                         onDragStart={(e, mode) => startDrag(e, mode, ws.id, item)}
+                        customColors={customColors}
                       />
                     </div>
                   </div>
