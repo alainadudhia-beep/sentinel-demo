@@ -516,7 +516,7 @@ export default function Plan() {
         </div>
 
         {/* Vertical dotted lines for meeting markers (full chart height) */}
-        <div className="absolute top-0 bottom-0 pointer-events-none z-10" style={{ left: '620px', right: 0 }}>
+        <div className="absolute top-0 bottom-0 pointer-events-none z-10" style={{ left: '460px', right: 0 }}>
           {markers.map((marker, i) => {
             const left = ((marker.day - 1 + 0.5) / TOTAL_DAYS) * 100;
             return (
