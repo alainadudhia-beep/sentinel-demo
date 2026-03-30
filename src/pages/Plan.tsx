@@ -61,9 +61,11 @@ interface DragState {
 function GanttBar({
   item,
   onDragStart,
+  customColors,
 }: {
   item: GanttItem;
   onDragStart?: (e: React.MouseEvent, mode: DragMode) => void;
+  customColors?: Record<string, string | null>;
 }) {
   if (item.type === "milestone") {
     const left = ((item.startDay - 1) / TOTAL_DAYS) * 100;
