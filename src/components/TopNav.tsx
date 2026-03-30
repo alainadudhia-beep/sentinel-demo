@@ -1,17 +1,15 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { FileText, ListChecks, Monitor, AlertTriangle } from "lucide-react";
+import { FileText, ListChecks, AlertTriangle } from "lucide-react";
 
 const steps = [
   { label: "Add Scope", path: "/scope", icon: FileText },
   { label: "Project Plan", path: "/plan", icon: ListChecks },
-  { label: "Live Project", path: "/project", icon: Monitor },
-  { label: "Risk Review", path: "/project", icon: AlertTriangle, matchPrefix: "/risk" },
+  { label: "Risk Review", path: "/project", icon: AlertTriangle },
 ];
 
-const stepOrder = ["/scope", "/plan", "/project", "/risk"];
+const stepOrder = ["/scope", "/plan", "/project"];
 
 function getStepIndex(pathname: string) {
-  if (pathname.startsWith("/risk")) return 3;
   const idx = stepOrder.findIndex((p) => pathname.startsWith(p));
   return idx >= 0 ? idx : -1;
 }
@@ -46,8 +44,7 @@ export default function TopNav() {
                 )}
                 <button
                   onClick={() => {
-                    if (step.matchPrefix) navigate("/project");
-                    else navigate(step.path);
+                    navigate(step.path);
                   }}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
                     isActive
