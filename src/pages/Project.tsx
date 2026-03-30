@@ -23,7 +23,8 @@ interface OutcomeGroup {
   severity: "high" | "medium";
   cause: string;
   projectImpact: string;
-  riskId: string; // links to Risk for overlay
+  recommendedAction: string;
+  riskId: string;
   affectedTaskIds: string[];
 }
 
