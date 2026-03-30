@@ -405,13 +405,13 @@ export default function Plan() {
                   <div className="w-64 min-w-[256px] shrink-0 px-4 py-2 pl-7 flex items-center gap-1.5">
                     <GripVertical className="w-3 h-3 text-muted-foreground/30 shrink-0 cursor-grab active:cursor-grabbing opacity-0 group-hover/item:opacity-100 transition-opacity" />
                     {item.status === "complete" ? (
-                      <Check className="w-3.5 h-3.5 text-rag-green shrink-0" />
+                      <Check className={`w-3.5 h-3.5 shrink-0 ${customColors.complete ? "" : "text-rag-green"}`} style={customColors.complete ? { color: customColors.complete } : undefined} />
                     ) : item.status === "on-track" ? (
-                      <Check className="w-3.5 h-3.5 text-rag-green-light shrink-0" />
+                      <Check className={`w-3.5 h-3.5 shrink-0 ${customColors["on-track"] ? "" : "text-rag-green-light"}`} style={customColors["on-track"] ? { color: customColors["on-track"] } : undefined} />
                     ) : item.status === "at-risk" ? (
-                      <AlertTriangle className="w-3 h-3 text-rag-amber shrink-0" />
+                      <AlertTriangle className={`w-3 h-3 shrink-0 ${customColors["at-risk"] ? "" : "text-rag-amber"}`} style={customColors["at-risk"] ? { color: customColors["at-risk"] } : undefined} />
                     ) : item.status === "blocked" ? (
-                      <AlertTriangle className="w-3 h-3 text-rag-red shrink-0" />
+                      <AlertTriangle className={`w-3 h-3 shrink-0 ${customColors.blocked ? "" : "text-rag-red"}`} style={customColors.blocked ? { color: customColors.blocked } : undefined} />
                     ) : item.type === "milestone" ? (
                       <Diamond className="w-2.5 h-2.5 text-muted-foreground/40 shrink-0" />
                     ) : (
