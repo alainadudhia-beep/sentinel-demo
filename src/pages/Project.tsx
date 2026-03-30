@@ -502,7 +502,7 @@ export default function Project() {
               </div>
 
               <div className="flex items-center gap-2 pt-6 mt-6 border-t border-border">
-                {isModelStalled ? (
+                {hasOptions ? (
                   <>
                     <Button
                       size="sm"
