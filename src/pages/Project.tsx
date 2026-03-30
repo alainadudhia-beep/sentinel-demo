@@ -20,7 +20,7 @@ const statusConfig: Record<string, { label: string; className: string; icon: Rea
 interface OutcomeGroup {
   id: string;
   outcome: string;
-  severity: "high" | "medium";
+  severity: "critical" | "high" | "medium";
   cause: string;
   projectImpact: string;
   recommendedAction: string;
