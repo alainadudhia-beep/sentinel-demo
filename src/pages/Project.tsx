@@ -52,7 +52,7 @@ const RISK_OPTIONS: Record<string, RecommendationOption[]> = {
   r1: [
     {
       id: "r1-opt1",
-      title: "Send priority boost request",
+      title: "Recover survey timeline with priority boost request",
       recommended: true,
       steps: [
         "Contact panel provider for priority escalation",
