@@ -170,10 +170,13 @@ export default function Plan() {
   const [workstreams, setWorkstreams] = useState<Workstream[]>(
     () => JSON.parse(JSON.stringify(ganttWorkstreams))
   );
+  const [markers, setMarkers] = useState<MeetingMarker[]>(() => [...INITIAL_MEETING_MARKERS]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [rowDrag, setRowDrag] = useState<{ wsId: string; itemId: string; overItemId: string | null } | null>(null);
   const dragRef = useRef<DragState | null>(null);
+  const markerDragRef = useRef<{ markerId: string; startX: number; originalDay: number } | null>(null);
   const timelineRef = useRef<HTMLDivElement | null>(null);
+  const markerTimelineRef = useRef<HTMLDivElement | null>(null);
 
   const toggleWorkstream = (id: string) =>
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
