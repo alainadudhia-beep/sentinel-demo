@@ -594,7 +594,7 @@ export default function Plan() {
                     </div>
                     {/* Dependency column */}
                     <div className="w-[130px] px-2 py-2">
-                      <span className="text-[10px] text-muted-foreground truncate block">{item.dependency || "—"}</span>
+                      <span className="text-[10px] text-muted-foreground block break-words">{item.dependency || "—"}</span>
                     </div>
                     {/* Notes column */}
                     <div className="flex-1 px-2 py-2">
