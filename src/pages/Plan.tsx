@@ -495,7 +495,7 @@ export default function Plan() {
             <div className="w-[240px] px-4 py-2">Task</div>
             <div className="w-[60px] px-2 py-2">Due</div>
             <div className="w-[160px] px-2 py-2">Dependency</div>
-            <div className="flex-1 px-2 py-2">Notes</div>
+            
           </div>
           <div className="flex-1 flex" ref={timelineRef}>
             {WEEKS.map((week, wi) => (
