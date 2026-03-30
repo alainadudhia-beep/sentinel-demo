@@ -290,7 +290,7 @@ export default function Project() {
                   <span
                     className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
                       selectedRisk.severity === "critical"
-                        ? "bg-rag-red/20 text-rag-red"
+                        ? "bg-rag-critical/20 text-rag-critical"
                         : selectedRisk.severity === "high"
                         ? "bg-rag-red/10 text-rag-red"
                         : "bg-rag-amber/10 text-rag-amber"
