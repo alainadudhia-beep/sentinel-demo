@@ -108,8 +108,10 @@ function StatusPicker({
   onChangeStatus: (status: string) => void;
 }) {
   const icon =
-    currentStatus === "complete" || currentStatus === "on-track" ? (
+    currentStatus === "complete" ? (
       <Check className={`w-3.5 h-3.5 ${statusIconColors[currentStatus]}`} />
+    ) : currentStatus === "on-track" ? (
+      <Circle className={`w-3 h-3 fill-current ${statusIconColors[currentStatus]}`} />
     ) : currentStatus === "at-risk" || currentStatus === "blocked" ? (
       <AlertTriangle className={`w-3 h-3 ${statusIconColors[currentStatus]}`} />
     ) : (
