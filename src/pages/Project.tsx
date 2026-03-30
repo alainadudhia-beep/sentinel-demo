@@ -188,7 +188,7 @@ export default function Project() {
                 </div>
                 <div className="shrink-0 max-w-[340px] text-right">
                   <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Project impact</p>
-                  <p className="text-xs text-foreground leading-snug">{group.projectImpact}</p>
+                  <p className="text-xs font-semibold text-foreground leading-snug">{group.projectImpact}</p>
                 </div>
               </button>
 
