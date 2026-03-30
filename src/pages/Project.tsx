@@ -257,7 +257,18 @@ export default function Project() {
                       {group.severity === "critical" ? "Critical" : group.severity === "high" ? "High" : "Medium"}
                     </span>
                     <h3 className="text-sm font-semibold text-foreground">{group.outcome}</h3>
-                  </div>
+                    <span
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold ${
+                        group.actionBy === "now"
+                          ? "bg-rag-critical/15 text-rag-critical"
+                          : group.actionBy === "today"
+                          ? "bg-rag-amber/15 text-rag-amber"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      <Clock className="w-3 h-3" />
+                      Act {group.actionBy}
+                    </span>
                   <p className="text-xs text-muted-foreground mt-1">{group.cause}</p>
                 </div>
                 <div className="shrink-0 max-w-[340px] text-right">
