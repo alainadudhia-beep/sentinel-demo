@@ -23,7 +23,8 @@ interface OutcomeGroup {
   severity: "high" | "medium";
   cause: string;
   projectImpact: string;
-  riskId: string; // links to Risk for overlay
+  recommendedAction: string;
+  riskId: string;
   affectedTaskIds: string[];
 }
 
@@ -34,6 +35,7 @@ const OUTCOME_GROUPS: OutcomeGroup[] = [
     severity: "high",
     cause: "Panel recruitment delayed 1 day, response rate at 62% of target",
     projectImpact: "Synthesis deck pushed +2 days → partner review compressed into final presentation day, eliminating buffer",
+    recommendedAction: "Send follow-up reminder to panel provider requesting priority boost. Consider extending survey by 1 day with adjusted synthesis timeline.",
     riskId: "r1",
     affectedTaskIds: ["s2", "s3", "s5", "s6", "s7", "s8"],
   },
@@ -43,6 +45,7 @@ const OUTCOME_GROUPS: OutcomeGroup[] = [
     severity: "high",
     cause: "Priya off sick since Wednesday — competitor pricing layer and 5-year projections incomplete",
     projectImpact: "TAM/SAM/SOM section incomplete for partner review, weakens investment thesis",
+    recommendedAction: "Check if Priya can work reduced hours remotely, or reassign competitor pricing layer. Consider simplifying 5-year projection to sensitivity range.",
     riskId: "r4",
     affectedTaskIds: ["mm2", "mm3"],
   },
@@ -52,6 +55,7 @@ const OUTCOME_GROUPS: OutcomeGroup[] = [
     severity: "medium",
     cause: "Session 2 rescheduled from Tuesday to Thursday",
     projectImpact: "Expert interview synthesis missing management cross-references, competitive dynamics section weakened",
+    recommendedAction: "Ask Tom to draft expert interview section with placeholders for management inputs, to be filled Thursday evening.",
     riskId: "r3",
     affectedTaskIds: ["ia2"],
   },
@@ -185,6 +189,10 @@ export default function Project() {
                   </div>
                   <h3 className="text-sm font-semibold text-foreground">{group.outcome}</h3>
                   <p className="text-xs text-muted-foreground mt-1">{group.cause}</p>
+                  <p className="text-xs text-foreground mt-1.5">
+                    <span className="font-medium text-muted-foreground">Recommended: </span>
+                    {group.recommendedAction}
+                  </p>
                 </div>
                 <div className="shrink-0 max-w-[340px] text-right">
                   <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Project impact</p>
