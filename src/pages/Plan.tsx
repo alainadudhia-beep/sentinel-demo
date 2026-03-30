@@ -12,6 +12,16 @@ const WEEKS = [
   { label: "Week 3 · 31 Mar–4 Apr", days: ["Mon", "Tue", "Wed", "Thu", "Fri"] },
 ];
 
+// Key client meetings as vertical markers on the Gantt
+const MEETING_MARKERS = [
+  { day: 1, label: "Status Update", cssVar: "--rag-blue" },
+  { day: 6, label: "Status Update", cssVar: "--rag-blue" },
+  { day: 10, label: "Interim", cssVar: "--rag-amber" },
+  { day: 11, label: "Status Update", cssVar: "--rag-blue" },
+  { day: 13, label: "Draft Review", cssVar: "--rag-amber" },
+  { day: 15, label: "Final Readout", cssVar: "--rag-green" },
+];
+
 const STATUS_KEYS = ["complete", "on-track", "at-risk", "blocked", "not-started"] as const;
 type StatusKey = typeof STATUS_KEYS[number];
 
@@ -333,7 +343,32 @@ export default function Plan() {
       </div>
 
       {/* Gantt Chart */}
-      <div className="border border-border rounded-lg overflow-hidden bg-card">
+      <div className="border border-border rounded-lg overflow-hidden bg-card relative">
+        {/* Meeting marker callouts row */}
+        <div className="flex border-b border-border bg-secondary/30">
+          <div className="w-64 min-w-[256px] shrink-0" />
+          <div className="flex-1 relative h-7">
+            {MEETING_MARKERS.map((marker, i) => {
+              const left = ((marker.day - 1 + 0.5) / TOTAL_DAYS) * 100;
+              return (
+                <div
+                  key={i}
+                  className="absolute top-0 flex flex-col items-center -translate-x-1/2"
+                  style={{ left: `${left}%` }}
+                >
+                  <span
+                    className="text-[9px] font-semibold whitespace-nowrap px-1.5 py-0.5 rounded bg-background border border-border shadow-sm"
+                    style={{ color: `hsl(var(${marker.cssVar}))` }}
+                  >
+                    {marker.label}
+                  </span>
+                  <div className="w-px h-1.5 opacity-60" style={{ backgroundColor: `hsl(var(${marker.cssVar}))` }} />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Timeline header */}
         <div className="flex border-b border-border bg-secondary/50">
           <div className="w-64 min-w-[256px] shrink-0 px-4 py-2" />
@@ -353,6 +388,24 @@ export default function Plan() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Vertical dotted lines for meeting markers (full chart height) */}
+        <div className="absolute top-0 bottom-0 left-64 right-0 pointer-events-none z-10">
+          {MEETING_MARKERS.map((marker, i) => {
+            const left = ((marker.day - 1 + 0.5) / TOTAL_DAYS) * 100;
+            return (
+              <div
+                key={i}
+                className="absolute top-0 bottom-0"
+                style={{
+                  left: `${left}%`,
+                  borderLeft: `1.5px dashed hsl(var(${marker.cssVar}))`,
+                  opacity: 0.35,
+                }}
+              />
+            );
+          })}
         </div>
 
         {/* Workstream rows */}
