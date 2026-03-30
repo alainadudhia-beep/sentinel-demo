@@ -269,6 +269,7 @@ export default function Project() {
                       <Clock className="w-3 h-3" />
                       Act {group.actionBy}
                     </span>
+                   </div>
                   <p className="text-xs text-muted-foreground mt-1">{group.cause}</p>
                 </div>
                 <div className="shrink-0 max-w-[340px] text-right">
