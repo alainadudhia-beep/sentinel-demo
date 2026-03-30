@@ -135,13 +135,13 @@ export default function Project() {
           </span>
         </div>
         <div className="flex items-center gap-3 mt-3">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-red/15 text-rag-red border border-rag-red/20">
+            <AlertTriangle className="w-4 h-4" />
+            2 high risk delays
+          </span>
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-amber/15 text-rag-amber border border-rag-amber/20">
             <AlertTriangle className="w-4 h-4" />
-            {totalAtRisk} at risk
-          </span>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-red/15 text-rag-red border border-rag-red/20">
-            <OctagonX className="w-4 h-4" />
-            {totalBlocked} blocked
+            1 medium risk delay
           </span>
         </div>
       </div>
