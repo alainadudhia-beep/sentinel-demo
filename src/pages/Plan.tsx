@@ -2,7 +2,7 @@ import { useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ganttWorkstreams, GanttItem, Workstream } from "@/data/mockData";
-import { ArrowRight, Clock, Sparkles, ChevronRight, ChevronDown, Diamond, Check, AlertTriangle, Plus, X } from "lucide-react";
+import { ArrowRight, Clock, Sparkles, ChevronRight, ChevronDown, Diamond, Check, AlertTriangle, Plus, X, GripVertical } from "lucide-react";
 
 const TOTAL_DAYS = 15;
 const WEEKS = [
