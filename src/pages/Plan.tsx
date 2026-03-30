@@ -365,6 +365,13 @@ export default function Plan() {
                         {item.label}
                       </span>
                     )}
+                    <button
+                      className="ml-auto opacity-0 group-hover/item:opacity-100 transition-opacity p-0.5 rounded hover:bg-destructive/10 shrink-0"
+                      onClick={() => removeItem(ws.id, item.id)}
+                      title="Remove task"
+                    >
+                      <X className="w-3 h-3 text-muted-foreground hover:text-destructive" />
+                    </button>
                   </div>
                   <div className="flex-1 relative py-1">
                     <div className="absolute inset-0 flex">
