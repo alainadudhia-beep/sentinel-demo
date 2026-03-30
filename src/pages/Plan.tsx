@@ -300,6 +300,13 @@ export default function Plan() {
                 )}
                 <span className="text-xs font-semibold text-foreground">{ws.name}</span>
                 <span className="text-[10px] text-muted-foreground ml-1">{ws.owner}</span>
+                <button
+                  className="ml-auto opacity-0 group-hover/ws:opacity-100 transition-opacity p-0.5 rounded hover:bg-accent"
+                  onClick={(e) => { e.stopPropagation(); addItem(ws.id); }}
+                  title="Add task"
+                >
+                  <Plus className="w-3 h-3 text-muted-foreground" />
+                </button>
               </div>
               <div className="flex-1 relative">
                 <div className="absolute inset-0 flex">
