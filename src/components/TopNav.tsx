@@ -5,7 +5,7 @@ const steps = [
   { label: "Add Scope", path: "/scope", icon: FileText },
   { label: "Scope Review", path: "/scope-review", icon: CheckCircle2 },
   { label: "Project Plan", path: "/plan", icon: ListChecks },
-  { label: "Risk Review", path: "/project", icon: AlertTriangle },
+  { label: "Risk Manager", path: "/project", icon: AlertTriangle },
 ];
 
 const stepOrder = ["/scope", "/scope-review", "/plan", "/project"];
