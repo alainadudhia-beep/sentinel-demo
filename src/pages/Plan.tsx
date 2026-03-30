@@ -23,7 +23,7 @@ const milestoneColors: Record<string, string> = {
   complete: "text-rag-blue",
   "on-track": "text-rag-green",
   "at-risk": "text-rag-amber",
-  blocked: "text-rag-blocked",
+  blocked: "text-rag-red",
   "not-started": "text-muted-foreground",
 };
 
