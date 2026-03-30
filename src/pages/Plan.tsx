@@ -541,7 +541,7 @@ export default function Plan() {
               className="flex border-b border-border hover:bg-accent/50 transition-colors cursor-pointer group/ws"
               onClick={() => toggleWorkstream(ws.id)}
             >
-              <div className="w-[620px] min-w-[620px] shrink-0 px-4 py-2.5 flex items-center gap-2">
+              <div className="w-[460px] min-w-[460px] shrink-0 px-4 py-2.5 flex items-center gap-2">
                 {expanded[ws.id] ? (
                   <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
                 ) : (
