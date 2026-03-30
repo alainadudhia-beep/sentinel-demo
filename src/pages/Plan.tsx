@@ -15,7 +15,7 @@ const statusColors: Record<string, string> = {
   complete: "bg-rag-blue",
   "on-track": "bg-rag-green",
   "at-risk": "bg-rag-amber",
-  blocked: "bg-rag-blocked",
+  blocked: "bg-rag-red",
   "not-started": "bg-muted-foreground/30",
 };
 
