@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ganttWorkstreams, GanttItem } from "@/data/mockData";
-import { ArrowRight, Clock, Sparkles, ChevronRight, ChevronDown, Diamond } from "lucide-react";
+import { ArrowRight, Clock, Sparkles, ChevronRight, ChevronDown, Diamond, Check, AlertTriangle } from "lucide-react";
 
 const TOTAL_DAYS = 15;
 const WEEKS = [
@@ -181,27 +181,20 @@ export default function Plan() {
                   className="flex border-b border-border/50 hover:bg-accent/30 transition-colors group"
                 >
                   <div className="w-64 min-w-[256px] shrink-0 px-4 py-2 pl-10 flex items-center gap-2">
-                    {item.type === "milestone" ? (
-                      <Diamond className="w-2.5 h-2.5 text-muted-foreground shrink-0" />
+                    {item.status === "complete" ? (
+                      <Check className="w-3.5 h-3.5 text-rag-blue shrink-0" />
+                    ) : item.status === "on-track" ? (
+                      <Check className="w-3.5 h-3.5 text-rag-green shrink-0" />
+                    ) : item.status === "at-risk" ? (
+                      <AlertTriangle className="w-3 h-3 text-rag-amber shrink-0" />
+                    ) : item.status === "blocked" ? (
+                      <AlertTriangle className="w-3 h-3 text-rag-red shrink-0" />
+                    ) : item.type === "milestone" ? (
+                      <Diamond className="w-2.5 h-2.5 text-muted-foreground/40 shrink-0" />
                     ) : (
-                      <span className="w-2.5 h-1 rounded-full bg-muted-foreground/40 shrink-0" />
+                      <span className="w-3.5 h-3.5 shrink-0" />
                     )}
                     <span className="text-xs text-foreground truncate">{item.label}</span>
-                    {item.status !== "not-started" && (
-                      <span
-                        className={`text-[10px] px-1.5 py-0.5 rounded font-medium shrink-0 ${
-                          item.status === "complete"
-                            ? "bg-rag-blue/10 text-rag-blue"
-                            : item.status === "at-risk"
-                            ? "bg-rag-amber/10 text-rag-amber"
-                            : item.status === "blocked"
-                            ? "bg-rag-blocked/10 text-rag-blocked"
-                            : "bg-rag-green/10 text-rag-green"
-                        }`}
-                      >
-                        {statusLabels[item.status]}
-                      </span>
-                    )}
                   </div>
                   <div className="flex-1 relative py-1">
                     {/* Grid lines */}
