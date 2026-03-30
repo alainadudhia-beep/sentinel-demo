@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ganttWorkstreams, risks, type Risk } from "@/data/mockData";
-import { AlertTriangle, ShieldAlert, X, Send, Pencil, ArrowUpRight, CircleCheck, OctagonX, ChevronDown, ChevronRight } from "lucide-react";
+import { AlertTriangle, ShieldAlert, X, Send, Pencil, ArrowUpRight, CircleCheck, OctagonX, ChevronDown, ChevronRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const statusConfig: Record<string, { label: string; className: string; icon: React.ReactNode }> = {
@@ -16,7 +16,6 @@ const statusConfig: Record<string, { label: string; className: string; icon: Rea
   },
 };
 
-// Outcome-based risk groupings — each outcome maps to affected tasks and a project-level impact
 interface OutcomeGroup {
   id: string;
   outcome: string;
@@ -61,7 +60,43 @@ const OUTCOME_GROUPS: OutcomeGroup[] = [
   },
 ];
 
-// Build a lookup of all gantt items by ID
+interface RecommendationOption {
+  id: string;
+  title: string;
+  recommended?: boolean;
+  steps: string[];
+  rationale: string;
+  risk: string;
+}
+
+const MODEL_STALLED_OPTIONS: RecommendationOption[] = [
+  {
+    id: "opt1",
+    title: "Reassign work",
+    recommended: true,
+    steps: [
+      "Move pricing layer to James",
+      "Ask Priya to share data and wish her better",
+    ],
+    rationale: "Keeps model on track, uses James' capacity given survey delays",
+    risk: "Increases later survey load",
+  },
+  {
+    id: "opt2",
+    title: "Simplify model scope",
+    steps: ["Reduce 5-year projection detail"],
+    rationale: "Maintains timeline",
+    risk: "Lowers precision, client may be unhappy with reduced scope",
+  },
+  {
+    id: "opt3",
+    title: "Recruit new resource",
+    steps: ["Currently have 2 available Associates in the pool"],
+    rationale: "Keeps model on track",
+    risk: "Requires onboarding, may delay partner review",
+  },
+];
+
 function getAllItems() {
   const map: Record<string, { id: string; label: string; workstream: string; owner: string; status: string; notes?: string; dueDate?: string }> = {};
   for (const ws of ganttWorkstreams) {
@@ -84,6 +119,7 @@ export default function Project() {
   const [selectedRisk, setSelectedRisk] = useState<Risk | null>(null);
   const [handled, setHandled] = useState<Set<string>>(new Set());
   const [expandedOutcomes, setExpandedOutcomes] = useState<Set<string>>(new Set(OUTCOME_GROUPS.map(o => o.id)));
+  const [selectedOption, setSelectedOption] = useState<string>("opt1");
 
   const allItems = getAllItems();
 
@@ -98,10 +134,14 @@ export default function Project() {
 
   const openRisk = (riskId: string) => {
     const risk = risks.find((r) => r.id === riskId);
-    if (risk) setSelectedRisk(risk);
+    if (risk) {
+      setSelectedRisk(risk);
+      setSelectedOption("opt1");
+    }
   };
 
-  // Count totals
+  const isModelStalled = selectedRisk?.id === "r4";
+
   const totalAtRisk = new Set(
     OUTCOME_GROUPS.flatMap(o => o.affectedTaskIds.filter(id => allItems[id]?.status === "at-risk"))
   ).size;
@@ -205,7 +245,7 @@ export default function Project() {
                 </div>
               </button>
 
-              {/* Actions bar - always visible */}
+              {/* Actions bar */}
               <div className="px-5 py-3 border-t border-border/50 flex items-center gap-2">
                 <Button
                   variant="outline"
@@ -233,8 +273,6 @@ export default function Project() {
               {/* Expanded: affected tasks */}
               {isExpanded && (
                 <div className="border-t border-border/50">
-
-                  {/* Affected tasks sub-table */}
                   <div className="px-5 py-3 border-t border-border/30">
                     <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Affected tasks</p>
                     <div className="space-y-1">
@@ -270,7 +308,7 @@ export default function Project() {
         })}
       </div>
 
-      {/* Overlay panel (Notion-style) */}
+      {/* Overlay panel */}
       {selectedRisk && (
         <>
           <div
@@ -321,43 +359,126 @@ export default function Project() {
                   <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">Who should act</h4>
                   <p className="text-sm text-foreground">{selectedRisk.whoShouldAct}</p>
                 </section>
-                <section>
-                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">Recommended Action: </h4>
-                  <p className="text-sm text-foreground leading-relaxed">{selectedRisk.suggestedAction}</p>
-                </section>
-                <section>
-                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">AI-drafted message</h4>
-                  <div className="bg-secondary rounded-lg p-4 text-sm text-foreground leading-relaxed font-mono whitespace-pre-wrap">
-                    {selectedRisk.draftMessage}
-                  </div>
-                </section>
+
+                {isModelStalled ? (
+                  <section>
+                    <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Choose an action</h4>
+                    <div className="space-y-3">
+                      {MODEL_STALLED_OPTIONS.map((opt, idx) => (
+                        <button
+                          key={opt.id}
+                          onClick={() => setSelectedOption(opt.id)}
+                          className={`w-full text-left rounded-lg border p-4 transition-all ${
+                            selectedOption === opt.id
+                              ? "border-primary bg-primary/5 ring-1 ring-primary/20"
+                              : "border-border hover:border-muted-foreground/30 hover:bg-accent/30"
+                          }`}
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className={`mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
+                              selectedOption === opt.id
+                                ? "border-primary bg-primary"
+                                : "border-muted-foreground/40"
+                            }`}>
+                              {selectedOption === opt.id && (
+                                <Check className="w-3 h-3 text-primary-foreground" />
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-1.5">
+                                <span className="text-sm font-semibold text-foreground">
+                                  {idx + 1}. {opt.title}
+                                </span>
+                                {opt.recommended && (
+                                  <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-primary/10 text-primary">
+                                    Recommended
+                                  </span>
+                                )}
+                              </div>
+                              <div className="space-y-1 mb-2">
+                                {opt.steps.map((step, i) => (
+                                  <p key={i} className="text-xs text-muted-foreground">
+                                    → {step}
+                                  </p>
+                                ))}
+                              </div>
+                              <p className="text-xs text-foreground">
+                                <span className="font-medium text-muted-foreground">Rationale: </span>
+                                {opt.rationale}
+                              </p>
+                              <p className="text-xs text-foreground mt-0.5">
+                                <span className="font-medium text-rag-amber">Risk: </span>
+                                {opt.risk}
+                              </p>
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </section>
+                ) : (
+                  <>
+                    <section>
+                      <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">Recommended Action</h4>
+                      <p className="text-sm text-foreground leading-relaxed">{selectedRisk.suggestedAction}</p>
+                    </section>
+                    <section>
+                      <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">AI-drafted message</h4>
+                      <div className="bg-secondary rounded-lg p-4 text-sm text-foreground leading-relaxed font-mono whitespace-pre-wrap">
+                        {selectedRisk.draftMessage}
+                      </div>
+                    </section>
+                  </>
+                )}
               </div>
 
               <div className="flex items-center gap-2 pt-6 mt-6 border-t border-border">
-                <Button variant="outline" size="sm" className="gap-1.5 h-8 text-xs">
-                  <Pencil className="w-3 h-3" />
-                  Edit
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="gap-1.5 h-8 text-xs"
-                  onClick={() => {
-                    setHandled((prev) => new Set(prev).add(selectedRisk.id));
-                    setSelectedRisk(null);
-                  }}
-                >
-                  <CircleCheck className="w-3 h-3" />
-                  Handled
-                </Button>
-                <Button variant="outline" size="sm" className="gap-1.5 h-8 text-xs">
-                  <ArrowUpRight className="w-3 h-3" />
-                  Escalate
-                </Button>
-                <Button size="sm" className="gap-1.5 h-8 text-xs">
-                  <Send className="w-3 h-3" />
-                  Send
-                </Button>
+                {isModelStalled ? (
+                  <>
+                    <Button
+                      size="sm"
+                      className="gap-1.5 h-8 text-xs"
+                      onClick={() => {
+                        setHandled((prev) => new Set(prev).add(selectedRisk.id));
+                        setSelectedRisk(null);
+                      }}
+                    >
+                      <Check className="w-3 h-3" />
+                      Action selected plan
+                    </Button>
+                    <Button variant="outline" size="sm" className="gap-1.5 h-8 text-xs">
+                      <ArrowUpRight className="w-3 h-3" />
+                      Escalate
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button variant="outline" size="sm" className="gap-1.5 h-8 text-xs">
+                      <Pencil className="w-3 h-3" />
+                      Edit
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="gap-1.5 h-8 text-xs"
+                      onClick={() => {
+                        setHandled((prev) => new Set(prev).add(selectedRisk.id));
+                        setSelectedRisk(null);
+                      }}
+                    >
+                      <CircleCheck className="w-3 h-3" />
+                      Handled
+                    </Button>
+                    <Button variant="outline" size="sm" className="gap-1.5 h-8 text-xs">
+                      <ArrowUpRight className="w-3 h-3" />
+                      Escalate
+                    </Button>
+                    <Button size="sm" className="gap-1.5 h-8 text-xs">
+                      <Send className="w-3 h-3" />
+                      Send
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>
