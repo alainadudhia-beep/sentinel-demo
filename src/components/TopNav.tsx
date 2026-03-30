@@ -11,6 +11,8 @@ const steps = [
 const stepOrder = ["/scope", "/scope-review", "/plan", "/project"];
 
 function getStepIndex(pathname: string) {
+  const exactIdx = stepOrder.indexOf(pathname);
+  if (exactIdx >= 0) return exactIdx;
   const idx = stepOrder.findIndex((p) => pathname.startsWith(p));
   return idx >= 0 ? idx : -1;
 }
