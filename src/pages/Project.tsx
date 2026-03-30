@@ -45,7 +45,7 @@ const OUTCOME_GROUPS: OutcomeGroup[] = [
     severity: "high",
     cause: "Priya off sick since Wednesday — competitor pricing layer and 5-year projections incomplete",
     projectImpact: "TAM/SAM/SOM section incomplete for partner review, weakens investment thesis",
-    recommendedAction: "Reassign competitor pricing layer. Consider simplifying 5-year projection to sensitivity range.",
+    recommendedAction: "Reassign the competitor pricing layer to another team member. Consider simplifying the 5-year projection to a sensitivity range.",
     riskId: "r4",
     affectedTaskIds: ["mm2", "mm3"],
   },
