@@ -137,15 +137,15 @@ export default function Project() {
         <div className="flex items-center gap-3 mt-3">
            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-critical/15 text-rag-critical border border-rag-critical/20">
              <AlertTriangle className="w-4 h-4" />
-             1 Critical
+             1 Critical Risk
            </span>
            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-red/15 text-rag-red border border-rag-red/20">
              <AlertTriangle className="w-4 h-4" />
-             1 high risk
+             1 High Risk
            </span>
            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-amber/15 text-rag-amber border border-rag-amber/20">
              <AlertTriangle className="w-4 h-4" />
-             1 medium risk
+             1 Medium Risk
            </span>
         </div>
       </div>
