@@ -417,35 +417,13 @@ export default function Plan() {
             Commercial DD — Project Falcon · FreshCart Ltd · 3 weeks
           </p>
         </div>
-        <div className="flex flex-col items-end gap-1.5">
-          {(() => {
-            const atRiskCount = workstreams.reduce((sum, ws) => sum + ws.items.filter(i => i.status === "at-risk").length, 0);
-            const blockedCount = workstreams.reduce((sum, ws) => sum + ws.items.filter(i => i.status === "blocked").length, 0);
-            return (
-              <>
-                <button
-                  onClick={() => navigate("/project")}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-rag-amber/10 text-rag-amber hover:bg-rag-amber/20 transition-colors cursor-pointer"
-                >
-                  <AlertTriangle className="w-3 h-3" />
-                  Project at risk: potential for +2 day delay (buffer exhausted)
-                </button>
-                <div className="flex items-center gap-2">
-                  {atRiskCount > 0 && (
-                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-xs font-medium bg-rag-amber/10 text-rag-amber">
-                      {atRiskCount} at risk
-                    </span>
-                  )}
-                  {blockedCount > 0 && (
-                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-xs font-medium bg-rag-red/10 text-rag-red">
-                      {blockedCount} blocked
-                    </span>
-                  )}
-                </div>
-              </>
-            );
-          })()}
-        </div>
+        <button
+          onClick={() => navigate("/project")}
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold bg-rag-red/15 text-rag-red border border-rag-red/25 hover:bg-rag-red/25 transition-colors cursor-pointer"
+        >
+          <AlertTriangle className="w-4 h-4" />
+          Project at risk: potential for +2 day delay (buffer exhausted)
+        </button>
       </div>
 
       <div className="flex items-center gap-4 mb-6">
