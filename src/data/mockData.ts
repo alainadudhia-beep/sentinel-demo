@@ -243,7 +243,7 @@ export const risks: Risk[] = [
   {
     id: "r1",
     title: "Survey response volume below threshold",
-    severity: "high",
+    severity: "critical",
     whyItMatters:
       "The consumer survey is at 62% of target (930 of 1,500 responses). If volume doesn't increase by Friday, the insights pack will lack statistical significance for key segments.",
     likelyImpact:
