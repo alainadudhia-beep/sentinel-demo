@@ -3,7 +3,7 @@ import { FileText, ListChecks, Monitor, AlertTriangle } from "lucide-react";
 
 const steps = [
   { label: "Add Scope", path: "/scope", icon: FileText },
-  { label: "Generate Plan", path: "/plan", icon: ListChecks },
+  { label: "Project Plan", path: "/plan", icon: ListChecks },
   { label: "Live Project", path: "/project", icon: Monitor },
   { label: "Risk Review", path: "/project", icon: AlertTriangle, matchPrefix: "/risk" },
 ];
