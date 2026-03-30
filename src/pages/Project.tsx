@@ -20,7 +20,7 @@ const statusConfig: Record<string, { label: string; className: string; icon: Rea
 interface OutcomeGroup {
   id: string;
   outcome: string;
-  severity: "high" | "medium";
+  severity: "critical" | "high" | "medium";
   cause: string;
   projectImpact: string;
   recommendedAction: string;
@@ -32,7 +32,7 @@ const OUTCOME_GROUPS: OutcomeGroup[] = [
   {
     id: "o1",
     outcome: "Survey delayed",
-    severity: "high",
+    severity: "critical",
     cause: "Panel recruitment delayed 1 day, response rate at 62% of target",
     projectImpact: "Survey critical path blocked, synthesis deck pushed +2 days, removes partner review buffer",
     recommendedAction: "Send follow-up reminder to panel provider requesting priority boost. Consider extending survey by 1 day with adjusted synthesis timeline.",
@@ -135,14 +135,18 @@ export default function Project() {
           </span>
         </div>
         <div className="flex items-center gap-3 mt-3">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-red/15 text-rag-red border border-rag-red/20">
-            <AlertTriangle className="w-4 h-4" />
-            2 high risk delays
-          </span>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-amber/15 text-rag-amber border border-rag-amber/20">
-            <AlertTriangle className="w-4 h-4" />
-            1 medium risk delay
-          </span>
+           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-red/15 text-rag-red border border-rag-red/20">
+             <AlertTriangle className="w-4 h-4" />
+             1 critical risk
+           </span>
+           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-red/15 text-rag-red border border-rag-red/20">
+             <AlertTriangle className="w-4 h-4" />
+             1 high risk
+           </span>
+           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-amber/15 text-rag-amber border border-rag-amber/20">
+             <AlertTriangle className="w-4 h-4" />
+             1 medium risk
+           </span>
         </div>
       </div>
 
@@ -176,12 +180,14 @@ export default function Project() {
                   <div className="flex items-center gap-3 mb-1">
                     <span
                       className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold ${
-                        group.severity === "high"
+                        group.severity === "critical"
+                          ? "bg-rag-red/20 text-rag-red"
+                          : group.severity === "high"
                           ? "bg-rag-red/10 text-rag-red"
                           : "bg-rag-amber/10 text-rag-amber"
                       }`}
                     >
-                      {group.severity === "high" ? "High" : "Medium"}
+                      {group.severity === "critical" ? "Critical" : group.severity === "high" ? "High" : "Medium"}
                     </span>
                     <span className="text-[11px] text-muted-foreground">
                       {group.affectedTaskIds.length} tasks affected
@@ -283,12 +289,14 @@ export default function Project() {
                   />
                   <span
                     className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                      selectedRisk.severity === "high"
+                      selectedRisk.severity === "critical"
+                        ? "bg-rag-red/20 text-rag-red"
+                        : selectedRisk.severity === "high"
                         ? "bg-rag-red/10 text-rag-red"
                         : "bg-rag-amber/10 text-rag-amber"
                     }`}
                   >
-                    {selectedRisk.severity === "high" ? "High severity" : "Medium severity"}
+                    {selectedRisk.severity === "critical" ? "Critical severity" : selectedRisk.severity === "high" ? "High severity" : "Medium severity"}
                   </span>
                 </div>
                 <button
