@@ -618,6 +618,7 @@ export default function Plan() {
               ))}
           </div>
         ))}
+        </div>
       </div>
 
       {/* Today marker note */}
