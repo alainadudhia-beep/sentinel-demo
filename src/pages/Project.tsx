@@ -190,7 +190,7 @@ export default function Project() {
                   <h3 className="text-sm font-semibold text-foreground">{group.outcome}</h3>
                   <p className="text-xs text-muted-foreground mt-1">{group.cause}</p>
                   <p className="text-xs text-foreground mt-1.5">
-                    <span className="font-medium text-muted-foreground">Recommended: </span>
+                    <span className="font-medium text-muted-foreground">Recommended Action: </span>
                     {group.recommendedAction}
                   </p>
                 </div>
