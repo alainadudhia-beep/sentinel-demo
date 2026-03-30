@@ -189,6 +189,10 @@ export default function Project() {
                   </div>
                   <h3 className="text-sm font-semibold text-foreground">{group.outcome}</h3>
                   <p className="text-xs text-muted-foreground mt-1">{group.cause}</p>
+                  <p className="text-xs text-foreground mt-1.5">
+                    <span className="font-medium text-muted-foreground">Recommended: </span>
+                    {group.recommendedAction}
+                  </p>
                 </div>
                 <div className="shrink-0 max-w-[340px] text-right">
                   <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Project impact</p>
