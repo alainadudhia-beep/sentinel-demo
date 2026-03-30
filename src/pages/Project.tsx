@@ -11,7 +11,7 @@ const statusConfig: Record<string, { label: string; className: string; icon: Rea
   },
   "on-track": {
     label: "On track",
-    className: "bg-rag-green/10 text-rag-green",
+    className: "bg-rag-green-light/10 text-rag-green-light",
     icon: <Clock className="w-3 h-3" />,
   },
   "at-risk": {
