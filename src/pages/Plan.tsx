@@ -687,6 +687,7 @@ export default function Plan() {
                       <GanttBar
                         item={item}
                         onDragStart={(e, mode) => startDrag(e, mode, ws.id, item)}
+                        onUpdateNotes={(notes) => updateItem(ws.id, item.id, { notes })}
                       />
                     </div>
                   </div>
