@@ -15,7 +15,7 @@ const statusColors: Record<string, string> = {
   complete: "bg-rag-blue",
   "on-track": "bg-rag-green",
   "at-risk": "bg-rag-amber",
-  blocked: "bg-rag-blocked",
+  blocked: "bg-rag-red",
   "not-started": "bg-muted-foreground/30",
 };
 
@@ -23,7 +23,7 @@ const milestoneColors: Record<string, string> = {
   complete: "text-rag-blue",
   "on-track": "text-rag-green",
   "at-risk": "text-rag-amber",
-  blocked: "text-rag-blocked",
+  blocked: "text-rag-red",
   "not-started": "text-muted-foreground",
 };
 
@@ -105,7 +105,7 @@ export default function Plan() {
           <span className="w-8 h-3 rounded-sm bg-rag-amber inline-block" /> At risk
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="w-8 h-3 rounded-sm bg-rag-blocked inline-block" /> Blocked
+          <span className="w-8 h-3 rounded-sm bg-rag-red inline-block" /> Blocked
         </span>
         <span className="flex items-center gap-1.5">
           <span className="w-8 h-3 rounded-sm bg-muted-foreground/30 inline-block" /> Not started
