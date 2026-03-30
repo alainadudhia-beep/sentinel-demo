@@ -302,6 +302,35 @@ export default function Plan() {
     setEditingId(null);
   };
 
+  const handleMarkerMouseMove = useCallback((e: MouseEvent) => {
+    const md = markerDragRef.current;
+    const el = markerTimelineRef.current;
+    if (!md || !el) return;
+    const rect = el.getBoundingClientRect();
+    const dayWidth = rect.width / TOTAL_DAYS;
+    const deltaDays = Math.round((e.clientX - md.startX) / dayWidth);
+    if (deltaDays === 0) return;
+    const newDay = Math.max(1, Math.min(TOTAL_DAYS, md.originalDay + deltaDays));
+    setMarkers((prev) => prev.map((m) => m.id === md.markerId ? { ...m, day: newDay } : m));
+  }, []);
+
+  const handleMarkerMouseUp = useCallback(() => {
+    markerDragRef.current = null;
+    document.removeEventListener("mousemove", handleMarkerMouseMove);
+    document.removeEventListener("mouseup", handleMarkerMouseUp);
+    document.body.style.userSelect = "";
+    document.body.style.cursor = "";
+  }, [handleMarkerMouseMove]);
+
+  const startMarkerDrag = useCallback((e: React.MouseEvent, marker: MeetingMarker) => {
+    e.preventDefault();
+    markerDragRef.current = { markerId: marker.id, startX: e.clientX, originalDay: marker.day };
+    document.body.style.userSelect = "none";
+    document.body.style.cursor = "grabbing";
+    document.addEventListener("mousemove", handleMarkerMouseMove);
+    document.addEventListener("mouseup", handleMarkerMouseUp);
+  }, [handleMarkerMouseMove, handleMarkerMouseUp]);
+
   return (
     <div className="max-w-7xl mx-auto px-6 py-10">
       {/* Header */}
