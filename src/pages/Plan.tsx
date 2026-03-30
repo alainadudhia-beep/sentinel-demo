@@ -408,10 +408,11 @@ export default function Plan() {
       </div>
 
       {/* Gantt Chart */}
-      <div className="border border-border rounded-lg overflow-hidden bg-card relative">
+      <div className="border border-border rounded-lg overflow-x-auto bg-card relative">
+        <div className="min-w-[1200px] relative">
         {/* Meeting marker callouts row */}
         <div className="flex border-b border-border bg-secondary/30">
-          <div className="w-[520px] min-w-[520px] shrink-0" />
+          <div className="w-[620px] min-w-[620px] shrink-0" />
           <div className="flex-1 relative h-7" ref={markerTimelineRef}>
             {markers.map((marker) => {
               const left = ((marker.day - 1 + 0.5) / TOTAL_DAYS) * 100;
@@ -438,10 +439,10 @@ export default function Plan() {
 
         {/* Timeline header */}
         <div className="flex border-b border-border bg-secondary/50">
-          <div className="w-[520px] min-w-[520px] shrink-0 flex text-[10px] font-medium text-muted-foreground">
-            <div className="w-[200px] px-4 py-2">Task</div>
+          <div className="w-[620px] min-w-[620px] shrink-0 flex text-[10px] font-medium text-muted-foreground">
+            <div className="w-[240px] px-4 py-2">Task</div>
             <div className="w-[60px] px-2 py-2">Due</div>
-            <div className="w-[130px] px-2 py-2">Dependency</div>
+            <div className="w-[160px] px-2 py-2">Dependency</div>
             <div className="flex-1 px-2 py-2">Notes</div>
           </div>
           <div className="flex-1 flex" ref={timelineRef}>
@@ -463,7 +464,7 @@ export default function Plan() {
         </div>
 
         {/* Vertical dotted lines for meeting markers (full chart height) */}
-        <div className="absolute top-0 bottom-0 pointer-events-none z-10" style={{ left: '520px', right: 0 }}>
+        <div className="absolute top-0 bottom-0 pointer-events-none z-10" style={{ left: '620px', right: 0 }}>
           {markers.map((marker, i) => {
             const left = ((marker.day - 1 + 0.5) / TOTAL_DAYS) * 100;
             return (
@@ -488,7 +489,7 @@ export default function Plan() {
               className="flex border-b border-border hover:bg-accent/50 transition-colors cursor-pointer group/ws"
               onClick={() => toggleWorkstream(ws.id)}
             >
-              <div className="w-[520px] min-w-[520px] shrink-0 px-4 py-2.5 flex items-center gap-2">
+              <div className="w-[620px] min-w-[620px] shrink-0 px-4 py-2.5 flex items-center gap-2">
                 {expanded[ws.id] ? (
                   <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
                 ) : (
@@ -548,9 +549,9 @@ export default function Plan() {
                       : ""
                   }`}
                 >
-                  <div className="w-[520px] min-w-[520px] shrink-0 flex items-center">
+                  <div className="w-[620px] min-w-[620px] shrink-0 flex items-center">
                     {/* Task name column */}
-                    <div className="w-[200px] px-4 py-2 pl-7 flex items-center gap-1.5">
+                    <div className="w-[240px] px-4 py-2 pl-7 flex items-center gap-1.5">
                       <GripVertical className="w-3 h-3 text-muted-foreground/30 shrink-0 cursor-grab active:cursor-grabbing opacity-0 group-hover/item:opacity-100 transition-opacity" />
                       <StatusPicker
                         currentStatus={item.status}
@@ -572,7 +573,7 @@ export default function Plan() {
                         />
                       ) : (
                         <span
-                          className="text-xs text-foreground truncate cursor-text hover:text-primary transition-colors"
+                          className="text-xs text-foreground cursor-text hover:text-primary transition-colors break-words"
                           onDoubleClick={() => setEditingId(item.id)}
                           title="Double-click to edit"
                         >
@@ -592,12 +593,12 @@ export default function Plan() {
                       <span className="text-[10px] text-muted-foreground whitespace-nowrap">{item.dueDate || "—"}</span>
                     </div>
                     {/* Dependency column */}
-                    <div className="w-[130px] px-2 py-2">
-                      <span className="text-[10px] text-muted-foreground truncate block">{item.dependency || "—"}</span>
+                    <div className="w-[160px] px-2 py-2">
+                      <span className="text-[10px] text-muted-foreground block break-words">{item.dependency || "—"}</span>
                     </div>
                     {/* Notes column */}
                     <div className="flex-1 px-2 py-2">
-                      <span className="text-[10px] text-muted-foreground truncate block">{item.notes || "—"}</span>
+                      <span className="text-[10px] text-muted-foreground block break-words">{item.notes || "—"}</span>
                     </div>
                   </div>
                   <div className="flex-1 relative py-1">
@@ -617,6 +618,7 @@ export default function Plan() {
               ))}
           </div>
         ))}
+        </div>
       </div>
 
       {/* Today marker note */}
