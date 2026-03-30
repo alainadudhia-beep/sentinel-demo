@@ -79,9 +79,9 @@ export const ganttWorkstreams: Workstream[] = [
       { id: "s3", label: "Collect responses", type: "task", owner: "James Okafor", startDay: 5, endDay: 9, status: "at-risk", notes: "62% of target responses", dueDate: "28 Mar", dependency: "Survey launch" },
       { id: "s4", label: "Set up analysis framework", type: "task", owner: "James Okafor", startDay: 7, endDay: 8, status: "not-started", dueDate: "27 Mar" },
       { id: "s5", label: "Run analysis (initial data)", type: "task", owner: "James Okafor", startDay: 9, endDay: 11, status: "blocked", notes: "Blocked — waiting on survey responses", dueDate: "31 Mar", dependency: "Survey responses", critical: true },
-      { id: "s6", label: "Slide up analysis", type: "task", owner: "James Okafor", startDay: 11, endDay: 12, status: "not-started", dueDate: "1 Apr", dependency: "Initial analysis" },
-      { id: "s7", label: "Run analysis (final data)", type: "task", owner: "James Okafor", startDay: 12, endDay: 13, status: "not-started", dueDate: "2 Apr", dependency: "Full survey data", critical: true },
-      { id: "s8", label: "Update slides", type: "task", owner: "James Okafor", startDay: 13, endDay: 14, status: "not-started", dueDate: "3 Apr", dependency: "Final analysis" },
+      { id: "s6", label: "Slide up analysis", type: "task", owner: "James Okafor", startDay: 11, endDay: 12, status: "blocked", dueDate: "1 Apr", dependency: "Initial analysis", notes: "Blocked — waiting on initial analysis" },
+      { id: "s7", label: "Run analysis (final data)", type: "task", owner: "James Okafor", startDay: 12, endDay: 13, status: "blocked", dueDate: "2 Apr", dependency: "Full survey data", critical: true, notes: "Blocked — waiting on full survey data" },
+      { id: "s8", label: "Update slides", type: "task", owner: "James Okafor", startDay: 13, endDay: 14, status: "blocked", dueDate: "3 Apr", dependency: "Final analysis", notes: "Blocked — waiting on final analysis" },
     ],
   },
   {
