@@ -14,7 +14,7 @@ export default function Scope() {
 
   const handleGenerate = () => {
     setLoading(true);
-    setTimeout(() => navigate("/plan"), 1800);
+    setTimeout(() => navigate("/scope-review"), 1800);
   };
 
   return (
