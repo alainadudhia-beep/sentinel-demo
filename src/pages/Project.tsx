@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ganttWorkstreams, risks, type Risk } from "@/data/mockData";
-import { AlertTriangle, ShieldAlert, X, Send, Pencil, ArrowUpRight, CircleCheck, OctagonX, ChevronDown, ChevronRight } from "lucide-react";
+import { AlertTriangle, ShieldAlert, X, Send, Pencil, ArrowUpRight, CircleCheck, OctagonX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const statusConfig: Record<string, { label: string; className: string; icon: React.ReactNode }> = {
@@ -16,7 +16,24 @@ const statusConfig: Record<string, { label: string; className: string; icon: Rea
   },
 };
 
-// Flatten gantt items that are at-risk or blocked
+// Map flagged task IDs to related risk IDs
+const TASK_RISK_MAP: Record<string, string> = {
+  s2: "r1",
+  s3: "r1",
+  s5: "r1",
+  mm2: "r4",
+  ia2: "r3",
+};
+
+// Map tasks to likely project impact
+const TASK_IMPACT_MAP: Record<string, string> = {
+  s2: "Delays survey data → synthesis deck pushed 2 days",
+  s3: "Insufficient data for key segments, deck lacks statistical backing",
+  s5: "Analysis blocked → entire survey workstream stalled",
+  mm2: "Market model incomplete for partner review, TAM section at risk",
+  ia2: "Management perspectives missing from competitive dynamics section",
+};
+
 function getFlaggedItems() {
   const items: Array<{
     id: string;
@@ -47,42 +64,24 @@ function getFlaggedItems() {
   return items;
 }
 
-// Map flagged task IDs to related risk IDs based on content overlap
-const TASK_RISK_MAP: Record<string, string> = {
-  s2: "r1", // Launch survey → Survey response volume
-  s3: "r1", // Collect responses → Survey response volume
-  s5: "r1", // Run analysis blocked → Survey response volume
-  mm2: "r4", // Build model structure (Priya sick) → Priya off sick
-  ia2: "r3", // Conduct sessions rescheduled → Management interview timing
-};
-
 export default function Project() {
   const [selectedRisk, setSelectedRisk] = useState<Risk | null>(null);
   const [handled, setHandled] = useState<Set<string>>(new Set());
-  const [expandedRisks, setExpandedRisks] = useState<Set<string>>(new Set());
 
   const flaggedItems = getFlaggedItems();
   const atRiskCount = flaggedItems.filter((i) => i.status === "at-risk").length;
   const blockedCount = flaggedItems.filter((i) => i.status === "blocked").length;
 
-  const toggleRiskExpand = (id: string) => {
-    setExpandedRisks((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  };
-
   const handleTaskClick = (taskId: string) => {
     const riskId = TASK_RISK_MAP[taskId];
     if (riskId) {
-      setExpandedRisks((prev) => new Set(prev).add(riskId));
-      // Scroll the risk into view
-      setTimeout(() => {
-        document.getElementById(`risk-${riskId}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
-      }, 50);
+      const risk = risks.find((r) => r.id === riskId);
+      if (risk) setSelectedRisk(risk);
     }
+  };
+
+  const handleRiskCardClick = (risk: Risk) => {
+    setSelectedRisk(risk);
   };
 
   return (
@@ -105,7 +104,6 @@ export default function Project() {
           </div>
         </div>
 
-        {/* Big dramatic status line */}
         <div className="mt-4 flex items-center gap-4 flex-wrap">
           <span className="text-lg font-bold text-rag-red tracking-tight">
             Project at risk: potential for +2 day delay, buffer exhausted
@@ -123,173 +121,200 @@ export default function Project() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Flagged tasks */}
-        <div>
-          <h3 className="text-sm font-semibold text-foreground mb-3">Flagged Tasks</h3>
-          <div className="border border-border rounded-lg overflow-hidden bg-card">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border bg-secondary/50">
-                  <th className="text-left px-4 py-2.5 font-medium text-muted-foreground text-xs">Task</th>
-                  <th className="text-left px-3 py-2.5 font-medium text-muted-foreground text-xs">Workstream</th>
-                  <th className="text-left px-3 py-2.5 font-medium text-muted-foreground text-xs">Owner</th>
-                  <th className="text-left px-3 py-2.5 font-medium text-muted-foreground text-xs">Due</th>
-                  <th className="text-left px-3 py-2.5 font-medium text-muted-foreground text-xs">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {flaggedItems.map((item) => {
-                  const sc = statusConfig[item.status];
-                  return (
-                     <tr
-                       key={item.id}
-                       className={`border-b border-border last:border-0 hover:bg-accent/50 transition-colors ${TASK_RISK_MAP[item.id] ? "cursor-pointer" : ""}`}
-                       onClick={() => handleTaskClick(item.id)}
-                     >
-                      <td className="px-4 py-3">
-                        <div className="flex items-center gap-1.5">
-                          <div>
-                            <p className="text-xs font-medium text-foreground">{item.task}</p>
-                            {item.notes && (
-                              <p className="text-[10px] text-muted-foreground mt-0.5">{item.notes}</p>
-                            )}
-                          </div>
-                          {TASK_RISK_MAP[item.id] && (
-                            <ArrowUpRight className="w-3 h-3 text-muted-foreground/50 shrink-0 ml-auto" />
-                          )}
+      {/* Single unified table */}
+      <div className="mb-8">
+        <h3 className="text-sm font-semibold text-foreground mb-3">Flagged Tasks</h3>
+        <div className="border border-border rounded-lg overflow-hidden bg-card">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-border bg-secondary/50">
+                <th className="text-left px-4 py-2.5 font-medium text-muted-foreground text-xs">Task</th>
+                <th className="text-left px-3 py-2.5 font-medium text-muted-foreground text-xs">Owner</th>
+                <th className="text-left px-3 py-2.5 font-medium text-muted-foreground text-xs">Likely impact on project</th>
+                <th className="text-left px-3 py-2.5 font-medium text-muted-foreground text-xs">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {flaggedItems.map((item) => {
+                const sc = statusConfig[item.status];
+                const impact = TASK_IMPACT_MAP[item.id];
+                return (
+                  <tr
+                    key={item.id}
+                    className={`border-b border-border last:border-0 hover:bg-accent/50 transition-colors ${TASK_RISK_MAP[item.id] ? "cursor-pointer" : ""}`}
+                    onClick={() => handleTaskClick(item.id)}
+                  >
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-1.5">
+                        <div>
+                          <p className="text-xs font-medium text-foreground">{item.task}</p>
+                          <p className="text-[10px] text-muted-foreground mt-0.5">{item.workstream}</p>
                         </div>
-                      </td>
-                      <td className="px-3 py-3 text-xs text-muted-foreground">{item.workstream}</td>
-                      <td className="px-3 py-3 text-xs text-muted-foreground">{item.owner}</td>
-                      <td className="px-3 py-3 text-xs text-muted-foreground whitespace-nowrap">{item.dueDate || "—"}</td>
-                      <td className="px-3 py-3">
+                        {TASK_RISK_MAP[item.id] && (
+                          <ArrowUpRight className="w-3 h-3 text-muted-foreground/50 shrink-0 ml-auto" />
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-3 py-3 text-xs text-muted-foreground">{item.owner}</td>
+                    <td className="px-3 py-3">
+                      {impact && (
+                        <p className="text-xs text-foreground leading-snug">{impact}</p>
+                      )}
+                    </td>
+                    <td className="px-3 py-3">
+                      <div className="flex flex-col gap-1">
                         {sc && (
-                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${sc.className}`}>
+                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium w-fit ${sc.className}`}>
                             {sc.icon}
                             {sc.label}
                           </span>
                         )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* AI Risk Detections */}
-        <div>
-          <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-1.5">
-            AI Early Warnings
-            <span className="text-xs font-normal text-muted-foreground ml-1">· {risks.length} detected</span>
-          </h3>
-          <div className="space-y-3">
-            {risks.map((risk) => {
-              const isExpanded = expandedRisks.has(risk.id);
-              const isHandled = handled.has(risk.id);
-              return (
-                <div
-                  key={risk.id}
-                  id={`risk-${risk.id}`}
-                  className={`border border-border rounded-lg bg-card overflow-hidden transition-all ${isHandled ? "opacity-50" : ""}`}
-                >
-                  {/* Risk header */}
-                  <button
-                    className="w-full text-left px-4 py-3 flex items-start gap-3 hover:bg-accent/30 transition-colors"
-                    onClick={() => toggleRiskExpand(risk.id)}
-                  >
-                    <div className="flex items-center gap-2 mt-0.5 shrink-0">
-                      {isExpanded ? (
-                        <ChevronDown className="w-3 h-3 text-muted-foreground" />
-                      ) : (
-                        <ChevronRight className="w-3 h-3 text-muted-foreground" />
-                      )}
-                      <div
-                        className={`w-2 h-2 rounded-full shrink-0 ${
-                          risk.severity === "high" ? "bg-rag-red" : "bg-rag-amber"
-                        }`}
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-0.5">
-                        <span
-                          className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium ${
-                            risk.severity === "high"
-                              ? "bg-rag-red/10 text-rag-red"
-                              : "bg-rag-amber/10 text-rag-amber"
-                          }`}
-                        >
-                          {risk.severity === "high" ? "High" : "Medium"}
-                        </span>
+                        {item.notes && (
+                          <p className="text-xs font-medium text-foreground leading-snug">{item.notes}</p>
+                        )}
                       </div>
-                      <p className="text-xs font-medium text-foreground leading-snug">{risk.title}</p>
-                      {!isExpanded && (
-                        <p className="text-[11px] text-muted-foreground mt-1 line-clamp-1">{risk.likelyImpact}</p>
-                      )}
-                    </div>
-                  </button>
-
-                  {/* Expanded detail */}
-                  {isExpanded && (
-                    <div className="px-4 pb-4 pt-1 space-y-3 border-t border-border/50">
-                      <section>
-                        <h4 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Why it matters</h4>
-                        <p className="text-xs text-foreground leading-relaxed">{risk.whyItMatters}</p>
-                      </section>
-                      <section>
-                        <h4 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Likely impact</h4>
-                        <p className="text-xs text-foreground leading-relaxed">{risk.likelyImpact}</p>
-                      </section>
-                      <section>
-                        <h4 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Who should act</h4>
-                        <p className="text-xs text-foreground">{risk.whoShouldAct}</p>
-                      </section>
-                      <section>
-                        <h4 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Recommended action</h4>
-                        <p className="text-xs text-foreground leading-relaxed">{risk.suggestedAction}</p>
-                      </section>
-                      <section>
-                        <h4 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">AI-drafted message</h4>
-                        <div className="bg-secondary rounded-md p-3 text-xs text-foreground leading-relaxed font-mono whitespace-pre-wrap">
-                          {risk.draftMessage}
-                        </div>
-                      </section>
-                      <div className="flex items-center gap-2 pt-1">
-                        <Button variant="outline" size="sm" className="gap-1.5 h-7 text-xs">
-                          <Pencil className="w-3 h-3" />
-                          Edit
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="gap-1.5 h-7 text-xs"
-                          onClick={() => {
-                            setHandled((prev) => new Set(prev).add(risk.id));
-                            setExpandedRisks((prev) => { const n = new Set(prev); n.delete(risk.id); return n; });
-                          }}
-                        >
-                          <CircleCheck className="w-3 h-3" />
-                          Handled
-                        </Button>
-                        <Button variant="outline" size="sm" className="gap-1.5 h-7 text-xs">
-                          <ArrowUpRight className="w-3 h-3" />
-                          Escalate
-                        </Button>
-                        <Button size="sm" className="gap-1.5 h-7 text-xs">
-                          <Send className="w-3 h-3" />
-                          Send
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </div>
+
+      {/* AI Risk Detections as clickable cards */}
+      <div>
+        <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-1.5">
+          AI Early Warnings
+          <span className="text-xs font-normal text-muted-foreground ml-1">· {risks.length} detected</span>
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {risks.map((risk) => {
+            const isHandled = handled.has(risk.id);
+            return (
+              <button
+                key={risk.id}
+                onClick={() => handleRiskCardClick(risk)}
+                className={`text-left border border-border rounded-lg bg-card p-4 hover:bg-accent/30 transition-all ${isHandled ? "opacity-50" : ""}`}
+              >
+                <div className="flex items-center gap-2 mb-1.5">
+                  <div
+                    className={`w-2 h-2 rounded-full shrink-0 ${
+                      risk.severity === "high" ? "bg-rag-red" : "bg-rag-amber"
+                    }`}
+                  />
+                  <span
+                    className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium ${
+                      risk.severity === "high"
+                        ? "bg-rag-red/10 text-rag-red"
+                        : "bg-rag-amber/10 text-rag-amber"
+                    }`}
+                  >
+                    {risk.severity === "high" ? "High" : "Medium"}
+                  </span>
+                </div>
+                <p className="text-xs font-medium text-foreground leading-snug">{risk.title}</p>
+                <p className="text-[11px] text-muted-foreground mt-1 line-clamp-2">{risk.likelyImpact}</p>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Overlay panel (Notion-style) */}
+      {selectedRisk && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/40 z-40 animate-in fade-in-0 duration-150"
+            onClick={() => setSelectedRisk(null)}
+          />
+          {/* Panel */}
+          <div className="fixed inset-y-0 right-0 w-full max-w-lg z-50 bg-card border-l border-border shadow-2xl animate-in slide-in-from-right-2 duration-200 overflow-y-auto">
+            <div className="p-6">
+              {/* Header */}
+              <div className="flex items-start justify-between mb-6">
+                <div className="flex items-center gap-2">
+                  <div
+                    className={`w-2.5 h-2.5 rounded-full ${
+                      selectedRisk.severity === "high" ? "bg-rag-red" : "bg-rag-amber"
+                    }`}
+                  />
+                  <span
+                    className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                      selectedRisk.severity === "high"
+                        ? "bg-rag-red/10 text-rag-red"
+                        : "bg-rag-amber/10 text-rag-amber"
+                    }`}
+                  >
+                    {selectedRisk.severity === "high" ? "High severity" : "Medium severity"}
+                  </span>
+                </div>
+                <button
+                  onClick={() => setSelectedRisk(null)}
+                  className="p-1 rounded-md hover:bg-accent transition-colors"
+                >
+                  <X className="w-4 h-4 text-muted-foreground" />
+                </button>
+              </div>
+
+              <h2 className="text-lg font-semibold text-foreground mb-6">{selectedRisk.title}</h2>
+
+              <div className="space-y-5">
+                <section>
+                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">Why it matters</h4>
+                  <p className="text-sm text-foreground leading-relaxed">{selectedRisk.whyItMatters}</p>
+                </section>
+                <section>
+                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">Likely impact</h4>
+                  <p className="text-sm text-foreground leading-relaxed">{selectedRisk.likelyImpact}</p>
+                </section>
+                <section>
+                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">Who should act</h4>
+                  <p className="text-sm text-foreground">{selectedRisk.whoShouldAct}</p>
+                </section>
+                <section>
+                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">Recommended action</h4>
+                  <p className="text-sm text-foreground leading-relaxed">{selectedRisk.suggestedAction}</p>
+                </section>
+                <section>
+                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">AI-drafted message</h4>
+                  <div className="bg-secondary rounded-lg p-4 text-sm text-foreground leading-relaxed font-mono whitespace-pre-wrap">
+                    {selectedRisk.draftMessage}
+                  </div>
+                </section>
+              </div>
+
+              <div className="flex items-center gap-2 pt-6 mt-6 border-t border-border">
+                <Button variant="outline" size="sm" className="gap-1.5 h-8 text-xs">
+                  <Pencil className="w-3 h-3" />
+                  Edit
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-1.5 h-8 text-xs"
+                  onClick={() => {
+                    setHandled((prev) => new Set(prev).add(selectedRisk.id));
+                    setSelectedRisk(null);
+                  }}
+                >
+                  <CircleCheck className="w-3 h-3" />
+                  Handled
+                </Button>
+                <Button variant="outline" size="sm" className="gap-1.5 h-8 text-xs">
+                  <ArrowUpRight className="w-3 h-3" />
+                  Escalate
+                </Button>
+                <Button size="sm" className="gap-1.5 h-8 text-xs">
+                  <Send className="w-3 h-3" />
+                  Send
+                </Button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
