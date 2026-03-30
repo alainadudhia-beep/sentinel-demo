@@ -12,14 +12,20 @@ const WEEKS = [
   { label: "Week 3 · 31 Mar–4 Apr", days: ["Mon", "Tue", "Wed", "Thu", "Fri"] },
 ];
 
-// Key client meetings as vertical markers on the Gantt
-const MEETING_MARKERS = [
-  { day: 1, label: "Status Update", cssVar: "--rag-blue" },
-  { day: 6, label: "Status Update", cssVar: "--rag-blue" },
-  { day: 10, label: "Interim", cssVar: "--rag-amber" },
-  { day: 11, label: "Status Update", cssVar: "--rag-blue" },
-  { day: 13, label: "Draft Review", cssVar: "--rag-amber" },
-  { day: 15, label: "Final Readout", cssVar: "--rag-green" },
+interface MeetingMarker {
+  id: string;
+  day: number;
+  label: string;
+  cssVar: string;
+}
+
+const INITIAL_MEETING_MARKERS: MeetingMarker[] = [
+  { id: "mk1", day: 1, label: "Status Update", cssVar: "--rag-blue" },
+  { id: "mk2", day: 6, label: "Status Update", cssVar: "--rag-blue" },
+  { id: "mk3", day: 10, label: "Interim", cssVar: "--rag-amber" },
+  { id: "mk4", day: 11, label: "Status Update", cssVar: "--rag-blue" },
+  { id: "mk5", day: 13, label: "Draft Review", cssVar: "--rag-amber" },
+  { id: "mk6", day: 15, label: "Final Readout", cssVar: "--rag-green" },
 ];
 
 const STATUS_KEYS = ["complete", "on-track", "at-risk", "blocked", "not-started"] as const;
