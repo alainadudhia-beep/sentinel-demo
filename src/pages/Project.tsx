@@ -172,7 +172,8 @@ export default function Project() {
               return (
                 <div
                   key={risk.id}
-                  className={`border border-border rounded-lg bg-card overflow-hidden transition-opacity ${isHandled ? "opacity-50" : ""}`}
+                  id={`risk-${risk.id}`}
+                  className={`border border-border rounded-lg bg-card overflow-hidden transition-all ${isHandled ? "opacity-50" : ""}`}
                 >
                   {/* Risk header */}
                   <button
