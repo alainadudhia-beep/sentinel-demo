@@ -63,7 +63,7 @@ const RISK_OPTIONS: Record<string, RecommendationOption[]> = {
     },
     {
       id: "r1-opt2",
-      title: "Extend survey by 1 day",
+      title: "Extend survey timeline",
       steps: [
         "Push survey close by 1 day",
         "Compress synthesis timeline by 1 day",
