@@ -135,10 +135,17 @@ export default function Project() {
                        onClick={() => handleTaskClick(item.id)}
                      >
                       <td className="px-4 py-3">
-                        <p className="text-xs font-medium text-foreground">{item.task}</p>
-                        {item.notes && (
-                          <p className="text-[10px] text-muted-foreground mt-0.5">{item.notes}</p>
-                        )}
+                        <div className="flex items-center gap-1.5">
+                          <div>
+                            <p className="text-xs font-medium text-foreground">{item.task}</p>
+                            {item.notes && (
+                              <p className="text-[10px] text-muted-foreground mt-0.5">{item.notes}</p>
+                            )}
+                          </div>
+                          {TASK_RISK_MAP[item.id] && (
+                            <ArrowUpRight className="w-3 h-3 text-muted-foreground/50 shrink-0 ml-auto" />
+                          )}
+                        </div>
                       </td>
                       <td className="px-3 py-3 text-xs text-muted-foreground">{item.workstream}</td>
                       <td className="px-3 py-3 text-xs text-muted-foreground">{item.owner}</td>
