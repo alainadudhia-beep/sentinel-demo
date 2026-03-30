@@ -218,7 +218,7 @@ export default function Project() {
     <div className="max-w-7xl mx-auto px-6 py-8">
       {/* Header banner */}
       <div className="mb-8 rounded-xl border border-rag-red/30 bg-gradient-to-r from-rag-red/5 via-rag-amber/5 to-transparent p-6">
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between gap-6">
           <div>
             <div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-10 rounded-lg bg-rag-red/10 flex items-center justify-center">
@@ -231,27 +231,26 @@ export default function Project() {
                 </p>
               </div>
             </div>
+            <div className="mt-4">
+              <span className="text-lg font-bold text-rag-red tracking-tight">
+                +2 day delay → partner review at risk → likely overrun
+              </span>
+            </div>
           </div>
-        </div>
-
-        <div className="mt-4 flex items-center gap-4 flex-wrap">
-          <span className="text-lg font-bold text-rag-red tracking-tight">
-            +2 day delay → partner review at risk → likely overrun
-          </span>
-        </div>
-        <div className="flex items-center gap-3 mt-3">
-           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-critical/15 text-rag-critical border border-rag-critical/20">
-             <AlertTriangle className="w-4 h-4" />
-             1 Critical Risk
-           </span>
-           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-red/15 text-rag-red border border-rag-red/20">
-             <AlertTriangle className="w-4 h-4" />
-             1 High Risk
-           </span>
-           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-amber/15 text-rag-amber border border-rag-amber/20">
-             <AlertTriangle className="w-4 h-4" />
-             2 Medium Risks
-           </span>
+          <div className="flex flex-col gap-2 shrink-0">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-critical/15 text-rag-critical border border-rag-critical/20">
+              <AlertTriangle className="w-4 h-4" />
+              1 Critical Risk
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-red/15 text-rag-red border border-rag-red/20">
+              <AlertTriangle className="w-4 h-4" />
+              1 High Risk
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-amber/15 text-rag-amber border border-rag-amber/20">
+              <AlertTriangle className="w-4 h-4" />
+              2 Medium Risks
+            </span>
+          </div>
         </div>
       </div>
 
