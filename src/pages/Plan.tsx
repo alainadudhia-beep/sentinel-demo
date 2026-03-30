@@ -97,6 +97,7 @@ export default function Plan() {
     () => JSON.parse(JSON.stringify(ganttWorkstreams))
   );
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [rowDrag, setRowDrag] = useState<{ wsId: string; itemId: string; overItemId: string | null } | null>(null);
   const dragRef = useRef<DragState | null>(null);
   const timelineRef = useRef<HTMLDivElement | null>(null);
 
