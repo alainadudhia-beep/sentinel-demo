@@ -44,8 +44,7 @@ export default function TopNav() {
                 )}
                 <button
                   onClick={() => {
-                    if (step.matchPrefix) navigate("/project");
-                    else navigate(step.path);
+                    navigate(step.path);
                   }}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
                     isActive
