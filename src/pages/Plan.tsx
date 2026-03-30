@@ -289,7 +289,7 @@ export default function Plan() {
           <div key={ws.id}>
             {/* Workstream header row */}
             <div
-              className="flex border-b border-border hover:bg-accent/50 transition-colors cursor-pointer"
+              className="flex border-b border-border hover:bg-accent/50 transition-colors cursor-pointer group/ws"
               onClick={() => toggleWorkstream(ws.id)}
             >
               <div className="w-64 min-w-[256px] shrink-0 px-4 py-2.5 flex items-center gap-2">
