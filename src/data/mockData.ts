@@ -292,8 +292,8 @@ export const risks: Risk[] = [
       "Market model won't be ready for Week 3 synthesis. The TAM/SAM/SOM section of the deck will be incomplete for partner review.",
     whoShouldAct: "Sarah Chen (project lead)",
     suggestedAction:
-      "Check if Priya can work reduced hours remotely, or reassign the competitor pricing layer to another team member. Consider simplifying the 5-year projection to a sensitivity range.",
+      "Reassign the competitor pricing layer to another team member. Consider simplifying the 5-year projection to a sensitivity range.",
     draftMessage:
-      "Hi Priya — hope you're feeling better. Wanted to check in on the market model. The competitor pricing layer and 5-year projections are the two outstanding pieces. If you're able to work a few hours remotely this week, that would be ideal. Otherwise, could you share your working files so we can have someone else pick up the pricing layer? No pressure — your health comes first. Let me know what works. — Sarah",
+      "Hi Priya — hope you're feeling better. Wanted to check in on the market model. The competitor pricing layer and 5-year projections are the two outstanding pieces. Could you share your working files so we can have someone else pick up the pricing layer? No pressure — your health comes first. Let me know what works. — Sarah",
   },
 ];
