@@ -601,7 +601,7 @@ export default function Plan() {
                       : ""
                   }`}
                 >
-                  <div className="w-[620px] min-w-[620px] shrink-0 flex items-center">
+                  <div className="w-[460px] min-w-[460px] shrink-0 flex items-center">
                     {/* Task name column */}
                     <div className="w-[240px] px-4 py-2 pl-7 flex items-center gap-1.5">
                       <GripVertical className="w-3 h-3 text-muted-foreground/30 shrink-0 cursor-grab active:cursor-grabbing opacity-0 group-hover/item:opacity-100 transition-opacity" />
