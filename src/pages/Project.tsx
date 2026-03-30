@@ -21,6 +21,7 @@ const OUTCOME_GROUPS: OutcomeGroup[] = [
     cause: "Panel recruitment delayed 1 day, response rate at 62% of target",
     projectImpact: "Survey critical path blocked, synthesis deck pushed +2 days, removes partner review buffer",
     riskId: "r1",
+    actionBy: "now",
   },
   {
     id: "o2",
@@ -29,6 +30,7 @@ const OUTCOME_GROUPS: OutcomeGroup[] = [
     cause: "Priya off sick since Wednesday — competitor pricing layer and 5-year projections incomplete",
     projectImpact: "TAM/SAM/SOM section incomplete for partner review, weakens investment thesis",
     riskId: "r4",
+    actionBy: "today",
   },
   {
     id: "o3",
@@ -37,6 +39,7 @@ const OUTCOME_GROUPS: OutcomeGroup[] = [
     cause: "Session 2 rescheduled from Tuesday to Thursday",
     projectImpact: "Expert interview synthesis missing management cross-references, competitive dynamics section weakened",
     riskId: "r3",
+    actionBy: "this week",
   },
 ];
 
