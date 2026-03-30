@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ganttWorkstreams, GanttItem } from "@/data/mockData";
+import { ganttWorkstreams, GanttItem, Workstream } from "@/data/mockData";
 import { ArrowRight, Clock, Sparkles, ChevronRight, ChevronDown, Diamond, Check, AlertTriangle } from "lucide-react";
 
 const TOTAL_DAYS = 15;
@@ -27,19 +27,32 @@ const milestoneColors: Record<string, string> = {
   "not-started": "text-muted-foreground",
 };
 
-const statusLabels: Record<string, string> = {
-  complete: "Complete",
-  "on-track": "On track",
-  "at-risk": "At risk",
-  blocked: "Blocked",
-  "not-started": "Not started",
-};
+type DragMode = "move" | "resize-left" | "resize-right";
 
-function GanttBar({ item }: { item: GanttItem }) {
+interface DragState {
+  itemId: string;
+  wsId: string;
+  mode: DragMode;
+  startX: number;
+  originalStart: number;
+  originalEnd: number;
+}
+
+function GanttBar({
+  item,
+  onDragStart,
+}: {
+  item: GanttItem;
+  onDragStart?: (e: React.MouseEvent, mode: DragMode) => void;
+}) {
   if (item.type === "milestone") {
     const left = ((item.startDay - 1) / TOTAL_DAYS) * 100;
     return (
-      <div className="absolute top-1/2 -translate-y-1/2" style={{ left: `${left}%` }}>
+      <div
+        className="absolute top-1/2 -translate-y-1/2 cursor-grab active:cursor-grabbing"
+        style={{ left: `${left}%` }}
+        onMouseDown={(e) => onDragStart?.(e, "move")}
+      >
         <Diamond className={`w-3.5 h-3.5 fill-current ${milestoneColors[item.status]}`} />
       </div>
     );
@@ -50,10 +63,28 @@ function GanttBar({ item }: { item: GanttItem }) {
 
   return (
     <div
-      className={`absolute top-1/2 -translate-y-1/2 h-5 rounded-sm ${statusColors[item.status]} ${item.critical ? "ring-1 ring-rag-red/40" : ""}`}
+      className={`absolute top-1/2 -translate-y-1/2 h-5 rounded-sm ${statusColors[item.status]} ${item.critical ? "ring-1 ring-rag-red/40" : ""} cursor-grab active:cursor-grabbing group/bar`}
       style={{ left: `${left}%`, width: `${width}%`, minWidth: "6px" }}
       title={`${item.label}${item.notes ? ` — ${item.notes}` : ""}`}
-    />
+      onMouseDown={(e) => onDragStart?.(e, "move")}
+    >
+      {/* Left resize handle */}
+      <div
+        className="absolute left-0 top-0 bottom-0 w-1.5 cursor-col-resize opacity-0 group-hover/bar:opacity-100 bg-foreground/20 rounded-l-sm"
+        onMouseDown={(e) => {
+          e.stopPropagation();
+          onDragStart?.(e, "resize-left");
+        }}
+      />
+      {/* Right resize handle */}
+      <div
+        className="absolute right-0 top-0 bottom-0 w-1.5 cursor-col-resize opacity-0 group-hover/bar:opacity-100 bg-foreground/20 rounded-r-sm"
+        onMouseDown={(e) => {
+          e.stopPropagation();
+          onDragStart?.(e, "resize-right");
+        }}
+      />
+    </div>
   );
 }
 
@@ -62,9 +93,90 @@ export default function Plan() {
   const [expanded, setExpanded] = useState<Record<string, boolean>>(
     Object.fromEntries(ganttWorkstreams.map((ws) => [ws.id, true]))
   );
+  const [workstreams, setWorkstreams] = useState<Workstream[]>(
+    () => JSON.parse(JSON.stringify(ganttWorkstreams))
+  );
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const dragRef = useRef<DragState | null>(null);
+  const timelineRef = useRef<HTMLDivElement | null>(null);
 
   const toggleWorkstream = (id: string) =>
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
+
+  const updateItem = useCallback((wsId: string, itemId: string, updates: Partial<GanttItem>) => {
+    setWorkstreams((prev) =>
+      prev.map((ws) =>
+        ws.id === wsId
+          ? {
+              ...ws,
+              items: ws.items.map((item) =>
+                item.id === itemId ? { ...item, ...updates } : item
+              ),
+            }
+          : ws
+      )
+    );
+  }, []);
+
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      const drag = dragRef.current;
+      if (!drag || !timelineRef.current) return;
+
+      const rect = timelineRef.current.getBoundingClientRect();
+      const dayWidth = rect.width / TOTAL_DAYS;
+      const deltadays = Math.round((e.clientX - drag.startX) / dayWidth);
+
+      if (deltadays === 0) return;
+
+      if (drag.mode === "move") {
+        const newStart = Math.max(1, Math.min(TOTAL_DAYS, drag.originalStart + deltadays));
+        const duration = drag.originalEnd - drag.originalStart;
+        const newEnd = Math.min(TOTAL_DAYS, newStart + duration);
+        const adjustedStart = newEnd - duration;
+        updateItem(drag.wsId, drag.itemId, { startDay: adjustedStart, endDay: newEnd });
+      } else if (drag.mode === "resize-left") {
+        const newStart = Math.max(1, Math.min(drag.originalEnd, drag.originalStart + deltadays));
+        updateItem(drag.wsId, drag.itemId, { startDay: newStart });
+      } else if (drag.mode === "resize-right") {
+        const newEnd = Math.max(drag.originalStart, Math.min(TOTAL_DAYS, drag.originalEnd + deltadays));
+        updateItem(drag.wsId, drag.itemId, { endDay: newEnd });
+      }
+    },
+    [updateItem]
+  );
+
+  const handleMouseUp = useCallback(() => {
+    dragRef.current = null;
+    document.removeEventListener("mousemove", handleMouseMove);
+    document.removeEventListener("mouseup", handleMouseUp);
+    document.body.style.userSelect = "";
+    document.body.style.cursor = "";
+  }, [handleMouseMove]);
+
+  const startDrag = useCallback(
+    (e: React.MouseEvent, mode: DragMode, wsId: string, item: GanttItem) => {
+      e.preventDefault();
+      dragRef.current = {
+        itemId: item.id,
+        wsId,
+        mode,
+        startX: e.clientX,
+        originalStart: item.startDay,
+        originalEnd: item.endDay,
+      };
+      document.body.style.userSelect = "none";
+      document.body.style.cursor = mode === "move" ? "grabbing" : "col-resize";
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+    },
+    [handleMouseMove, handleMouseUp]
+  );
+
+  const handleLabelChange = (wsId: string, itemId: string, newLabel: string) => {
+    updateItem(wsId, itemId, { label: newLabel });
+    setEditingId(null);
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-10">
@@ -123,7 +235,7 @@ export default function Plan() {
         {/* Timeline header */}
         <div className="flex border-b border-border bg-secondary/50">
           <div className="w-64 min-w-[256px] shrink-0 px-4 py-2" />
-          <div className="flex-1 flex">
+          <div className="flex-1 flex" ref={timelineRef}>
             {WEEKS.map((week, wi) => (
               <div key={wi} className="flex-1 border-l border-border">
                 <div className="text-[10px] font-medium text-muted-foreground px-2 py-1 border-b border-border/50">
@@ -142,7 +254,7 @@ export default function Plan() {
         </div>
 
         {/* Workstream rows */}
-        {ganttWorkstreams.map((ws) => (
+        {workstreams.map((ws) => (
           <div key={ws.id}>
             {/* Workstream header row */}
             <div
@@ -159,13 +271,11 @@ export default function Plan() {
                 <span className="text-[10px] text-muted-foreground ml-1">{ws.owner}</span>
               </div>
               <div className="flex-1 relative">
-                {/* Grid lines */}
                 <div className="absolute inset-0 flex">
                   {Array.from({ length: 3 }).map((_, i) => (
                     <div key={i} className="flex-1 border-l border-border" />
                   ))}
                 </div>
-                {/* Summary bars - show all items collapsed into one row */}
                 {!expanded[ws.id] &&
                   ws.items.map((item) => (
                     <GanttBar key={item.id} item={item} />
@@ -194,17 +304,41 @@ export default function Plan() {
                     ) : (
                       <span className="w-3.5 h-3.5 shrink-0" />
                     )}
-                    <span className="text-xs text-foreground truncate">{item.label}</span>
+                    {editingId === item.id ? (
+                      <input
+                        autoFocus
+                        defaultValue={item.label}
+                        className="text-xs text-foreground bg-transparent border-b border-primary outline-none w-full"
+                        onBlur={(e) => handleLabelChange(ws.id, item.id, e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            handleLabelChange(ws.id, item.id, (e.target as HTMLInputElement).value);
+                          } else if (e.key === "Escape") {
+                            setEditingId(null);
+                          }
+                        }}
+                      />
+                    ) : (
+                      <span
+                        className="text-xs text-foreground truncate cursor-text hover:text-primary transition-colors"
+                        onDoubleClick={() => setEditingId(item.id)}
+                        title="Double-click to edit"
+                      >
+                        {item.label}
+                      </span>
+                    )}
                   </div>
                   <div className="flex-1 relative py-1">
-                    {/* Grid lines */}
                     <div className="absolute inset-0 flex">
                       {Array.from({ length: 3 }).map((_, i) => (
                         <div key={i} className="flex-1 border-l border-border/50" />
                       ))}
                     </div>
                     <div className="relative h-6">
-                      <GanttBar item={item} />
+                      <GanttBar
+                        item={item}
+                        onDragStart={(e, mode) => startDrag(e, mode, ws.id, item)}
+                      />
                     </div>
                   </div>
                 </div>
@@ -215,7 +349,7 @@ export default function Plan() {
 
       {/* Today marker note */}
       <p className="text-[10px] text-muted-foreground mt-3">
-        Today is Wednesday Week 2 (26 Mar). Tasks to the left of midpoint should be complete.
+        Today is Wednesday Week 2 (26 Mar). Drag bars to move or resize. Double-click labels to edit.
       </p>
     </div>
   );
