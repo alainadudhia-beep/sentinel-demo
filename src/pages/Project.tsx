@@ -314,7 +314,7 @@ export default function Project() {
                   <p className="text-sm text-foreground">{selectedRisk.whoShouldAct}</p>
                 </section>
                 <section>
-                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">Recommended action</h4>
+                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">Recommended Action: </h4>
                   <p className="text-sm text-foreground leading-relaxed">{selectedRisk.suggestedAction}</p>
                 </section>
                 <section>
