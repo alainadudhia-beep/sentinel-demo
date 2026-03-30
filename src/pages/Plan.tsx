@@ -438,11 +438,9 @@ export default function Plan() {
                     {blockedCount} blocked
                   </span>
                 )}
-                <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium ${
-                  isOverallOnTrack ? "bg-rag-green-light/10 text-rag-green-light" : "bg-rag-amber/10 text-rag-amber"
-                }`}>
-                  <Check className="w-3 h-3" />
-                  Overall: {isOverallOnTrack ? "On Track" : "At Risk"}
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-rag-amber/10 text-rag-amber">
+                  <AlertTriangle className="w-3 h-3" />
+                  At risk: potential for +2 day delay (buffer exhausted)
                 </span>
               </>
             );
