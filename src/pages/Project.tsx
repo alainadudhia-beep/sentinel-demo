@@ -180,12 +180,14 @@ export default function Project() {
                   <div className="flex items-center gap-3 mb-1">
                     <span
                       className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold ${
-                        group.severity === "high"
+                        group.severity === "critical"
+                          ? "bg-rag-red/20 text-rag-red"
+                          : group.severity === "high"
                           ? "bg-rag-red/10 text-rag-red"
                           : "bg-rag-amber/10 text-rag-amber"
                       }`}
                     >
-                      {group.severity === "high" ? "High" : "Medium"}
+                      {group.severity === "critical" ? "Critical" : group.severity === "high" ? "High" : "Medium"}
                     </span>
                     <span className="text-[11px] text-muted-foreground">
                       {group.affectedTaskIds.length} tasks affected
