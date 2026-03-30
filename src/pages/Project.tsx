@@ -87,24 +87,37 @@ export default function Project() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
-      {/* Header */}
-      <div className="flex items-start justify-between mb-8">
-        <div>
-          <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
-            <ShieldAlert className="w-5 h-5 text-rag-amber" />
-            Risk Review
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            Project Falcon · FreshCart DD · Week 2 of 3
-          </p>
+      {/* Dramatic header banner */}
+      <div className="mb-8 rounded-xl border border-rag-red/30 bg-gradient-to-r from-rag-red/5 via-rag-amber/5 to-transparent p-6">
+        <div className="flex items-start justify-between">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 rounded-lg bg-rag-red/10 flex items-center justify-center">
+                <ShieldAlert className="w-6 h-6 text-rag-red" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-foreground">Risk Review</h2>
+                <p className="text-sm text-muted-foreground">
+                  Project Falcon · FreshCart DD · Week 2 of 3
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-rag-amber/10 text-rag-amber">
-            <AlertTriangle className="w-3 h-3" />
+
+        {/* Big dramatic status line */}
+        <div className="mt-4 flex items-center gap-4 flex-wrap">
+          <span className="text-lg font-bold text-rag-red tracking-tight">
+            Project at risk: potential for +2 day delay (buffer exhausted)
+          </span>
+        </div>
+        <div className="flex items-center gap-3 mt-3">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-amber/15 text-rag-amber border border-rag-amber/20">
+            <AlertTriangle className="w-4 h-4" />
             {atRiskCount} at risk
           </span>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-rag-red/10 text-rag-red">
-            <OctagonX className="w-3 h-3" />
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-red/15 text-rag-red border border-rag-red/20">
+            <OctagonX className="w-4 h-4" />
             {blockedCount} blocked
           </span>
         </div>
