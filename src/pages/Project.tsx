@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ganttWorkstreams } from "@/data/mockData";
-import { AlertTriangle, ShieldAlert, CircleCheck, OctagonX, ChevronDown, ChevronRight, Check, ArrowUpRight } from "lucide-react";
+import { AlertTriangle, ShieldAlert, CircleCheck, OctagonX, ChevronDown, ChevronRight, Check, ArrowUpRight, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface OutcomeGroup {
@@ -10,6 +10,7 @@ interface OutcomeGroup {
   cause: string;
   projectImpact: string;
   riskId: string;
+  actionBy: "now" | "today" | "this week";
 }
 
 const OUTCOME_GROUPS: OutcomeGroup[] = [
@@ -20,6 +21,7 @@ const OUTCOME_GROUPS: OutcomeGroup[] = [
     cause: "Panel recruitment delayed 1 day, response rate at 62% of target",
     projectImpact: "Survey critical path blocked, synthesis deck pushed +2 days, removes partner review buffer",
     riskId: "r1",
+    actionBy: "now",
   },
   {
     id: "o2",
@@ -28,6 +30,7 @@ const OUTCOME_GROUPS: OutcomeGroup[] = [
     cause: "Priya off sick since Wednesday — competitor pricing layer and 5-year projections incomplete",
     projectImpact: "TAM/SAM/SOM section incomplete for partner review, weakens investment thesis",
     riskId: "r4",
+    actionBy: "today",
   },
   {
     id: "o3",
@@ -36,6 +39,7 @@ const OUTCOME_GROUPS: OutcomeGroup[] = [
     cause: "Session 2 rescheduled from Tuesday to Thursday",
     projectImpact: "Expert interview synthesis missing management cross-references, competitive dynamics section weakened",
     riskId: "r3",
+    actionBy: "this week",
   },
 ];
 
@@ -253,7 +257,19 @@ export default function Project() {
                       {group.severity === "critical" ? "Critical" : group.severity === "high" ? "High" : "Medium"}
                     </span>
                     <h3 className="text-sm font-semibold text-foreground">{group.outcome}</h3>
-                  </div>
+                    <span
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold ${
+                        group.actionBy === "now"
+                          ? "bg-rag-critical/15 text-rag-critical"
+                          : group.actionBy === "today"
+                          ? "bg-rag-amber/15 text-rag-amber"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      <Clock className="w-3 h-3" />
+                      Act {group.actionBy}
+                    </span>
+                   </div>
                   <p className="text-xs text-muted-foreground mt-1">{group.cause}</p>
                 </div>
                 <div className="shrink-0 max-w-[340px] text-right">
