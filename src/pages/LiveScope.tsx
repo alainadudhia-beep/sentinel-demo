@@ -42,7 +42,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
   },
   {
     id: "q3",
-    question: "What is the target's market share, and how is it trending?",
+    question: "What is the target's market share and how is it trending?",
     workstream: "Market",
     status: "in-progress",
     priority: "important",
