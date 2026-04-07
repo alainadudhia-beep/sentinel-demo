@@ -7,6 +7,8 @@ interface ScopeQuestion {
   question: string;
   workstream: string;
   status: "answered" | "in-progress" | "open" | "new";
+  priority: "critical" | "high" | "medium" | "low";
+  deadline: string;
   source: string;
   addedDate: string;
   notes?: string;
@@ -18,6 +20,8 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     question: "What is the current customer churn rate by cohort and what are the primary drivers?",
     workstream: "Commercial",
     status: "answered",
+    priority: "critical",
+    deadline: "28 Mar",
     source: "Original scope",
     addedDate: "24 Mar",
     notes: "Answered via data room — 8.2% annual, primarily driven by pricing sensitivity in SMB segment",
@@ -27,6 +31,8 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     question: "What is the gross margin profile by product line, and how has it trended over the last 3 years?",
     workstream: "Financial",
     status: "answered",
+    priority: "critical",
+    deadline: "31 Mar",
     source: "Original scope",
     addedDate: "24 Mar",
     notes: "CFO interview confirmed 62% blended, trending up 200bps/yr",
@@ -36,6 +42,8 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     question: "What does the technology architecture look like and what is the estimated technical debt?",
     workstream: "Tech & Product",
     status: "in-progress",
+    priority: "high",
+    deadline: "4 Apr",
     source: "Original scope",
     addedDate: "24 Mar",
     notes: "CTO interview scheduled Thu — architecture diagram received",
@@ -45,6 +53,8 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     question: "What are the key regulatory risks and compliance requirements in target expansion markets?",
     workstream: "Legal & Regulatory",
     status: "in-progress",
+    priority: "high",
+    deadline: "4 Apr",
     source: "Original scope",
     addedDate: "24 Mar",
   },
@@ -53,6 +63,8 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     question: "How defensible is the competitive moat — what are the top 3 switching costs for enterprise customers?",
     workstream: "Commercial",
     status: "open",
+    priority: "high",
+    deadline: "7 Apr",
     source: "Original scope",
     addedDate: "24 Mar",
   },
@@ -61,6 +73,8 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     question: "What is the management team's track record and are there any key-person dependencies?",
     workstream: "Management",
     status: "open",
+    priority: "medium",
+    deadline: "7 Apr",
     source: "Original scope",
     addedDate: "24 Mar",
   },
@@ -69,6 +83,8 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     question: "What is the net revenue retention rate for enterprise vs. SMB segments?",
     workstream: "Commercial",
     status: "in-progress",
+    priority: "critical",
+    deadline: "2 Apr",
     source: "Original scope",
     addedDate: "24 Mar",
     notes: "Data request sent to CFO — expecting response by Wed",
@@ -78,6 +94,8 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     question: "What capex is required to support the 3-year growth plan and what is the payback period?",
     workstream: "Financial",
     status: "open",
+    priority: "medium",
+    deadline: "9 Apr",
     source: "Original scope",
     addedDate: "24 Mar",
   },
@@ -88,6 +106,8 @@ const NEW_QUESTION_FROM_EMAIL: ScopeQuestion = {
   question: "Has FreshCart ever explored or been approached about a side-letter arrangement with any existing investor, and if so what were the terms discussed?",
   workstream: "Legal & Regulatory",
   status: "new",
+  priority: "high",
+  deadline: "4 Apr",
   source: "Client email — auto-detected",
   addedDate: "Today",
 };
@@ -131,6 +151,13 @@ const statusConfig = {
   "in-progress": { icon: Clock, color: "text-rag-amber", bg: "bg-rag-amber/10", label: "In Progress" },
   open: { icon: Circle, color: "text-muted-foreground", bg: "bg-muted", label: "Open" },
   new: { icon: Sparkles, color: "text-primary", bg: "bg-primary/10", label: "New — Auto-detected" },
+};
+
+const priorityConfig: Record<string, { label: string; color: string; bg: string }> = {
+  critical: { label: "Critical", color: "text-rag-red", bg: "bg-rag-red/10" },
+  high: { label: "High", color: "text-rag-amber", bg: "bg-rag-amber/10" },
+  medium: { label: "Medium", color: "text-primary", bg: "bg-primary/10" },
+  low: { label: "Low", color: "text-muted-foreground", bg: "bg-muted" },
 };
 
 const workstreamColors: Record<string, string> = {
@@ -247,12 +274,18 @@ export default function LiveScope() {
                                 <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
                               )}
                             </div>
-                            <div className="flex items-center gap-3 mt-1.5">
+                            <div className="flex items-center gap-2 mt-1.5 flex-wrap">
                               <span className={`text-[11px] px-1.5 py-0.5 rounded ${sc.bg} ${sc.color} font-medium`}>
                                 {sc.label}
                               </span>
+                              <span className={`text-[11px] px-1.5 py-0.5 rounded font-medium ${priorityConfig[q.priority].bg} ${priorityConfig[q.priority].color}`}>
+                                {priorityConfig[q.priority].label}
+                              </span>
+                              <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
+                                <Clock className="w-3 h-3" />
+                                {q.deadline}
+                              </span>
                               <span className="text-[11px] text-muted-foreground">{q.source}</span>
-                              <span className="text-[11px] text-muted-foreground">Added {q.addedDate}</span>
                             </div>
                             {isExpanded && q.notes && (
                               <div className="mt-3 pt-3 border-t border-border">
