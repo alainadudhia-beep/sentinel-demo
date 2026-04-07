@@ -277,14 +277,9 @@ export default function LiveScope() {
                           <StatusIcon className={`w-4 h-4 mt-0.5 shrink-0 ${sc.color}`} />
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-3">
-                              <p className={`text-sm font-medium ${isNew ? "text-foreground" : "text-foreground"}`}>
+                              <p className="text-sm font-medium text-foreground">
                                 {q.question}
                               </p>
-                              {isExpanded ? (
-                                <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
-                              ) : (
-                                <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
-                              )}
                             </div>
                             <div className="flex items-center gap-2 mt-1.5 flex-wrap">
                               <span className={`text-[11px] px-1.5 py-0.5 rounded ${sc.bg} ${sc.color} font-medium`}>
