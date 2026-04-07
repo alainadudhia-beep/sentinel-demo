@@ -468,7 +468,7 @@ export default function Plan() {
                 >
                   <span
                     className="text-[8px] font-semibold text-center px-1 py-px rounded select-none leading-tight"
-                    style={{ color: `hsl(var(${marker.cssVar}))`, backgroundColor: `hsl(var(${marker.cssVar}) / 0.1)` }}
+                    style={{ color: `white`, backgroundColor: `hsl(var(${marker.cssVar}))` }}
                   >
                     {marker.label.includes(" ") ? marker.label.split(" ").map((word, i) => <span key={i} className="block">{word}</span>) : marker.label}
                   </span>
