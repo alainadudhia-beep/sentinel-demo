@@ -138,9 +138,9 @@ export const generatedPlan: Milestone[] = [
   { id: "m2", workstream: "Commercial", task: "Launch survey (n=1,500)", owner: "James Okafor", dueDate: "20 Mar", week: 1, dependency: "Survey design", status: "at-risk", notes: "Panel recruitment delayed", critical: true },
   { id: "m3", workstream: "Market", task: "Build market sizing model", owner: "Priya Sharma", dueDate: "28 Mar", week: 2, dependency: "Data room", status: "at-risk", notes: "Missing competitor pricing", critical: true },
   { id: "m4", workstream: "Internals", task: "Conduct management sessions", owner: "Tom Bradley", dueDate: "26 Mar", week: 2, dependency: "Client scheduling", status: "at-risk", notes: "Session 2 rescheduled", critical: false },
-  { id: "m5", workstream: "Client Communication", task: "Synthesise deck", owner: "Emma Wilson", dueDate: "2 Apr", week: 3, dependency: "All inputs", status: "not-started", notes: "Critical path", critical: true },
-  { id: "m6", workstream: "Client Communication", task: "Partner review", owner: "Sarah Chen", dueDate: "3 Apr", week: 3, dependency: "Draft deck", status: "not-started", notes: "", critical: true },
-  { id: "m7", workstream: "Client Communication", task: "Final presentation to IC", owner: "Sarah Chen", dueDate: "4 Apr", week: 3, dependency: "Partner sign-off", status: "not-started", notes: "Hard deadline", critical: true },
+  { id: "m5", workstream: "Client Comms", task: "Synthesise deck", owner: "Emma Wilson", dueDate: "2 Apr", week: 3, dependency: "All inputs", status: "not-started", notes: "Critical path", critical: true },
+  { id: "m6", workstream: "Client Comms", task: "Partner review", owner: "Sarah Chen", dueDate: "3 Apr", week: 3, dependency: "Draft deck", status: "not-started", notes: "", critical: true },
+  { id: "m7", workstream: "Client Comms", task: "Final presentation to IC", owner: "Sarah Chen", dueDate: "4 Apr", week: 3, dependency: "Partner sign-off", status: "not-started", notes: "Hard deadline", critical: true },
 ];
 
 export interface WorkstreamRow {
