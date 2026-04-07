@@ -70,7 +70,7 @@ const initialScope = {
       estimatedDays: "1–10",
     },
     {
-      name: "Presentation",
+      name: "Project Management / Client Comms",
       owner: "Emma Wilson",
       tasks: [
         "Synthesise findings into 40–50 slide deck",
@@ -101,7 +101,7 @@ const workstreamNameColors: Record<string, string> = {
   "Commercial (Survey)": "text-blue-600",
   "Market Model": "text-violet-600",
   "Internals (Analysis, Mgmt Interviews)": "text-emerald-600",
-  "Presentation": "text-pink-600",
+  "Project Management / Client Comms": "text-pink-600",
 };
 
 function EditableText({
