@@ -305,6 +305,18 @@ export default function LiveScope() {
                                 <p className="text-xs text-muted-foreground">{q.notes}</p>
                               </div>
                             )}
+                            {q.depth && (
+                              <div className={`mt-2 inline-flex items-center gap-1.5 text-[11px] px-2 py-1 rounded-md font-medium ${
+                                q.depth.level === "high"
+                                  ? "bg-rag-green/10 text-rag-green"
+                                  : q.depth.level === "medium"
+                                  ? "bg-rag-amber/10 text-rag-amber"
+                                  : "bg-rag-red/10 text-rag-red"
+                              }`}>
+                                {q.depth.level === "high" ? <ShieldCheck className="w-3 h-3" /> : q.depth.level === "medium" ? <ShieldAlert className="w-3 h-3" /> : <Shield className="w-3 h-3" />}
+                                Depth: {q.depth.level} — {q.depth.note.toLowerCase()}
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
