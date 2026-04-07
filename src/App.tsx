@@ -10,6 +10,7 @@ import ScopeReview from "./pages/ScopeReview";
 import Plan from "./pages/Plan";
 import LiveScope from "./pages/LiveScope";
 import Project from "./pages/Project";
+import Milestones from "./pages/Milestones";
 import SlideReview from "./pages/SlideReview";
 import TeamsAlerts from "./pages/TeamsAlerts";
 import NotFound from "./pages/NotFound";
