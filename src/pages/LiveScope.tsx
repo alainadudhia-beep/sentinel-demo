@@ -53,7 +53,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     question: "What are the key regulatory risks and compliance requirements in target expansion markets?",
     workstream: "Legal & Regulatory",
     status: "in-progress",
-    priority: "high",
+    priority: "important",
     deadline: "4 Apr",
     source: "Original scope",
     addedDate: "24 Mar",
