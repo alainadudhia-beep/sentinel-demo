@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ganttWorkstreams } from "@/data/mockData";
-import { AlertTriangle, ShieldAlert, CircleCheck, OctagonX, ChevronDown, ChevronRight, Check, ArrowUpRight, Clock } from "lucide-react";
+import { AlertTriangle, ShieldAlert, CircleCheck, OctagonX, ChevronDown, ChevronRight, Check, ArrowUpRight, Clock, MessageSquare, Bot, User } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 
 interface OutcomeGroup {
