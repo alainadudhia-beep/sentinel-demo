@@ -75,7 +75,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
   {
     id: "q6",
     question: "What is the management team's track record and are there any key-person dependencies?",
-    workstream: "Internals",
+    workstream: "Financial",
     status: "open",
     priority: "nice-to-have",
     deadline: "7 Apr",
