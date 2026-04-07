@@ -42,7 +42,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     question: "What does the technology architecture look like and what is the estimated technical debt?",
     workstream: "Tech & Product",
     status: "in-progress",
-    priority: "high",
+    priority: "important",
     deadline: "4 Apr",
     source: "Original scope",
     addedDate: "24 Mar",
