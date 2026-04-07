@@ -43,7 +43,7 @@ const ALERTS: AlertCard[] = [
     managerResponses: {
       sr1: "Opening slide review. Will approve or flag changes within the hour.",
       sr2: "Acknowledged. Scheduled for review during the Fri 4pm hold.",
-      sr3: "Please re-check pipeline coverage data against VDR before I review. Flagging back to you.",
+      sr3: "Acknowledged. I'll remind you to review these slides in 1 hour.",
     },
   },
   {
