@@ -26,6 +26,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     source: "Original scope",
     addedDate: "24 Mar",
     notes: "Answered via data room — 8.2% annual, primarily driven by pricing sensitivity in SMB segment",
+    depth: { level: "high", note: "Cross-referenced with VDR data and expert interviews" },
   },
   {
     id: "q2",
