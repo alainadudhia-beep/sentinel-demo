@@ -6,7 +6,7 @@ const steps = [
   { label: "Workstream Planner", path: "/scope-review", icon: CheckCircle2 },
   { label: "Live Scope", path: "/live-scope", icon: Eye },
   { label: "Project Plan", path: "/plan", icon: ListChecks },
-  { label: "Milestones", path: "/milestones", icon: CalendarCheck },
+  { label: "Milestone Tracker", path: "/milestones", icon: CalendarCheck },
   { label: "Slide Review", path: "/slide-review", icon: Presentation },
   { label: "Risk Manager", path: "/project", icon: AlertTriangle },
 ];
@@ -52,7 +52,7 @@ export default function TopNav() {
                   onClick={() => {
                     navigate(step.path);
                   }}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors text-left ${
                     isActive
                       ? "bg-primary text-primary-foreground"
                       : isPast
