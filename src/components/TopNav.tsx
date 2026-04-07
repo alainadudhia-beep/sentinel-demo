@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { FileText, CheckCircle2, ListChecks, AlertTriangle } from "lucide-react";
+import { FileText, CheckCircle2, ListChecks, AlertTriangle, MessageSquare } from "lucide-react";
 
 const steps = [
   { label: "Add Scope", path: "/scope", icon: FileText },
