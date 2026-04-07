@@ -42,8 +42,8 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
   },
   {
     id: "q3",
-    question: "What does the technology architecture look like and what is the estimated technical debt?",
-    workstream: "Tech & Product",
+    question: "What is the target's market share, and how is it trending?",
+    workstream: "Market",
     status: "in-progress",
     priority: "important",
     deadline: "4 Apr",
