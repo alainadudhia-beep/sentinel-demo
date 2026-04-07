@@ -294,7 +294,7 @@ export default function LiveScope() {
                               </span>
                               <span className="text-[11px] text-muted-foreground">{q.source}</span>
                             </div>
-                            {isExpanded && q.notes && (
+                            {q.notes && (
                               <div className="mt-3 pt-3 border-t border-border">
                                 <p className="text-xs text-muted-foreground">{q.notes}</p>
                               </div>
