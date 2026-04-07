@@ -53,7 +53,7 @@ const initialScope = {
       tasks: [
         "Collect market data from data room",
         "Build bottom-up sizing model (TAM/SAM/SOM)",
-        "Populate with expert interview inputs",
+        "Conduct 8–10 expert interviews for inputs",
         "5-year growth projections",
       ],
       estimatedDays: "1–10",
@@ -64,7 +64,7 @@ const initialScope = {
       tasks: [
         "Schedule management interviews",
         "Conduct 3 management sessions",
-        "Conduct 8–10 expert interviews",
+        "",
         "Synthesise interview findings",
       ],
       estimatedDays: "1–10",
