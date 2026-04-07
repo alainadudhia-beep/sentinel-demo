@@ -109,7 +109,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
 const NEW_QUESTION_FROM_EMAIL: ScopeQuestion = {
   id: "q9",
   question: "Has FreshCart ever explored or been approached about a side-letter arrangement with any existing investor, and if so what were the terms discussed?",
-  workstream: "Legal & Regulatory",
+  workstream: "Internals",
   status: "new",
   priority: "important",
   deadline: "4 Apr",
