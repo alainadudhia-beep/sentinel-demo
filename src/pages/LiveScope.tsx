@@ -155,9 +155,8 @@ const statusConfig = {
 
 const priorityConfig: Record<string, { label: string; color: string; bg: string }> = {
   critical: { label: "Critical", color: "text-rag-red", bg: "bg-rag-red/10" },
-  high: { label: "High", color: "text-rag-amber", bg: "bg-rag-amber/10" },
-  medium: { label: "Medium", color: "text-primary", bg: "bg-primary/10" },
-  low: { label: "Low", color: "text-muted-foreground", bg: "bg-muted" },
+  important: { label: "Important", color: "text-rag-amber", bg: "bg-rag-amber/10" },
+  "nice-to-have": { label: "Nice to Have", color: "text-muted-foreground", bg: "bg-muted" },
 };
 
 const workstreamColors: Record<string, string> = {
