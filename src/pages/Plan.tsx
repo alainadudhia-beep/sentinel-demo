@@ -58,6 +58,7 @@ const workstreamNameColors: Record<string, string> = {
   Commercial: "text-blue-600",
   Market: "text-violet-600",
   Internals: "text-emerald-600",
+  "Client Comms": "text-pink-600",
 };
 
 const STATUS_KEYS = ["complete", "on-track", "at-risk", "blocked", "not-started"] as const;
