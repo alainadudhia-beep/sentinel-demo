@@ -19,6 +19,34 @@ interface AlertCard {
 
 const ALERTS: AlertCard[] = [
   {
+    id: "slide-review",
+    time: "8:31 AM",
+    severity: "info",
+    title: "Slides marked for partner review",
+    emoji: "📋",
+    shortTitle: "Slides for Review",
+    preview: "J. Okafor marked 2 slides for partner review",
+    isPersonMessage: true,
+    personAvatar: { initials: "JO", bg: "bg-red-500" },
+    fields: [
+      { label: "From", value: "J. Okafor · Commercial workstream" },
+      { label: "Slides", value: "Management plan stress test + Commercial risk summary" },
+      { label: "Section", value: "Commercial · 6 done, 2 awaiting review, 2 not started" },
+      { label: "Deadline", value: "Partner sign-off needed before Mon 7 Apr client presentation" },
+      { label: "Note", value: "Can you check my 2 slides please? Flagged for partner review — pipeline coverage ratios not yet independently validated." },
+    ],
+    actions: [
+      { id: "sr1", label: "✅ Open slides and review now", recommended: true },
+      { id: "sr2", label: "📧 Acknowledge — will review by Fri 4pm" },
+      { id: "sr3", label: "↩️ Request changes before reviewing" },
+    ],
+    managerResponses: {
+      sr1: "Opening slide review. Will approve or flag changes within the hour.",
+      sr2: "Acknowledged. Scheduled for review during the Fri 4pm hold.",
+      sr3: "Please re-check pipeline coverage data against VDR before I review. Flagging back to you.",
+    },
+  },
+  {
     id: "survey",
     time: "9:14 AM",
     severity: "critical",
