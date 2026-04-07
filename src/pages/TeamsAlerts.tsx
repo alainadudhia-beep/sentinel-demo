@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { AlertTriangle, CircleCheck, ArrowUpRight, Check, MessageSquare, Bot, User } from "lucide-react";
+import { AlertTriangle, CircleCheck, ArrowUpRight, Check, MessageSquare, Bot, User, FileCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface AlertCard {
   id: string;
   time: string;
-  severity: "critical" | "high" | "medium";
+  severity: "critical" | "high" | "medium" | "info";
   title: string;
   emoji: string;
   shortTitle: string;
@@ -13,9 +13,39 @@ interface AlertCard {
   fields: { label: string; value: string }[];
   actions: { id: string; label: string; recommended?: boolean }[];
   managerResponses: Record<string, string>;
+  isPersonMessage?: boolean;
+  personAvatar?: { initials: string; bg: string };
 }
 
 const ALERTS: AlertCard[] = [
+  {
+    id: "slide-review",
+    time: "8:31 AM",
+    severity: "info",
+    title: "Slides marked for partner review",
+    emoji: "📋",
+    shortTitle: "Slides for Review",
+    preview: "J. Okafor marked 2 slides for partner review",
+    isPersonMessage: true,
+    personAvatar: { initials: "JO", bg: "bg-red-500" },
+    fields: [
+      { label: "From", value: "J. Okafor · Commercial workstream" },
+      { label: "Slides", value: "Management plan stress test + Commercial risk summary" },
+      { label: "Section", value: "Commercial · 6 done, 2 awaiting review, 2 not started" },
+      { label: "Deadline", value: "Partner sign-off needed before Mon 7 Apr client presentation" },
+      { label: "Note", value: "Can you check my 2 slides please? Flagged for partner review — pipeline coverage ratios not yet independently validated." },
+    ],
+    actions: [
+      { id: "sr1", label: "✅ Open slides and review now", recommended: true },
+      { id: "sr2", label: "📧 Acknowledge — will review by Fri 4pm" },
+      { id: "sr3", label: "↩️ Request changes before reviewing" },
+    ],
+    managerResponses: {
+      sr1: "Opening slide review. Will approve or flag changes within the hour.",
+      sr2: "Acknowledged. Scheduled for review during the Fri 4pm hold.",
+      sr3: "Please re-check pipeline coverage data against VDR before I review. Flagging back to you.",
+    },
+  },
   {
     id: "survey",
     time: "9:14 AM",
@@ -119,18 +149,21 @@ const severityColor: Record<string, string> = {
   critical: "bg-rag-red",
   high: "bg-rag-amber",
   medium: "bg-primary",
+  info: "bg-[hsl(258,60%,45%)]",
 };
 
 const severityDot: Record<string, string> = {
   critical: "bg-rag-red",
   high: "bg-rag-amber",
   medium: "bg-primary",
+  info: "bg-[hsl(258,60%,45%)]",
 };
 
 const severityBotColor: Record<string, string> = {
   critical: "bg-rag-red/15 text-rag-red",
   high: "bg-rag-amber/15 text-rag-amber",
   medium: "bg-primary/15 text-primary",
+  info: "bg-[hsl(258,60%,50%)]/15 text-[hsl(258,60%,45%)]",
 };
 
 export default function TeamsAlerts() {
@@ -184,9 +217,15 @@ export default function TeamsAlerts() {
                   >
                     <div className="flex items-start gap-2.5">
                       <div className="relative shrink-0 mt-0.5">
-                        <div className="w-8 h-8 rounded-full bg-muted/60 flex items-center justify-center">
-                          <Bot className="w-4 h-4 text-muted-foreground" />
-                        </div>
+                        {alert.isPersonMessage && alert.personAvatar ? (
+                          <div className={`w-8 h-8 rounded-full ${alert.personAvatar.bg} flex items-center justify-center text-white text-[10px] font-bold`}>
+                            {alert.personAvatar.initials}
+                          </div>
+                        ) : (
+                          <div className="w-8 h-8 rounded-full bg-muted/60 flex items-center justify-center">
+                            <Bot className="w-4 h-4 text-muted-foreground" />
+                          </div>
+                        )}
                         <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-card ${severityDot[alert.severity]}`} />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -214,21 +253,37 @@ export default function TeamsAlerts() {
             <div className="flex-1 flex flex-col">
               {/* Chat header */}
               <div className="px-4 py-2.5 border-b border-border bg-card flex items-center gap-2">
-                <Bot className="w-5 h-5 text-muted-foreground" />
-                <span className="text-sm font-semibold text-foreground">Risk Manager Bot</span>
+                {activeAlert.isPersonMessage && activeAlert.personAvatar ? (
+                  <div className={`w-5 h-5 rounded-full ${activeAlert.personAvatar.bg} flex items-center justify-center text-white text-[8px] font-bold`}>
+                    {activeAlert.personAvatar.initials}
+                  </div>
+                ) : (
+                  <Bot className="w-5 h-5 text-muted-foreground" />
+                )}
+                <span className="text-sm font-semibold text-foreground">
+                  {activeAlert.isPersonMessage ? "J. Okafor" : "Risk Manager Bot"}
+                </span>
                 <span className="text-xs text-muted-foreground">· {activeAlert.shortTitle}</span>
               </div>
 
               {/* Messages */}
               <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-muted/20">
-                {/* Bot alert card */}
+                {/* Alert card */}
                 <div className="flex items-start gap-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${severityBotColor[activeAlert.severity]}`}>
-                    <Bot className="w-4 h-4" />
-                  </div>
+                  {activeAlert.isPersonMessage && activeAlert.personAvatar ? (
+                    <div className={`w-8 h-8 rounded-full ${activeAlert.personAvatar.bg} flex items-center justify-center text-white text-[10px] font-bold shrink-0`}>
+                      {activeAlert.personAvatar.initials}
+                    </div>
+                  ) : (
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${severityBotColor[activeAlert.severity]}`}>
+                      <Bot className="w-4 h-4" />
+                    </div>
+                  )}
                   <div className="flex-1 max-w-[480px]">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-semibold text-foreground">Risk Manager Bot</span>
+                      <span className="text-sm font-semibold text-foreground">
+                        {activeAlert.isPersonMessage ? "J. Okafor" : "Risk Manager Bot"}
+                      </span>
                       <span className="text-[11px] text-muted-foreground">Today {activeAlert.time}</span>
                     </div>
                     <div className="rounded-lg border border-border bg-background overflow-hidden">
