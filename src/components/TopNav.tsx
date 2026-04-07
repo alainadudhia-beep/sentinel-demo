@@ -2,13 +2,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { FileText, CheckCircle2, ListChecks, AlertTriangle, MessageSquare, Eye, Presentation, CalendarCheck } from "lucide-react";
 
 const steps = [
-  { label: "Add Scope", path: "/scope", icon: FileText },
-  { label: "Workstream Planner", path: "/scope-review", icon: CheckCircle2 },
-  { label: "Live Scope", path: "/live-scope", icon: Eye },
-  { label: "Project Plan", path: "/plan", icon: ListChecks },
-  { label: "Milestone Tracker", path: "/milestones", icon: CalendarCheck },
-  { label: "Slide Review", path: "/slide-review", icon: Presentation },
-  { label: "Risk Manager", path: "/project", icon: AlertTriangle },
+  { label: "Add\nScope", path: "/scope", icon: FileText },
+  { label: "Workstream\nPlanner", path: "/scope-review", icon: CheckCircle2 },
+  { label: "Live\nScope", path: "/live-scope", icon: Eye },
+  { label: "Project\nPlan", path: "/plan", icon: ListChecks },
+  { label: "Milestone\nTracker", path: "/milestones", icon: CalendarCheck },
+  { label: "Slide\nReview", path: "/slide-review", icon: Presentation },
+  { label: "Risk\nManager", path: "/project", icon: AlertTriangle },
 ];
 
 const stepOrder = ["/scope", "/scope-review", "/live-scope", "/plan", "/milestones", "/slide-review", "/project"];
@@ -52,7 +52,7 @@ export default function TopNav() {
                   onClick={() => {
                     navigate(step.path);
                   }}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors text-left w-[120px] ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors text-left w-[120px] leading-tight ${
                     isActive
                       ? "bg-primary text-primary-foreground"
                       : isPast
@@ -60,8 +60,8 @@ export default function TopNav() {
                       : "text-muted-foreground hover:bg-accent hover:text-foreground"
                   }`}
                 >
-                  <Icon className="w-3.5 h-3.5" />
-                  {step.label}
+                  <Icon className="w-3.5 h-3.5 shrink-0" />
+                  <span className="whitespace-pre-line">{step.label}</span>
                 </button>
               </div>
             );
