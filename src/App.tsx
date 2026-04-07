@@ -9,6 +9,7 @@ import Scope from "./pages/Scope";
 import ScopeReview from "./pages/ScopeReview";
 import Plan from "./pages/Plan";
 import Project from "./pages/Project";
+import TeamsAlerts from "./pages/TeamsAlerts";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
