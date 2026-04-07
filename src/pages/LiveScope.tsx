@@ -55,7 +55,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
   {
     id: "q4",
     question: "What are the key regulatory risks and compliance requirements in target expansion markets?",
-    workstream: "Legal & Regulatory",
+    workstream: "Market",
     status: "in-progress",
     priority: "important",
     deadline: "4 Apr",
@@ -75,7 +75,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
   {
     id: "q6",
     question: "What is the management team's track record and are there any key-person dependencies?",
-    workstream: "Management",
+    workstream: "Financial",
     status: "open",
     priority: "nice-to-have",
     deadline: "7 Apr",
@@ -294,9 +294,6 @@ export default function LiveScope() {
                               <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
                                 <Clock className="w-3 h-3" />
                                 {q.deadline}
-                              </span>
-                              <span className="text-[11px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-medium">
-                                {q.workstream}
                               </span>
                               <span className="text-[11px] text-muted-foreground">{q.source}</span>
                             </div>
