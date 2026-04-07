@@ -295,9 +295,6 @@ export default function LiveScope() {
                                 <Clock className="w-3 h-3" />
                                 {q.deadline}
                               </span>
-                              <span className="text-[11px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-medium">
-                                {q.workstream}
-                              </span>
                               <span className="text-[11px] text-muted-foreground">{q.source}</span>
                             </div>
                             {isNew && (
