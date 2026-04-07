@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ganttWorkstreams } from "@/data/mockData";
-import { AlertTriangle, ShieldAlert, CircleCheck, OctagonX, ChevronDown, ChevronRight, Check, ArrowUpRight, Clock } from "lucide-react";
+import { AlertTriangle, ShieldAlert, CircleCheck, OctagonX, ChevronDown, ChevronRight, Check, ArrowUpRight, Clock, MessageSquare, Bot, User } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 
 interface OutcomeGroup {
@@ -216,199 +217,383 @@ export default function Project() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
-      {/* Header banner */}
-      <div className="mb-8 rounded-xl border border-rag-red/30 bg-gradient-to-r from-rag-red/5 via-rag-amber/5 to-transparent p-6">
-        <div className="flex items-start justify-between gap-6">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-lg bg-rag-red/10 flex items-center justify-center">
-                <ShieldAlert className="w-6 h-6 text-rag-red" />
-              </div>
+      <Tabs defaultValue="risk-manager" className="w-full">
+        <TabsList className="mb-6">
+          <TabsTrigger value="risk-manager" className="gap-2">
+            <ShieldAlert className="w-4 h-4" />
+            Risk Manager
+          </TabsTrigger>
+          <TabsTrigger value="teams-alerts" className="gap-2">
+            <MessageSquare className="w-4 h-4" />
+            Teams Alerts
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="risk-manager">
+          {/* Header banner */}
+          <div className="mb-8 rounded-xl border border-rag-red/30 bg-gradient-to-r from-rag-red/5 via-rag-amber/5 to-transparent p-6">
+            <div className="flex items-start justify-between gap-6">
               <div>
-                <h2 className="text-xl font-bold text-foreground">Project at Risk</h2>
-                <p className="text-sm text-muted-foreground">
-                  Project Falcon · FreshCart DD · Week 2 of 3
-                </p>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 rounded-lg bg-rag-red/10 flex items-center justify-center">
+                    <ShieldAlert className="w-6 h-6 text-rag-red" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-foreground">Project at Risk</h2>
+                    <p className="text-sm text-muted-foreground">
+                      Project Falcon · FreshCart DD · Week 2 of 3
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <span className="text-lg font-bold text-rag-red tracking-tight">
+                    Potential +2 day delay → partner review at risk → likely overrun
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-col gap-2 shrink-0">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-critical/15 text-rag-critical border border-rag-critical/20">
+                  <AlertTriangle className="w-4 h-4" />
+                  1 Critical Risk
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-red/15 text-rag-red border border-rag-red/20">
+                  <AlertTriangle className="w-4 h-4" />
+                  1 High Risk
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-amber/15 text-rag-amber border border-rag-amber/20">
+                  <AlertTriangle className="w-4 h-4" />
+                  2 Medium Risks
+                </span>
               </div>
             </div>
-            <div className="mt-4">
-              <span className="text-lg font-bold text-rag-red tracking-tight">
-                Potential +2 day delay → partner review at risk → likely overrun
-              </span>
-            </div>
           </div>
-          <div className="flex flex-col gap-2 shrink-0">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-critical/15 text-rag-critical border border-rag-critical/20">
-              <AlertTriangle className="w-4 h-4" />
-              1 Critical Risk
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-red/15 text-rag-red border border-rag-red/20">
-              <AlertTriangle className="w-4 h-4" />
-              1 High Risk
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-rag-amber/15 text-rag-amber border border-rag-amber/20">
-              <AlertTriangle className="w-4 h-4" />
-              2 Medium Risks
-            </span>
-          </div>
-        </div>
-      </div>
 
-      {/* Outcome-based risk groups */}
-      <div className="space-y-4">
-        {OUTCOME_GROUPS.map((group) => {
-          const isExpanded = expandedOutcomes.has(group.id);
-          const isHandled_ = handled.has(group.riskId);
-          const options = RISK_OPTIONS[group.riskId] || [];
-          const currentSelection = selectedOptions[group.riskId];
-          const severityClass = group.severity === "critical"
-            ? "border-rag-critical/20 bg-rag-critical/[0.04]"
-            : group.severity === "high"
-            ? "border-rag-red/20 bg-rag-red/[0.02]"
-            : "border-rag-amber/20 bg-rag-amber/[0.02]";
+          {/* Outcome-based risk groups */}
+          <div className="space-y-4">
+            {OUTCOME_GROUPS.map((group) => {
+              const isExpanded = expandedOutcomes.has(group.id);
+              const options = RISK_OPTIONS[group.riskId] || [];
+              const isHandled = handled.has(group.riskId);
+              const severityColors = {
+                critical: { bg: "bg-rag-critical/10", text: "text-rag-critical", border: "border-rag-critical/20", badge: "bg-rag-critical/15 text-rag-critical border-rag-critical/20" },
+                high: { bg: "bg-rag-red/10", text: "text-rag-red", border: "border-rag-red/20", badge: "bg-rag-red/15 text-rag-red border-rag-red/20" },
+                medium: { bg: "bg-rag-amber/10", text: "text-rag-amber", border: "border-rag-amber/20", badge: "bg-rag-amber/15 text-rag-amber border-rag-amber/20" },
+              };
+              const colors = severityColors[group.severity];
+              const actionByColors = {
+                now: "bg-rag-critical/15 text-rag-critical border-rag-critical/25",
+                today: "bg-rag-red/15 text-rag-red border-rag-red/25",
+                "this week": "bg-rag-amber/15 text-rag-amber border-rag-amber/25",
+              };
 
-          return (
-            <div
-              key={group.id}
-              className={`border rounded-lg overflow-hidden transition-all ${severityClass} ${isHandled_ ? "opacity-50" : ""}`}
-            >
-              {/* Outcome header */}
-              <button
-                className="w-full text-left px-5 py-4 flex items-start gap-4 hover:bg-accent/20 transition-colors"
-                onClick={() => toggleOutcome(group.id)}
-              >
-                <div className="flex items-center gap-2 mt-0.5 shrink-0">
-                  {isExpanded ? (
-                    <ChevronDown className="w-4 h-4 text-muted-foreground" />
-                  ) : (
-                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              return (
+                <div
+                  key={group.id}
+                  className={`rounded-lg border ${colors.border} ${isHandled ? "opacity-60" : ""}`}
+                >
+                  <button
+                    onClick={() => toggleOutcome(group.id)}
+                    className={`w-full flex items-center gap-3 px-5 py-4 text-left hover:bg-muted/30 transition-colors rounded-lg`}
+                  >
+                    {isExpanded ? (
+                      <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />
+                    ) : (
+                      <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+                    )}
+                    <div className={`w-8 h-8 rounded-md ${colors.bg} flex items-center justify-center shrink-0`}>
+                      {group.severity === "critical" ? (
+                        <OctagonX className={`w-4 h-4 ${colors.text}`} />
+                      ) : (
+                        <AlertTriangle className={`w-4 h-4 ${colors.text}`} />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-foreground">{group.outcome}</span>
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium border ${colors.badge}`}>
+                          {group.severity}
+                        </span>
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium border ${actionByColors[group.actionBy]} flex items-center gap-1`}>
+                          <Clock className="w-3 h-3" />
+                          {group.actionBy === "now" ? "Action now" : group.actionBy === "today" ? "Action today" : "Action this week"}
+                        </span>
+                        {isHandled && (
+                          <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-rag-green/15 text-rag-green border border-rag-green/20 flex items-center gap-1">
+                            <CircleCheck className="w-3 h-3" /> Handled
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-0.5 truncate">{group.cause}</p>
+                    </div>
+                  </button>
+
+                  {isExpanded && (
+                    <div className="px-5 pb-5 pt-1 ml-[3.25rem]">
+                      <div className="mb-3 p-3 rounded-md bg-muted/40 border border-border/50">
+                        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Project Impact</span>
+                        <p className="text-sm text-foreground mt-1">{group.projectImpact}</p>
+                      </div>
+
+                      <div className="space-y-2">
+                        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Response Options</span>
+                        {options.map((opt) => {
+                          const isSelected = selectedOptions[group.riskId] === opt.id;
+                          return (
+                            <button
+                              key={opt.id}
+                              onClick={() =>
+                                setSelectedOptions((prev) => ({ ...prev, [group.riskId]: opt.id }))
+                              }
+                              className={`w-full text-left rounded-md border p-3 transition-colors ${
+                                isSelected
+                                  ? "border-primary bg-primary/5"
+                                  : "border-border hover:border-primary/40"
+                              }`}
+                            >
+                              <div className="flex items-center gap-2 mb-1">
+                                <div
+                                  className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                                    isSelected ? "border-primary bg-primary" : "border-muted-foreground/40"
+                                  }`}
+                                >
+                                  {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-primary-foreground" />}
+                                </div>
+                                <span className="text-sm font-medium text-foreground">{opt.title}</span>
+                                {opt.recommended && (
+                                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/15 text-primary font-medium">
+                                    Recommended
+                                  </span>
+                                )}
+                              </div>
+                              <div className="ml-6 space-y-1">
+                                {opt.steps.map((s, i) => (
+                                  <p key={i} className="text-xs text-muted-foreground">
+                                    {i + 1}. {s}
+                                  </p>
+                                ))}
+                                <div className="flex gap-4 mt-1.5">
+                                  <span className="text-[11px] text-muted-foreground">
+                                    <strong className="text-foreground">Rationale:</strong> {opt.rationale}
+                                  </span>
+                                  <span className="text-[11px] text-muted-foreground">
+                                    <strong className="text-foreground">Risk:</strong> {opt.risk}
+                                  </span>
+                                </div>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      <div className="flex items-center gap-2 mt-4">
+                        <Button
+                          size="sm"
+                          className="gap-1.5 h-7 text-xs"
+                          onClick={() => {
+                            setHandled((prev) => new Set(prev).add(group.riskId));
+                          }}
+                        >
+                          <Check className="w-3 h-3" />
+                          Action selected plan
+                        </Button>
+                        <Button variant="outline" size="sm" className="gap-1.5 h-7 text-xs">
+                          <ArrowUpRight className="w-3 h-3" />
+                          Escalate
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="gap-1.5 h-7 text-xs"
+                          onClick={() => {
+                            setHandled((prev) => new Set(prev).add(group.riskId));
+                          }}
+                        >
+                          <CircleCheck className="w-3 h-3" />
+                          Handled
+                        </Button>
+                      </div>
+                    </div>
                   )}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-3 mb-1">
-                    <span
-                      className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold ${
-                        group.severity === "critical"
-                          ? "bg-rag-critical/20 text-rag-critical"
-                          : group.severity === "high"
-                          ? "bg-rag-red/10 text-rag-red"
-                          : "bg-rag-amber/10 text-rag-amber"
-                      }`}
-                    >
-                      {group.severity === "critical" ? "Critical" : group.severity === "high" ? "High" : "Medium"}
-                    </span>
-                    <h3 className="text-sm font-semibold text-foreground">{group.outcome}</h3>
-                    <span
-                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold ${
-                        group.actionBy === "now"
-                          ? "bg-rag-critical/15 text-rag-critical"
-                          : group.actionBy === "today"
-                          ? "bg-rag-amber/15 text-rag-amber"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      <Clock className="w-3 h-3" />
-                      Act {group.actionBy}
-                    </span>
-                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">{group.cause}</p>
-                </div>
-                <div className="shrink-0 max-w-[340px] text-right">
-                  <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Project impact</p>
-                  <p className="text-xs font-semibold text-foreground leading-snug">{group.projectImpact}</p>
-                </div>
-              </button>
+              );
+            })}
+          </div>
+        </TabsContent>
 
-              {/* Expanded: choose an action */}
-              {isExpanded && options.length > 0 && (
-                <div className="border-t border-border/50 px-5 py-4">
-                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-3">Choose an action</p>
-                  <div className="grid gap-2">
-                    {options.map((opt, idx) => (
-                      <button
-                        key={opt.id}
-                        onClick={() => setSelectedOptions(prev => ({ ...prev, [group.riskId]: opt.id }))}
-                        className={`w-full text-left rounded-lg border p-3.5 transition-all ${
-                          currentSelection === opt.id
-                            ? "border-primary bg-primary/5 ring-1 ring-primary/20"
-                            : "border-border hover:border-muted-foreground/30 hover:bg-accent/30"
-                        }`}
-                      >
-                        <div className="flex items-start gap-3">
-                          <div className={`mt-0.5 w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
-                            currentSelection === opt.id
-                              ? "border-primary bg-primary"
-                              : "border-muted-foreground/40"
-                          }`}>
-                            {currentSelection === opt.id && (
-                              <Check className="w-2.5 h-2.5 text-primary-foreground" />
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="text-sm font-semibold text-foreground">
-                                {idx + 1}. {opt.title}
-                              </span>
-                              {opt.recommended && (
-                                <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-primary/10 text-primary">
-                                  Recommended
-                                </span>
-                              )}
-                            </div>
-                            <div className="space-y-0.5 mb-1.5">
-                              {opt.steps.map((step, i) => (
-                                <p key={i} className="text-xs text-muted-foreground">→ {step}</p>
-                              ))}
-                            </div>
-                            <div className="flex items-center gap-4">
-                              <p className="text-xs text-foreground">
-                                <span className="font-medium text-muted-foreground">Rationale: </span>
-                                {opt.rationale}
-                              </p>
-                            </div>
-                            <p className="text-xs text-foreground mt-0.5">
-                              <span className="font-medium text-rag-amber">Risk: </span>
-                              {opt.risk}
-                            </p>
-                          </div>
-                        </div>
-                      </button>
-                    ))}
+        <TabsContent value="teams-alerts">
+          <TeamsAlertsMockup />
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
+
+/* ─── Teams Alerts Mockup ─── */
+function TeamsAlertsMockup() {
+  const [selectedAction, setSelectedAction] = useState<string | null>(null);
+
+  return (
+    <div className="max-w-2xl mx-auto">
+      {/* Teams window chrome */}
+      <div className="rounded-xl border border-border overflow-hidden shadow-lg bg-background">
+        {/* Teams header bar */}
+        <div className="flex items-center gap-3 px-4 py-3 bg-[hsl(258,60%,45%)] text-white">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded bg-white/20 flex items-center justify-center text-xs font-bold">T</div>
+            <span className="text-sm font-semibold">Microsoft Teams</span>
+          </div>
+          <span className="text-xs opacity-70 ml-auto">Chat · Project Falcon Alerts</span>
+        </div>
+
+        {/* Chat area */}
+        <div className="p-4 space-y-4 bg-muted/20 min-h-[400px]">
+          {/* Bot message - alert */}
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-full bg-rag-red/15 flex items-center justify-center shrink-0">
+              <Bot className="w-4 h-4 text-rag-red" />
+            </div>
+            <div className="flex-1 max-w-[480px]">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-sm font-semibold text-foreground">Risk Manager Bot</span>
+                <span className="text-[11px] text-muted-foreground">Today 9:14 AM</span>
+              </div>
+              {/* Adaptive card style */}
+              <div className="rounded-lg border border-border bg-background overflow-hidden">
+                <div className="h-1 bg-rag-red" />
+                <div className="p-4 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className="w-5 h-5 text-rag-red" />
+                    <span className="font-bold text-foreground">🚨 Critical Risk Alert</span>
+                  </div>
+                  <div className="text-sm space-y-2">
+                    <div>
+                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Project</span>
+                      <p className="text-foreground">Project Falcon · FreshCart DD</p>
+                    </div>
+                    <div>
+                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Risk</span>
+                      <p className="text-foreground font-medium">Survey Delayed</p>
+                    </div>
+                    <div>
+                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Cause</span>
+                      <p className="text-muted-foreground">Panel recruitment delayed 1 day, response rate at 62% of target</p>
+                    </div>
+                    <div>
+                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Impact</span>
+                      <p className="text-muted-foreground">Potential +2 day delay → partner review at risk → likely overrun</p>
+                    </div>
                   </div>
 
-                  {/* Action buttons */}
-                  <div className="flex items-center gap-2 mt-4">
-                    <Button
-                      size="sm"
-                      className="gap-1.5 h-7 text-xs"
-                      onClick={() => {
-                        setHandled((prev) => new Set(prev).add(group.riskId));
-                      }}
-                    >
+                  <div className="border-t border-border pt-3">
+                    <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2 block">Recommended Actions</span>
+                    <div className="space-y-2">
+                      {[
+                        { id: "a1", label: "✅ Recover timeline — priority boost request", recommended: true },
+                        { id: "a2", label: "📅 Extend survey timeline (+1 day)" },
+                        { id: "a3", label: "📊 Proceed with partial data (62%)" },
+                      ].map((action) => (
+                        <button
+                          key={action.id}
+                          onClick={() => setSelectedAction(action.id)}
+                          className={`w-full text-left text-sm px-3 py-2 rounded-md border transition-colors ${
+                            selectedAction === action.id
+                              ? "border-primary bg-primary/10 text-foreground"
+                              : "border-border hover:border-primary/40 text-foreground"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span>{action.label}</span>
+                            {action.recommended && (
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/15 text-primary font-medium">
+                                Recommended
+                              </span>
+                            )}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2 pt-1">
+                    <Button size="sm" className="gap-1.5 h-8 text-xs flex-1" disabled={!selectedAction}>
                       <Check className="w-3 h-3" />
-                      Action selected plan
+                      Approve Action
                     </Button>
-                    <Button variant="outline" size="sm" className="gap-1.5 h-7 text-xs">
+                    <Button variant="outline" size="sm" className="gap-1.5 h-8 text-xs">
                       <ArrowUpRight className="w-3 h-3" />
                       Escalate
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="gap-1.5 h-7 text-xs"
-                      onClick={() => {
-                        setHandled((prev) => new Set(prev).add(group.riskId));
-                      }}
-                    >
-                      <CircleCheck className="w-3 h-3" />
-                      Handled
-                    </Button>
                   </div>
                 </div>
-              )}
+              </div>
             </div>
-          );
-        })}
+          </div>
+
+          {/* Manager response */}
+          {selectedAction && (
+            <div className="flex items-start gap-3 justify-end">
+              <div className="max-w-[400px]">
+                <div className="flex items-center gap-2 mb-1 justify-end">
+                  <span className="text-[11px] text-muted-foreground">Today 9:16 AM</span>
+                  <span className="text-sm font-semibold text-foreground">Sarah Chen</span>
+                </div>
+                <div className="rounded-lg bg-primary/10 border border-primary/20 p-3 text-sm text-foreground">
+                  {selectedAction === "a1" && "Approved: Recover timeline with priority boost. Please escalate to panel provider immediately."}
+                  {selectedAction === "a2" && "Approved: Extend survey by 1 day. Compress synthesis accordingly."}
+                  {selectedAction === "a3" && "Approved: Proceed with partial data. Flag confidence level in deck."}
+                </div>
+              </div>
+              <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
+                <User className="w-4 h-4 text-primary" />
+              </div>
+            </div>
+          )}
+
+          {/* Bot confirmation */}
+          {selectedAction && (
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-full bg-rag-green/15 flex items-center justify-center shrink-0">
+                <Bot className="w-4 h-4 text-rag-green" />
+              </div>
+              <div className="max-w-[480px]">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-sm font-semibold text-foreground">Risk Manager Bot</span>
+                  <span className="text-[11px] text-muted-foreground">Today 9:16 AM</span>
+                </div>
+                <div className="rounded-lg border border-rag-green/30 bg-rag-green/5 p-3 text-sm text-foreground">
+                  <div className="flex items-center gap-2 mb-1">
+                    <CircleCheck className="w-4 h-4 text-rag-green" />
+                    <span className="font-medium">Action confirmed</span>
+                  </div>
+                  <p className="text-muted-foreground text-xs">
+                    Risk response logged. Team notified. Project timeline updated.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Teams input bar */}
+        <div className="flex items-center gap-2 px-4 py-3 border-t border-border bg-background">
+          <div className="flex-1 rounded-md border border-border px-3 py-2 text-sm text-muted-foreground bg-muted/30">
+            Type a message...
+          </div>
+          <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground">
+            <MessageSquare className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+
+      {/* Description */}
+      <div className="mt-6 p-4 rounded-lg border border-border bg-muted/30">
+        <h3 className="text-sm font-semibold text-foreground mb-2">How Teams Alerts Work</h3>
+        <ul className="text-sm text-muted-foreground space-y-1.5">
+          <li>• Risk Manager Bot sends adaptive cards when risks are detected</li>
+          <li>• Managers can review context, select an action, and approve directly in Teams</li>
+          <li>• Responses are logged and the project timeline updates automatically</li>
+          <li>• Escalation routes alerts to senior leadership channels</li>
+        </ul>
       </div>
     </div>
   );
