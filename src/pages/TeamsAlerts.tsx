@@ -1,6 +1,9 @@
 import { useState } from "react";
-import { AlertTriangle, CircleCheck, ArrowUpRight, Check, MessageSquare, Bot, User, FileCheck } from "lucide-react";
+import { AlertTriangle, CircleCheck, ArrowUpRight, Check, MessageSquare, Bot, User, FileCheck, Mail, Sparkles, Plus, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+
+// ── Risk Alerts data ──
 
 interface AlertCard {
   id: string;
@@ -166,9 +169,29 @@ const severityBotColor: Record<string, string> = {
   info: "bg-[hsl(258,60%,50%)]/15 text-[hsl(258,60%,45%)]",
 };
 
+// ── Scope Detection data ──
+
+interface ScopeMessage {
+  id: string;
+  from: string;
+  avatar: { initials: string; bg: string };
+  time: string;
+  type: "email-forward" | "bot-detection" | "manager-action" | "bot-confirm";
+  content: React.ReactNode;
+}
+
+const SCOPE_SIDEBAR_ITEMS = [
+  { id: "scope-email", label: "New Scope Item", preview: "Client email — pricing elasticity question", time: "8:32 AM", avatar: { initials: "S", bg: "bg-primary" }, isBot: true },
+  { id: "risk-survey", label: "Survey Delayed", preview: "Panel recruitment delayed — 62%", time: "9:14 AM", isBot: true },
+  { id: "risk-partner", label: "Slide Review Declined", preview: "Thu 11am removed", time: "10:42 AM", isBot: true },
+];
+
 export default function TeamsAlerts() {
   const [selectedActions, setSelectedActions] = useState<Record<string, string | null>>({});
   const [activeChat, setActiveChat] = useState(ALERTS[0].id);
+
+  // Scope detection state
+  const [scopeStep, setScopeStep] = useState(0); // 0=initial, 1=detected, 2=confirmed, 3=added
 
   const selectAction = (alertId: string, actionId: string) => {
     setSelectedActions((prev) => ({ ...prev, [alertId]: actionId }));
@@ -177,239 +200,623 @@ export default function TeamsAlerts() {
   const activeAlert = ALERTS.find((a) => a.id === activeChat)!;
   const selected = selectedActions[activeAlert.id] || null;
 
+  const handleScopeAction = (action: string) => {
+    if (action === "confirm") setScopeStep(2);
+    if (action === "add") setScopeStep(3);
+  };
+
   return (
     <div className="min-h-[calc(100vh-3.5rem)] bg-background">
       <div className="max-w-5xl mx-auto px-6 py-10">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-foreground">Teams Interface</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Preview how risk notifications appear in Microsoft Teams
+            Preview how notifications appear in Microsoft Teams
           </p>
         </div>
 
-        {/* Teams window */}
-        <div className="rounded-xl border border-border overflow-hidden shadow-lg bg-background">
-          {/* Teams header bar */}
-          <div className="flex items-center gap-3 px-4 py-3 bg-[hsl(258,60%,45%)] text-white">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded bg-white/20 flex items-center justify-center text-xs font-bold">T</div>
-              <span className="text-sm font-semibold">Microsoft Teams</span>
+        <Tabs defaultValue="risk-alerts">
+          <TabsList className="mb-4">
+            <TabsTrigger value="risk-alerts">Risk Alerts</TabsTrigger>
+            <TabsTrigger value="scope-detection">Scope Detection</TabsTrigger>
+          </TabsList>
+
+          {/* ── Risk Alerts Tab ── */}
+          <TabsContent value="risk-alerts">
+            <RiskAlertsPanel
+              alerts={ALERTS}
+              activeChat={activeChat}
+              setActiveChat={setActiveChat}
+              activeAlert={activeAlert}
+              selected={selected}
+              selectedActions={selectedActions}
+              selectAction={selectAction}
+            />
+          </TabsContent>
+
+          {/* ── Scope Detection Tab ── */}
+          <TabsContent value="scope-detection">
+            <ScopeDetectionPanel scopeStep={scopeStep} setScopeStep={setScopeStep} onAction={handleScopeAction} />
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  );
+}
+
+// ── Risk Alerts Panel (existing) ──
+
+function RiskAlertsPanel({
+  alerts,
+  activeChat,
+  setActiveChat,
+  activeAlert,
+  selected,
+  selectedActions,
+  selectAction,
+}: {
+  alerts: AlertCard[];
+  activeChat: string;
+  setActiveChat: (id: string) => void;
+  activeAlert: AlertCard;
+  selected: string | null;
+  selectedActions: Record<string, string | null>;
+  selectAction: (alertId: string, actionId: string) => void;
+}) {
+  return (
+    <>
+      {/* Teams window */}
+      <div className="rounded-xl border border-border overflow-hidden shadow-lg bg-background">
+        {/* Teams header bar */}
+        <div className="flex items-center gap-3 px-4 py-3 bg-[hsl(258,60%,45%)] text-white">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded bg-white/20 flex items-center justify-center text-xs font-bold">T</div>
+            <span className="text-sm font-semibold">Microsoft Teams</span>
+          </div>
+          <span className="text-xs opacity-70 ml-auto">Chat · Project Alerts</span>
+        </div>
+
+        <div className="flex" style={{ height: "560px" }}>
+          {/* Chat list sidebar */}
+          <div className="w-64 border-r border-border bg-card overflow-y-auto shrink-0">
+            <div className="px-3 py-2 border-b border-border">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Recent</p>
             </div>
-            <span className="text-xs opacity-70 ml-auto">Chat · Project Alerts</span>
+            {alerts.map((alert) => {
+              const isActive = alert.id === activeChat;
+              const hasAction = !!selectedActions[alert.id];
+              return (
+                <button
+                  key={alert.id}
+                  onClick={() => setActiveChat(alert.id)}
+                  className={`w-full text-left px-3 py-3 border-b border-border/50 transition-colors ${
+                    isActive ? "bg-primary/8 border-l-2 border-l-primary" : "hover:bg-muted/50"
+                  }`}
+                >
+                  <div className="flex items-start gap-2.5">
+                    <div className="relative shrink-0 mt-0.5">
+                      {alert.isPersonMessage && alert.personAvatar ? (
+                        <div className={`w-8 h-8 rounded-full ${alert.personAvatar.bg} flex items-center justify-center text-white text-[10px] font-bold`}>
+                          {alert.personAvatar.initials}
+                        </div>
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-muted/60 flex items-center justify-center">
+                          <Bot className="w-4 h-4 text-muted-foreground" />
+                        </div>
+                      )}
+                      <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-card ${severityDot[alert.severity]}`} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-1">
+                        <span className="text-xs font-semibold truncate text-foreground">
+                          {alert.shortTitle}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground shrink-0">{alert.time}</span>
+                      </div>
+                      <p className="text-[11px] text-muted-foreground truncate mt-0.5">{alert.preview}</p>
+                      {hasAction && (
+                        <div className="flex items-center gap-1 mt-1">
+                          <CircleCheck className="w-3 h-3 text-rag-green" />
+                          <span className="text-[10px] text-rag-green font-medium">Actioned</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
           </div>
 
-          <div className="flex" style={{ height: "560px" }}>
-            {/* Chat list sidebar */}
-            <div className="w-64 border-r border-border bg-card overflow-y-auto shrink-0">
-              <div className="px-3 py-2 border-b border-border">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Recent</p>
-              </div>
-              {ALERTS.map((alert) => {
-                const isActive = alert.id === activeChat;
-                const hasAction = !!selectedActions[alert.id];
-                return (
-                  <button
-                    key={alert.id}
-                    onClick={() => setActiveChat(alert.id)}
-                    className={`w-full text-left px-3 py-3 border-b border-border/50 transition-colors ${
-                      isActive ? "bg-primary/8 border-l-2 border-l-primary" : "hover:bg-muted/50"
-                    }`}
-                  >
-                    <div className="flex items-start gap-2.5">
-                      <div className="relative shrink-0 mt-0.5">
-                        {alert.isPersonMessage && alert.personAvatar ? (
-                          <div className={`w-8 h-8 rounded-full ${alert.personAvatar.bg} flex items-center justify-center text-white text-[10px] font-bold`}>
-                            {alert.personAvatar.initials}
-                          </div>
-                        ) : (
-                          <div className="w-8 h-8 rounded-full bg-muted/60 flex items-center justify-center">
-                            <Bot className="w-4 h-4 text-muted-foreground" />
-                          </div>
-                        )}
-                        <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-card ${severityDot[alert.severity]}`} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-1">
-                          <span className={`text-xs font-semibold truncate ${isActive ? "text-foreground" : "text-foreground"}`}>
-                            {alert.shortTitle}
-                          </span>
-                          <span className="text-[10px] text-muted-foreground shrink-0">{alert.time}</span>
-                        </div>
-                        <p className="text-[11px] text-muted-foreground truncate mt-0.5">{alert.preview}</p>
-                        {hasAction && (
-                          <div className="flex items-center gap-1 mt-1">
-                            <CircleCheck className="w-3 h-3 text-rag-green" />
-                            <span className="text-[10px] text-rag-green font-medium">Actioned</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
+          {/* Chat content */}
+          <div className="flex-1 flex flex-col">
+            {/* Chat header */}
+            <div className="px-4 py-2.5 border-b border-border bg-card flex items-center gap-2">
+              {activeAlert.isPersonMessage && activeAlert.personAvatar ? (
+                <div className={`w-5 h-5 rounded-full ${activeAlert.personAvatar.bg} flex items-center justify-center text-white text-[8px] font-bold`}>
+                  {activeAlert.personAvatar.initials}
+                </div>
+              ) : (
+                <Bot className="w-5 h-5 text-muted-foreground" />
+              )}
+              <span className="text-sm font-semibold text-foreground">
+                {activeAlert.isPersonMessage ? "J. Okafor" : "Risk Manager Bot"}
+              </span>
+              <span className="text-xs text-muted-foreground">· {activeAlert.shortTitle}</span>
             </div>
 
-            {/* Chat content */}
-            <div className="flex-1 flex flex-col">
-              {/* Chat header */}
-              <div className="px-4 py-2.5 border-b border-border bg-card flex items-center gap-2">
+            {/* Messages */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-muted/20">
+              {/* Alert card */}
+              <div className="flex items-start gap-3">
                 {activeAlert.isPersonMessage && activeAlert.personAvatar ? (
-                  <div className={`w-5 h-5 rounded-full ${activeAlert.personAvatar.bg} flex items-center justify-center text-white text-[8px] font-bold`}>
+                  <div className={`w-8 h-8 rounded-full ${activeAlert.personAvatar.bg} flex items-center justify-center text-white text-[10px] font-bold shrink-0`}>
                     {activeAlert.personAvatar.initials}
                   </div>
                 ) : (
-                  <Bot className="w-5 h-5 text-muted-foreground" />
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${severityBotColor[activeAlert.severity]}`}>
+                    <Bot className="w-4 h-4" />
+                  </div>
                 )}
-                <span className="text-sm font-semibold text-foreground">
-                  {activeAlert.isPersonMessage ? "J. Okafor" : "Risk Manager Bot"}
-                </span>
-                <span className="text-xs text-muted-foreground">· {activeAlert.shortTitle}</span>
-              </div>
+                <div className="flex-1 max-w-[480px]">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-sm font-semibold text-foreground">
+                      {activeAlert.isPersonMessage ? "J. Okafor" : "Risk Manager Bot"}
+                    </span>
+                    <span className="text-[11px] text-muted-foreground">Today {activeAlert.time}</span>
+                  </div>
+                  <div className="rounded-lg border border-border bg-background overflow-hidden">
+                    <div className={`h-1 ${severityColor[activeAlert.severity]}`} />
+                    <div className="p-4 space-y-3">
+                      <div className="flex items-center gap-2">
+                        <AlertTriangle className={`w-5 h-5 ${activeAlert.severity === "critical" ? "text-rag-red" : activeAlert.severity === "high" ? "text-rag-amber" : "text-primary"}`} />
+                        <span className="font-bold text-foreground">{activeAlert.emoji} {activeAlert.title}</span>
+                      </div>
+                      <div className="text-sm space-y-2">
+                        {activeAlert.fields.map((f) => (
+                          <div key={f.label}>
+                            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{f.label}</span>
+                            <p className={f.label === "Risk" || f.label === "Event" ? "text-foreground font-medium" : "text-muted-foreground"}>{f.value}</p>
+                          </div>
+                        ))}
+                      </div>
 
-              {/* Messages */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-muted/20">
-                {/* Alert card */}
-                <div className="flex items-start gap-3">
-                  {activeAlert.isPersonMessage && activeAlert.personAvatar ? (
-                    <div className={`w-8 h-8 rounded-full ${activeAlert.personAvatar.bg} flex items-center justify-center text-white text-[10px] font-bold shrink-0`}>
-                      {activeAlert.personAvatar.initials}
-                    </div>
-                  ) : (
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${severityBotColor[activeAlert.severity]}`}>
-                      <Bot className="w-4 h-4" />
-                    </div>
-                  )}
-                  <div className="flex-1 max-w-[480px]">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-semibold text-foreground">
-                        {activeAlert.isPersonMessage ? "J. Okafor" : "Risk Manager Bot"}
-                      </span>
-                      <span className="text-[11px] text-muted-foreground">Today {activeAlert.time}</span>
-                    </div>
-                    <div className="rounded-lg border border-border bg-background overflow-hidden">
-                      <div className={`h-1 ${severityColor[activeAlert.severity]}`} />
-                      <div className="p-4 space-y-3">
-                        <div className="flex items-center gap-2">
-                          <AlertTriangle className={`w-5 h-5 ${activeAlert.severity === "critical" ? "text-rag-red" : activeAlert.severity === "high" ? "text-rag-amber" : "text-primary"}`} />
-                          <span className="font-bold text-foreground">{activeAlert.emoji} {activeAlert.title}</span>
-                        </div>
-                        <div className="text-sm space-y-2">
-                          {activeAlert.fields.map((f) => (
-                            <div key={f.label}>
-                              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{f.label}</span>
-                              <p className={f.label === "Risk" || f.label === "Event" ? "text-foreground font-medium" : "text-muted-foreground"}>{f.value}</p>
-                            </div>
+                      <div className="border-t border-border pt-3">
+                        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2 block">Recommended Actions</span>
+                        <div className="space-y-2">
+                          {activeAlert.actions.map((action) => (
+                            <button
+                              key={action.id}
+                              onClick={() => selectAction(activeAlert.id, action.id)}
+                              className={`w-full text-left text-sm px-3 py-2 rounded-md border transition-colors ${
+                                selected === action.id
+                                  ? "border-primary bg-primary/10 text-foreground"
+                                  : "border-border hover:border-primary/40 text-foreground"
+                              }`}
+                            >
+                              <div className="flex items-center justify-between">
+                                <span>{action.label}</span>
+                                {action.recommended && (
+                                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/15 text-primary font-medium">
+                                    Recommended
+                                  </span>
+                                )}
+                              </div>
+                            </button>
                           ))}
                         </div>
+                      </div>
 
-                        <div className="border-t border-border pt-3">
-                          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2 block">Recommended Actions</span>
-                          <div className="space-y-2">
-                            {activeAlert.actions.map((action) => (
+                      <div className="flex gap-2 pt-1">
+                        <Button size="sm" className="gap-1.5 h-8 text-xs flex-1" disabled={!selected}>
+                          <Check className="w-3 h-3" />
+                          Approve Action
+                        </Button>
+                        <Button variant="outline" size="sm" className="gap-1.5 h-8 text-xs">
+                          <ArrowUpRight className="w-3 h-3" />
+                          Escalate
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Manager response */}
+              {selected && (
+                <div className="flex items-start gap-3 justify-end">
+                  <div className="max-w-[400px]">
+                    <div className="flex items-center gap-2 mb-1 justify-end">
+                      <span className="text-[11px] text-muted-foreground">Today {activeAlert.time}</span>
+                      <span className="text-sm font-semibold text-foreground">Sarah Chen</span>
+                    </div>
+                    <div className="rounded-lg bg-primary/10 border border-primary/20 p-3 text-sm text-foreground">
+                      {activeAlert.managerResponses[selected]}
+                    </div>
+                  </div>
+                  <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
+                    <User className="w-4 h-4 text-primary" />
+                  </div>
+                </div>
+              )}
+
+              {/* Bot confirmation */}
+              {selected && (
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-rag-green/15 flex items-center justify-center shrink-0">
+                    <Bot className="w-4 h-4 text-rag-green" />
+                  </div>
+                  <div className="max-w-[480px]">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-sm font-semibold text-foreground">Risk Manager Bot</span>
+                      <span className="text-[11px] text-muted-foreground">Today {activeAlert.time}</span>
+                    </div>
+                    <div className="rounded-lg border border-rag-green/30 bg-rag-green/5 p-3 text-sm text-foreground">
+                      <div className="flex items-center gap-2 mb-1">
+                        <CircleCheck className="w-4 h-4 text-rag-green" />
+                        <span className="font-medium">Action confirmed</span>
+                      </div>
+                      <p className="text-muted-foreground text-xs">
+                        Risk response logged. Team notified. Project timeline updated.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Teams input bar */}
+            <div className="flex items-center gap-2 px-4 py-3 border-t border-border bg-background">
+              <div className="flex-1 rounded-md border border-border px-3 py-2 text-sm text-muted-foreground bg-muted/30">
+                Type a message...
+              </div>
+              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground">
+                <MessageSquare className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Description */}
+      <div className="mt-6 p-4 rounded-lg border border-border bg-muted/30 max-w-2xl">
+        <h3 className="text-sm font-semibold text-foreground mb-2">How Teams Alerts Work</h3>
+        <ul className="text-sm text-muted-foreground space-y-1.5">
+          <li>• Risk Manager Bot sends adaptive cards when risks are detected</li>
+          <li>• Managers can review context, select an action, and approve directly in Teams</li>
+          <li>• Responses are logged and the project timeline updates automatically</li>
+          <li>• Escalation routes alerts to senior leadership channels</li>
+        </ul>
+      </div>
+    </>
+  );
+}
+
+// ── Scope Detection Panel ──
+
+function ScopeDetectionPanel({
+  scopeStep,
+  setScopeStep,
+  onAction,
+}: {
+  scopeStep: number;
+  setScopeStep: (s: number) => void;
+  onAction: (action: string) => void;
+}) {
+  const handleStart = () => {
+    setScopeStep(1);
+    setTimeout(() => setScopeStep(2), 1500);
+  };
+
+  return (
+    <>
+      <div className="rounded-xl border border-border overflow-hidden shadow-lg bg-background">
+        {/* Teams header bar */}
+        <div className="flex items-center gap-3 px-4 py-3 bg-[hsl(258,60%,45%)] text-white">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded bg-white/20 flex items-center justify-center text-xs font-bold">T</div>
+            <span className="text-sm font-semibold">Microsoft Teams</span>
+          </div>
+          <span className="text-xs opacity-70 ml-auto">Chat · Scope Monitor</span>
+        </div>
+
+        <div className="flex" style={{ height: "560px" }}>
+          {/* Sidebar */}
+          <div className="w-64 border-r border-border bg-card overflow-y-auto shrink-0">
+            <div className="px-3 py-2 border-b border-border">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Recent</p>
+            </div>
+            {/* Active chat item */}
+            <button className="w-full text-left px-3 py-3 border-b border-border/50 bg-primary/8 border-l-2 border-l-primary">
+              <div className="flex items-start gap-2.5">
+                <div className="relative shrink-0 mt-0.5">
+                  <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center">
+                    <Sparkles className="w-4 h-4 text-primary" />
+                  </div>
+                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-card bg-primary" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-xs font-semibold truncate text-foreground">Scope Detection</span>
+                    <span className="text-[10px] text-muted-foreground shrink-0">8:32 AM</span>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground truncate mt-0.5">Client email — pricing elasticity</p>
+                  {scopeStep >= 4 && (
+                    <div className="flex items-center gap-1 mt-1">
+                      <CircleCheck className="w-3 h-3 text-rag-green" />
+                      <span className="text-[10px] text-rag-green font-medium">Added to scope</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </button>
+            {/* Other placeholder items */}
+            <div className="px-3 py-3 border-b border-border/50 hover:bg-muted/50 cursor-default">
+              <div className="flex items-start gap-2.5">
+                <div className="w-8 h-8 rounded-full bg-muted/60 flex items-center justify-center shrink-0 mt-0.5">
+                  <Bot className="w-4 h-4 text-muted-foreground" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-xs font-semibold truncate text-foreground">Survey Delayed</span>
+                    <span className="text-[10px] text-muted-foreground shrink-0">9:14 AM</span>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground truncate mt-0.5">Panel recruitment delayed — 62%</p>
+                </div>
+              </div>
+            </div>
+            <div className="px-3 py-3 border-b border-border/50 hover:bg-muted/50 cursor-default">
+              <div className="flex items-start gap-2.5">
+                <div className="w-8 h-8 rounded-full bg-muted/60 flex items-center justify-center shrink-0 mt-0.5">
+                  <Bot className="w-4 h-4 text-muted-foreground" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-xs font-semibold truncate text-foreground">Daily Check-in</span>
+                    <span className="text-[10px] text-muted-foreground shrink-0">7:45 AM</span>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground truncate mt-0.5">3 items before your 9am</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Chat content */}
+          <div className="flex-1 flex flex-col">
+            {/* Chat header */}
+            <div className="px-4 py-2.5 border-b border-border bg-card flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-primary" />
+              <span className="text-sm font-semibold text-foreground">Scope Monitor Bot</span>
+              <span className="text-xs text-muted-foreground">· New Scope Item</span>
+            </div>
+
+            {/* Messages */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-muted/20">
+              {scopeStep === 0 && (
+                <div className="flex flex-col items-center justify-center h-full text-center px-8">
+                  <Mail className="w-10 h-10 text-muted-foreground mb-3" />
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Click below to simulate a client email arriving and see how a new scope item is auto-detected and surfaced in Teams
+                  </p>
+                  <Button onClick={handleStart} className="gap-2">
+                    <Mail className="w-4 h-4" />
+                    Simulate Client Email
+                  </Button>
+                </div>
+              )}
+
+              {scopeStep >= 1 && (
+                <>
+                  {/* Step 1: Email forwarded */}
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
+                      <Sparkles className="w-4 h-4 text-primary" />
+                    </div>
+                    <div className="flex-1 max-w-[480px]">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm font-semibold text-foreground">Scope Monitor Bot</span>
+                        <span className="text-[11px] text-muted-foreground">Today 8:32 AM</span>
+                      </div>
+                      <div className="rounded-lg border border-border bg-background overflow-hidden">
+                        <div className="h-1 bg-primary" />
+                        <div className="p-4 space-y-3">
+                          <div className="flex items-center gap-2">
+                            <Mail className="w-5 h-5 text-primary" />
+                            <span className="font-bold text-foreground">📧 New client email detected</span>
+                          </div>
+                          <div className="text-sm space-y-2">
+                            <div>
+                              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">From</span>
+                              <p className="text-foreground font-medium">James Morton (Client)</p>
+                            </div>
+                            <div>
+                              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Subject</span>
+                              <p className="text-muted-foreground">Re: FreshCart DD — pricing elasticity</p>
+                            </div>
+                            <div>
+                              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Message</span>
+                              <div className="text-muted-foreground text-xs whitespace-pre-line leading-relaxed bg-muted/30 rounded p-2.5 mt-1">{`Hi Sarah,
+
+Interesting that churn is 8%, that seems low vs competitors. Can you look at elasticity and see where we can move our pricing to drive revenue growth balanced against churn?
+
+Would be great to get this into the commercial analysis workstream.
+
+Best,
+James`}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {scopeStep >= 2 && (
+                <>
+                  {/* Step 2: Bot detects scope item */}
+                  <div className="flex items-start gap-3 animate-in fade-in slide-in-from-bottom-2">
+                    <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
+                      <Sparkles className="w-4 h-4 text-primary" />
+                    </div>
+                    <div className="flex-1 max-w-[480px]">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm font-semibold text-foreground">Scope Monitor Bot</span>
+                        <span className="text-[11px] text-muted-foreground">Today 8:32 AM</span>
+                      </div>
+                      <div className="rounded-lg border border-primary/40 bg-primary/5 overflow-hidden ring-1 ring-primary/20">
+                        <div className="h-1 bg-primary" />
+                        <div className="p-4 space-y-3">
+                          <div className="flex items-center gap-2">
+                            <Sparkles className="w-5 h-5 text-primary" />
+                            <span className="font-bold text-foreground">🔔 New scope item detected</span>
+                          </div>
+                          <div className="text-sm space-y-2">
+                            <div>
+                              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Detected Question</span>
+                              <p className="text-foreground font-medium">
+                                "Churn is 8% which seems low vs competitors — can we look at price elasticity and model where we can move pricing to drive revenue growth balanced against churn?"
+                              </p>
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                              <div>
+                                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Workstream</span>
+                                <p className="text-muted-foreground">Commercial</p>
+                              </div>
+                              <div>
+                                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Priority</span>
+                                <p className="text-rag-amber font-medium">High</p>
+                              </div>
+                              <div>
+                                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Source</span>
+                                <p className="text-muted-foreground">Client email — auto-detected</p>
+                              </div>
+                              <div>
+                                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Deadline</span>
+                                <p className="text-muted-foreground">4 Apr</p>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="border-t border-border pt-3">
+                            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2 block">Actions</span>
+                            <div className="space-y-2">
                               <button
-                                key={action.id}
-                                onClick={() => selectAction(activeAlert.id, action.id)}
+                                onClick={() => onAction("confirm")}
+                                disabled={scopeStep >= 3}
                                 className={`w-full text-left text-sm px-3 py-2 rounded-md border transition-colors ${
-                                  selected === action.id
+                                  scopeStep >= 3
                                     ? "border-primary bg-primary/10 text-foreground"
                                     : "border-border hover:border-primary/40 text-foreground"
                                 }`}
                               >
                                 <div className="flex items-center justify-between">
-                                  <span>{action.label}</span>
-                                  {action.recommended && (
-                                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/15 text-primary font-medium">
-                                      Recommended
-                                    </span>
-                                  )}
+                                  <span>✅ Confirm — add to live scope</span>
+                                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/15 text-primary font-medium">Recommended</span>
                                 </div>
                               </button>
-                            ))}
+                              <button
+                                disabled={scopeStep >= 3}
+                                className="w-full text-left text-sm px-3 py-2 rounded-md border border-border hover:border-primary/40 text-foreground transition-colors disabled:opacity-50"
+                              >
+                                📝 Edit question before adding
+                              </button>
+                              <button
+                                disabled={scopeStep >= 3}
+                                className="w-full text-left text-sm px-3 py-2 rounded-md border border-border hover:border-primary/40 text-foreground transition-colors disabled:opacity-50"
+                              >
+                                ❌ Dismiss — not in scope
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="flex gap-2 pt-1">
+                            <Button
+                              size="sm"
+                              className="gap-1.5 h-8 text-xs flex-1"
+                              disabled={scopeStep < 2 || scopeStep >= 3}
+                              onClick={() => onAction("confirm")}
+                            >
+                              <Check className="w-3 h-3" />
+                              Approve
+                            </Button>
+                            <Button variant="outline" size="sm" className="gap-1.5 h-8 text-xs">
+                              <ArrowUpRight className="w-3 h-3" />
+                              Escalate
+                            </Button>
                           </div>
                         </div>
-
-                        <div className="flex gap-2 pt-1">
-                          <Button size="sm" className="gap-1.5 h-8 text-xs flex-1" disabled={!selected}>
-                            <Check className="w-3 h-3" />
-                            Approve Action
-                          </Button>
-                          <Button variant="outline" size="sm" className="gap-1.5 h-8 text-xs">
-                            <ArrowUpRight className="w-3 h-3" />
-                            Escalate
-                          </Button>
-                        </div>
                       </div>
                     </div>
+                  </div>
+                </>
+              )}
+
+              {/* Manager response */}
+              {scopeStep >= 3 && (
+                <div className="flex items-start gap-3 justify-end animate-in fade-in slide-in-from-bottom-2">
+                  <div className="max-w-[400px]">
+                    <div className="flex items-center gap-2 mb-1 justify-end">
+                      <span className="text-[11px] text-muted-foreground">Today 8:33 AM</span>
+                      <span className="text-sm font-semibold text-foreground">Sarah Chen</span>
+                    </div>
+                    <div className="rounded-lg bg-primary/10 border border-primary/20 p-3 text-sm text-foreground">
+                      Confirmed — add pricing elasticity question to Commercial workstream. Flag for J. Okafor to pick up.
+                    </div>
+                  </div>
+                  <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
+                    <User className="w-4 h-4 text-primary" />
                   </div>
                 </div>
+              )}
 
-                {/* Manager response */}
-                {selected && (
-                  <div className="flex items-start gap-3 justify-end">
-                    <div className="max-w-[400px]">
-                      <div className="flex items-center gap-2 mb-1 justify-end">
-                        <span className="text-[11px] text-muted-foreground">Today {activeAlert.time}</span>
-                        <span className="text-sm font-semibold text-foreground">Sarah Chen</span>
-                      </div>
-                      <div className="rounded-lg bg-primary/10 border border-primary/20 p-3 text-sm text-foreground">
-                        {activeAlert.managerResponses[selected]}
-                      </div>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
-                      <User className="w-4 h-4 text-primary" />
-                    </div>
+              {/* Bot confirmation */}
+              {scopeStep >= 3 && (
+                <div className="flex items-start gap-3 animate-in fade-in slide-in-from-bottom-2">
+                  <div className="w-8 h-8 rounded-full bg-rag-green/15 flex items-center justify-center shrink-0">
+                    <CheckCircle2 className="w-4 h-4 text-rag-green" />
                   </div>
-                )}
-
-                {/* Bot confirmation */}
-                {selected && (
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-full bg-rag-green/15 flex items-center justify-center shrink-0">
-                      <Bot className="w-4 h-4 text-rag-green" />
+                  <div className="max-w-[480px]">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-sm font-semibold text-foreground">Scope Monitor Bot</span>
+                      <span className="text-[11px] text-muted-foreground">Today 8:33 AM</span>
                     </div>
-                    <div className="max-w-[480px]">
+                    <div className="rounded-lg border border-rag-green/30 bg-rag-green/5 p-3 text-sm text-foreground">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-semibold text-foreground">Risk Manager Bot</span>
-                        <span className="text-[11px] text-muted-foreground">Today {activeAlert.time}</span>
+                        <CircleCheck className="w-4 h-4 text-rag-green" />
+                        <span className="font-medium">Scope item added</span>
                       </div>
-                      <div className="rounded-lg border border-rag-green/30 bg-rag-green/5 p-3 text-sm text-foreground">
-                        <div className="flex items-center gap-2 mb-1">
-                          <CircleCheck className="w-4 h-4 text-rag-green" />
-                          <span className="font-medium">Action confirmed</span>
-                        </div>
-                        <p className="text-muted-foreground text-xs">
-                          Risk response logged. Team notified. Project timeline updated.
-                        </p>
-                      </div>
+                      <p className="text-muted-foreground text-xs">
+                        Question added to Commercial workstream · Live scope updated · J. Okafor notified · Deadline set: 4 Apr
+                      </p>
                     </div>
                   </div>
-                )}
-              </div>
-
-              {/* Teams input bar */}
-              <div className="flex items-center gap-2 px-4 py-3 border-t border-border bg-background">
-                <div className="flex-1 rounded-md border border-border px-3 py-2 text-sm text-muted-foreground bg-muted/30">
-                  Type a message...
                 </div>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground">
-                  <MessageSquare className="w-4 h-4" />
-                </Button>
+              )}
+            </div>
+
+            {/* Teams input bar */}
+            <div className="flex items-center gap-2 px-4 py-3 border-t border-border bg-background">
+              <div className="flex-1 rounded-md border border-border px-3 py-2 text-sm text-muted-foreground bg-muted/30">
+                Type a message...
               </div>
+              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground">
+                <MessageSquare className="w-4 h-4" />
+              </Button>
             </div>
           </div>
         </div>
-
-        {/* Description */}
-        <div className="mt-6 p-4 rounded-lg border border-border bg-muted/30 max-w-2xl">
-          <h3 className="text-sm font-semibold text-foreground mb-2">How Teams Alerts Work</h3>
-          <ul className="text-sm text-muted-foreground space-y-1.5">
-            <li>• Risk Manager Bot sends adaptive cards when risks are detected</li>
-            <li>• Managers can review context, select an action, and approve directly in Teams</li>
-            <li>• Responses are logged and the project timeline updates automatically</li>
-            <li>• Escalation routes alerts to senior leadership channels</li>
-          </ul>
-        </div>
       </div>
-    </div>
+
+      {/* Description */}
+      <div className="mt-6 p-4 rounded-lg border border-border bg-muted/30 max-w-2xl">
+        <h3 className="text-sm font-semibold text-foreground mb-2">How Scope Detection Works</h3>
+        <ul className="text-sm text-muted-foreground space-y-1.5">
+          <li>• Scope Monitor Bot watches incoming client emails for new questions or requests</li>
+          <li>• New scope items are auto-classified by workstream, priority, and deadline</li>
+          <li>• Managers can confirm, edit, or dismiss directly in Teams</li>
+          <li>• Approved items are added to the live scope and the team is notified automatically</li>
+        </ul>
+      </div>
+    </>
   );
 }
