@@ -100,10 +100,10 @@ const weeks: Week[] = [
 
 const earlyWarningDraft = `Hi Marcus,
 
-Quick flag ahead of Monday's interim presentation — our expert interview count is at 6/15 as of today. We're on pace for ~12 by Friday, which would leave us 3 below the original target of 15.
+Quick flag ahead of Monday's interim presentation — our survey completion is behind schedule due to limited respondent availability.
 
 We have two options:
-1. Proceed on Monday with the interviews we have — I'll caveat the findings appropriately
+1. Proceed on Monday with the survey respondents we have — I'll caveat the findings appropriately
 2. Push the interim to Tuesday to allow one more day of fieldwork
 
 Happy to discuss on today's check-in. Let me know your preference.
