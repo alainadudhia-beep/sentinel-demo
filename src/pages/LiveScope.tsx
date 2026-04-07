@@ -108,8 +108,8 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
 
 const NEW_QUESTION_FROM_EMAIL: ScopeQuestion = {
   id: "q9",
-  question: "Has FreshCart ever explored or been approached about a side-letter arrangement with any existing investor, and if so what were the terms discussed?",
-  workstream: "Internals",
+  question: "Churn is 8% which seems low vs competitors — can we look at price elasticity and model where we can move pricing to drive revenue growth balanced against churn?",
+  workstream: "Commercial",
   status: "new",
   priority: "important",
   deadline: "4 Apr",
@@ -123,12 +123,12 @@ const EMAIL_CHAIN = [
     from: "James Morton (Client)",
     to: "Sarah Chen",
     time: "Today 8:32 AM",
-    subject: "Re: FreshCart DD — additional area",
+    subject: "Re: FreshCart DD — pricing elasticity",
     body: `Hi Sarah,
 
-One more thing that came up in our IC discussion yesterday — we'd like the DD to also cover whether FreshCart has ever explored or been approached about any side-letter arrangements with existing investors. This came up in the context of the Series B terms and we want to understand the full picture before proceeding.
+Interesting that churn is 8%, that seems low vs competitors. Can you look at elasticity and see where we can move our pricing to drive revenue growth balanced against churn?
 
-Can you add this to the scope? Happy to discuss on our call later.
+Would be great to get this into the commercial workstream.
 
 Best,
 James`,
@@ -141,13 +141,13 @@ James`,
     subject: "🔔 New scope item detected from client email",
     body: `New scope item detected from James Morton's email:
 
-"Has FreshCart ever explored or been approached about a side-letter arrangement with any existing investor, and if so what were the terms discussed?"
+"Churn is 8% which seems low vs competitors — can we look at price elasticity and model where we can move pricing to drive revenue growth balanced against churn?"
 
-Auto-routed to Internals workstream
-Tom Bradley notified
-Added to Internals task list
+Auto-routed to Commercial workstream
+Sarah Chen notified
+Added to Commercial task list
 
-Priority: High — relates to Series B terms
+Priority: High — relates to pricing strategy & revenue growth
 
 Action: Review and confirm addition to live scope →`,
     isBot: true,
