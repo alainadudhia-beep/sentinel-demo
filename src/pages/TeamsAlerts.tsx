@@ -9,7 +9,7 @@ export default function TeamsAlerts() {
     <div className="min-h-[calc(100vh-3.5rem)] bg-background">
       <div className="max-w-5xl mx-auto px-6 py-10">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-foreground">Teams Alerts</h1>
+          <h1 className="text-2xl font-bold text-foreground">Teams Interface</h1>
           <p className="text-sm text-muted-foreground mt-1">
             Preview how risk notifications appear in Microsoft Teams
           </p>
