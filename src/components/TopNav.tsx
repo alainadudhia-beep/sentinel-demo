@@ -3,7 +3,7 @@ import { FileText, CheckCircle2, ListChecks, AlertTriangle, MessageSquare } from
 
 const steps = [
   { label: "Add Scope", path: "/scope", icon: FileText },
-  { label: "Scope Review", path: "/scope-review", icon: CheckCircle2 },
+  { label: "Workstream Planner", path: "/scope-review", icon: CheckCircle2 },
   { label: "Project Plan", path: "/plan", icon: ListChecks },
   { label: "Risk Manager", path: "/project", icon: AlertTriangle },
   { label: "Teams Interface", path: "/teams-alerts", icon: MessageSquare },
