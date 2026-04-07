@@ -59,7 +59,7 @@ const initialScope = {
       estimatedDays: "1–10",
     },
     {
-      name: "Internals (Analysis, Mgmt Interviews)",
+      name: "Internals (Financial Analysis, Mgmt Interviews)",
       owner: "Tom Bradley",
       tasks: [
         "Schedule management interviews",
@@ -100,7 +100,7 @@ const initialScope = {
 const workstreamNameColors: Record<string, string> = {
   "Commercial (Survey)": "text-blue-600",
   "Market (Model, Interviews)": "text-violet-600",
-  "Internals (Analysis, Mgmt Interviews)": "text-emerald-600",
+  "Internals (Financial Analysis, Mgmt Interviews)": "text-emerald-600",
   "Project Management / Client Comms": "text-pink-600",
 };
 
