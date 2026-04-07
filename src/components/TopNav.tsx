@@ -7,7 +7,6 @@ const steps = [
   { label: "Live Scope", path: "/live-scope", icon: Eye },
   { label: "Project Plan", path: "/plan", icon: ListChecks },
   { label: "Risk Manager", path: "/project", icon: AlertTriangle },
-  { label: "Teams Interface", path: "/teams-alerts", icon: MessageSquare },
 ];
 
 const stepOrder = ["/scope", "/scope-review", "/live-scope", "/plan", "/project", "/teams-alerts"];
