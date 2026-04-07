@@ -27,6 +27,7 @@ const App = () => (
           <Route path="/scope" element={<Scope />} />
           <Route path="/scope-review" element={<ScopeReview />} />
           <Route path="/plan" element={<Plan />} />
+          <Route path="/live-scope" element={<LiveScope />} />
           <Route path="/project" element={<Project />} />
           <Route path="/teams-alerts" element={<TeamsAlerts />} />
           <Route path="*" element={<NotFound />} />
