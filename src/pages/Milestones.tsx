@@ -276,7 +276,11 @@ export default function Milestones() {
           {weeks.map((w) => (
             <Card key={w.week} className="overflow-hidden">
               {/* Week header */}
-              <div className="flex items-center gap-3 px-5 py-3 border-b border-border bg-muted/40">
+              <div
+                className="flex items-center gap-3 px-5 py-3 border-b border-border bg-muted/40 cursor-pointer select-none hover:bg-muted/60 transition-colors"
+                onClick={() => toggleWeek(w.week)}
+              >
+                <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${collapsedWeeks.has(w.week) ? "-rotate-90" : ""}`} />
                 <span className="text-sm font-bold text-foreground">Week {w.week}</span>
                 <span className="text-xs text-muted-foreground">{w.range}</span>
                 <span className="text-xs text-muted-foreground">· {w.phase}</span>
