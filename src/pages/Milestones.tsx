@@ -65,7 +65,7 @@ const weeks: Week[] = [
       },
       {
         date: "Fri 4 Apr",
-        title: "Expert interviews target N=15",
+        title: "Survey target N:100",
         status: "at-risk",
         extra: { title: "Partner review hold 4pm", status: "auto-booked", autoBookedNote: "Auto-booked" },
       },
