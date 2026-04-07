@@ -92,6 +92,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     source: "Original scope",
     addedDate: "24 Mar",
     notes: "Data request sent to CFO — expecting response by Wed",
+    depth: { level: "medium", note: "Pending — management data requested, not yet received" },
   },
   {
     id: "q8",
