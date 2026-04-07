@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import sentinelLogo from "@/assets/sentinel-logo.png";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -8,9 +9,9 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6">
       <div className="max-w-2xl text-center space-y-6">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary text-xs font-medium text-muted-foreground mb-2">
-          <Sparkles className="w-3 h-3" />
-          Suggested plan based on prior commercial DD template
+        <div className="flex items-center justify-center gap-3 mb-2">
+          <img src={sentinelLogo} alt="Sentinel logo" width={40} height={40} />
+          <span className="text-2xl font-bold tracking-tight text-foreground">Sentinel</span>
         </div>
 
         <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight leading-tight text-foreground">
