@@ -71,7 +71,7 @@ export interface Workstream {
 export const ganttWorkstreams: Workstream[] = [
   {
     id: "ws-survey",
-    name: "Survey",
+    name: "Commercial",
     owner: "James Okafor",
     items: [
       { id: "s1", label: "Design questionnaire", type: "task", owner: "James Okafor", startDay: 1, endDay: 3, status: "complete", dueDate: "19 Mar", dependency: "Data room access" },
@@ -86,7 +86,7 @@ export const ganttWorkstreams: Workstream[] = [
   },
   {
     id: "ws-market",
-    name: "Market Model",
+    name: "Market",
     owner: "Priya Sharma",
     items: [
       { id: "mm1", label: "Collect data", type: "task", owner: "Priya Sharma", startDay: 1, endDay: 4, status: "complete", dueDate: "20 Mar", dependency: "Data room" },
@@ -98,7 +98,7 @@ export const ganttWorkstreams: Workstream[] = [
   },
   {
     id: "ws-internal",
-    name: "Internal Analysis",
+    name: "Internals",
     owner: "Tom Bradley",
     items: [
       { id: "ia1", label: "Organise management sessions", type: "task", owner: "Tom Bradley", startDay: 1, endDay: 3, status: "complete", dueDate: "19 Mar", dependency: "Client scheduling" },
@@ -120,7 +120,6 @@ export const ganttWorkstreams: Workstream[] = [
   },
 ];
 
-// Keep backward compat for Project page
 export interface Milestone {
   id: string;
   workstream: string;
@@ -135,14 +134,15 @@ export interface Milestone {
 }
 
 export const generatedPlan: Milestone[] = [
-  { id: "m1", workstream: "Survey", task: "Design questionnaire", owner: "James Okafor", dueDate: "19 Mar", week: 1, dependency: "Data room access", status: "complete", notes: "", critical: false },
-  { id: "m2", workstream: "Survey", task: "Launch survey (n=1,500)", owner: "James Okafor", dueDate: "20 Mar", week: 1, dependency: "Survey design", status: "at-risk", notes: "Panel recruitment delayed", critical: true },
-  { id: "m3", workstream: "Market Model", task: "Build market sizing model", owner: "Priya Sharma", dueDate: "28 Mar", week: 2, dependency: "Data room", status: "at-risk", notes: "Missing competitor pricing", critical: true },
-  { id: "m4", workstream: "Internal Analysis", task: "Conduct management sessions", owner: "Tom Bradley", dueDate: "26 Mar", week: 2, dependency: "Client scheduling", status: "at-risk", notes: "Session 2 rescheduled", critical: false },
+  { id: "m1", workstream: "Commercial", task: "Design questionnaire", owner: "James Okafor", dueDate: "19 Mar", week: 1, dependency: "Data room access", status: "complete", notes: "", critical: false },
+  { id: "m2", workstream: "Commercial", task: "Launch survey (n=1,500)", owner: "James Okafor", dueDate: "20 Mar", week: 1, dependency: "Survey design", status: "at-risk", notes: "Panel recruitment delayed", critical: true },
+  { id: "m3", workstream: "Market", task: "Build market sizing model", owner: "Priya Sharma", dueDate: "28 Mar", week: 2, dependency: "Data room", status: "at-risk", notes: "Missing competitor pricing", critical: true },
+  { id: "m4", workstream: "Internals", task: "Conduct management sessions", owner: "Tom Bradley", dueDate: "26 Mar", week: 2, dependency: "Client scheduling", status: "at-risk", notes: "Session 2 rescheduled", critical: false },
   { id: "m5", workstream: "Client Communication", task: "Synthesise deck", owner: "Emma Wilson", dueDate: "2 Apr", week: 3, dependency: "All inputs", status: "not-started", notes: "Critical path", critical: true },
   { id: "m6", workstream: "Client Communication", task: "Partner review", owner: "Sarah Chen", dueDate: "3 Apr", week: 3, dependency: "Draft deck", status: "not-started", notes: "", critical: true },
   { id: "m7", workstream: "Client Communication", task: "Final presentation to IC", owner: "Sarah Chen", dueDate: "4 Apr", week: 3, dependency: "Partner sign-off", status: "not-started", notes: "Hard deadline", critical: true },
 ];
+
 export interface WorkstreamRow {
   id: string;
   workstream: string;
@@ -183,7 +183,7 @@ export const liveWorkstreams: WorkstreamRow[] = [
   },
   {
     id: "w4",
-    workstream: "Market Model",
+    workstream: "Market",
     owner: "Priya Sharma",
     dueDate: "28 Mar",
     status: "at-risk",
