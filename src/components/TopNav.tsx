@@ -7,10 +7,9 @@ const steps = [
   { label: "Live Scope", path: "/live-scope", icon: Eye },
   { label: "Project Plan", path: "/plan", icon: ListChecks },
   { label: "Risk Manager", path: "/project", icon: AlertTriangle },
-  { label: "Teams Interface", path: "/teams-alerts", icon: MessageSquare },
 ];
 
-const stepOrder = ["/scope", "/scope-review", "/live-scope", "/plan", "/project", "/teams-alerts"];
+const stepOrder = ["/scope", "/scope-review", "/live-scope", "/plan", "/project"];
 
 function getStepIndex(pathname: string) {
   const exactIdx = stepOrder.indexOf(pathname);
@@ -66,6 +65,20 @@ export default function TopNav() {
             );
           })}
         </nav>
+
+        <div className="ml-auto">
+          <button
+            onClick={() => navigate("/teams-alerts")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+              pathname === "/teams-alerts"
+                ? "bg-[hsl(264,67%,50%)] text-white"
+                : "bg-[hsl(264,67%,50%)]/10 text-[hsl(264,67%,50%)] hover:bg-[hsl(264,67%,50%)]/20"
+            }`}
+          >
+            <MessageSquare className="w-3.5 h-3.5" />
+            Teams Interface
+          </button>
+        </div>
       </div>
     </header>
   );
