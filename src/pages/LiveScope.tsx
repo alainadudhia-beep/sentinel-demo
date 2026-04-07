@@ -267,12 +267,18 @@ export default function LiveScope() {
                                 <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
                               )}
                             </div>
-                            <div className="flex items-center gap-3 mt-1.5">
+                            <div className="flex items-center gap-2 mt-1.5 flex-wrap">
                               <span className={`text-[11px] px-1.5 py-0.5 rounded ${sc.bg} ${sc.color} font-medium`}>
                                 {sc.label}
                               </span>
+                              <span className={`text-[11px] px-1.5 py-0.5 rounded font-medium ${priorityConfig[q.priority].bg} ${priorityConfig[q.priority].color}`}>
+                                {priorityConfig[q.priority].label}
+                              </span>
+                              <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
+                                <Clock className="w-3 h-3" />
+                                {q.deadline}
+                              </span>
                               <span className="text-[11px] text-muted-foreground">{q.source}</span>
-                              <span className="text-[11px] text-muted-foreground">Added {q.addedDate}</span>
                             </div>
                             {isExpanded && q.notes && (
                               <div className="mt-3 pt-3 border-t border-border">
