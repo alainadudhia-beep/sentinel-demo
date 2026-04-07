@@ -169,10 +169,8 @@ const priorityConfig: Record<string, { label: string; color: string; bg: string 
 
 const workstreamColors: Record<string, string> = {
   Commercial: "bg-blue-500/10 text-blue-600 border-blue-500/20",
-  Financial: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
+  Internals: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
   Market: "bg-violet-500/10 text-violet-600 border-violet-500/20",
-  "Legal & Regulatory": "bg-orange-500/10 text-orange-600 border-orange-500/20",
-  Management: "bg-pink-500/10 text-pink-600 border-pink-500/20",
 };
 
 export default function LiveScope() {
