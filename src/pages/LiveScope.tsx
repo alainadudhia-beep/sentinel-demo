@@ -388,7 +388,7 @@ export default function LiveScope() {
                         <span className="text-sm font-medium text-foreground">Question added to scope</span>
                       </div>
                       <p className="text-xs text-muted-foreground mt-1">
-                        Added to Internals workstream. Team notified.
+                        Added to Commercial workstream. Team notified.
                       </p>
                     </div>
                   )}
