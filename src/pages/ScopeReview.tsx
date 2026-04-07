@@ -59,7 +59,7 @@ const initialScope = {
       estimatedDays: "1–10",
     },
     {
-      name: "Internal Analysis",
+      name: "Internals (Analysis, Mgmt Interviews)",
       owner: "Tom Bradley",
       tasks: [
         "Schedule management interviews",
