@@ -19,7 +19,7 @@ export default function Home() {
         </h1>
 
         <p className="text-base text-muted-foreground leading-relaxed max-w-lg mx-auto">
-          Turn engagement scope into a live delivery plan, detect risks early, and help managers act before delays hit the client.
+          Sentinel turns your engagement scope into a live project plan, adapts the plan as new information and questions come in, detects delivery risks early, and helps managers act before delays hit the client - all within your native toolkit.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
