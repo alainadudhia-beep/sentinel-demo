@@ -177,7 +177,7 @@ export default function LiveScope() {
   const [showEmailChain, setShowEmailChain] = useState(false);
   const [emailDetected, setEmailDetected] = useState(false);
   const [questionAdded, setQuestionAdded] = useState(false);
-  const [expandedQ, setExpandedQ] = useState<string | null>(null);
+  
 
   const handleSimulateEmail = () => {
     setShowEmailChain(true);
