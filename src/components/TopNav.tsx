@@ -34,7 +34,7 @@ export default function TopNav() {
           onClick={() => navigate("/")}
           className="text-sm font-semibold tracking-tight mr-6 text-foreground hover:opacity-70 transition-opacity"
         >
-          DD Copilot
+          Sentinel
         </button>
 
         <nav className="flex items-center gap-1">
