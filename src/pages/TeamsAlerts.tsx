@@ -79,6 +79,30 @@ const ALERTS: AlertCard[] = [
       c3: "Approved: Placeholders with methodology note. Full slides by Wed.",
     },
   },
+  {
+    id: "meridian-checkin",
+    time: "Today 7:45 AM",
+    severity: "medium",
+    title: "Daily check-in brief",
+    emoji: "📋",
+    fields: [
+      { label: "Project", value: "Project Meridian · Daily check-in brief" },
+      { label: "Date", value: "Wed 2 Apr · 3 items before your 9am" },
+      { label: "Flag", value: "Expert interviews at 6 of 15 — on pace for 12 by Friday, 3 below target. Client needs advance notice before Monday's interim presentation." },
+      { label: "Today", value: "CFO interview confirmed 2pm. Q13 (side-letter) added to guide. CPO rescheduled to Thu 2pm." },
+      { label: "Action needed", value: "Tech & product workstream unassigned — 9 days to deadline. Needs an owner or partner sign-off to descope by end of today." },
+    ],
+    actions: [
+      { id: "d1", label: "📧 Draft expert outreach", recommended: true },
+      { id: "d2", label: "⚠️ Warn client re: Mon" },
+      { id: "d3", label: "🔺 Escalate to partner" },
+    ],
+    managerResponses: {
+      d1: "Approved: Draft outreach for remaining 9 experts. Prioritise industry practitioners over academics.",
+      d2: "Approved: Send client a heads-up that interim deck may have gaps in expert section. Frame as draft.",
+      d3: "Approved: Escalating workstream ownership to partner. Set up 15-min call for today.",
+    },
+  },
 ];
 
 const severityColor: Record<string, string> = {
