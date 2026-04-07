@@ -38,7 +38,7 @@ const ALERTS: AlertCard[] = [
     actions: [
       { id: "sr1", label: "✅ Open slides and review now", recommended: true },
       { id: "sr2", label: "📧 Acknowledge — will review by Fri 4pm" },
-      { id: "sr3", label: "↩️ Request changes before reviewing" },
+      { id: "sr3", label: "↩️ Remind me in 1 hour" },
     ],
     managerResponses: {
       sr1: "Opening slide review. Will approve or flag changes within the hour.",
