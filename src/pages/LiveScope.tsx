@@ -49,7 +49,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     deadline: "4 Apr",
     source: "Original scope",
     addedDate: "24 Mar",
-    notes: "Market research from Gartner & Statista — 14% share growing 3% annually",
+    notes: "Iniital estimate 25% and growing",
     depth: { level: "low", note: "triangulation delayed due to team sickness" },
   },
   {
