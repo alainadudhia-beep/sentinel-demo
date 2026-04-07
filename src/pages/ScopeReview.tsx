@@ -64,7 +64,7 @@ const initialScope = {
       tasks: [
         "Schedule management interviews",
         "Conduct 3 management sessions",
-        "",
+        "Collect and itemise internal data",
         "Synthesise interview findings",
       ],
       estimatedDays: "1–10",
