@@ -98,7 +98,7 @@ const initialScope = {
 };
 
 const workstreamNameColors: Record<string, string> = {
-  "Commercial Survey": "text-blue-600",
+  "Commercial (Survey)": "text-blue-600",
   "Market Model": "text-violet-600",
   "Internal Analysis": "text-emerald-600",
   "Presentation": "text-pink-600",
