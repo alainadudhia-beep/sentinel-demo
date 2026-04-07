@@ -594,6 +594,22 @@ export default function Plan() {
                   </span>
                 )}
                 <span className="text-[10px] text-muted-foreground ml-1">{ws.owner}</span>
+                {/* Scope questions summary */}
+                {(() => {
+                  const qs = WORKSTREAM_QUESTIONS[ws.id] || [];
+                  const answered = qs.filter(q => q.status === "answered").length;
+                  const inProg = qs.filter(q => q.status === "in-progress").length;
+                  const open = qs.filter(q => q.status === "open").length;
+                  return qs.length > 0 ? (
+                    <span className="text-[10px] text-muted-foreground ml-2 flex items-center gap-1">
+                      · <span className="text-rag-green font-medium">{answered} answered</span> ·{" "}
+                      <span className="text-rag-amber font-medium">{inProg} in progress</span> ·{" "}
+                      <span>{open} open</span>
+                    </span>
+                  ) : (
+                    <span className="text-[10px] text-muted-foreground/60 ml-2">· 0 questions assigned</span>
+                  );
+                })()}
                 <button
                   className="ml-auto opacity-0 group-hover/ws:opacity-100 transition-opacity p-0.5 rounded hover:bg-accent"
                   onClick={(e) => { e.stopPropagation(); addItem(ws.id); }}
