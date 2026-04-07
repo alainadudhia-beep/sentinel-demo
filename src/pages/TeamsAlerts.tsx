@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AlertTriangle, CircleCheck, ArrowUpRight, Check, MessageSquare, Bot, User } from "lucide-react";
+import { AlertTriangle, CircleCheck, ArrowUpRight, Check, MessageSquare, Bot, User, FileCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface AlertCard {
