@@ -265,7 +265,7 @@ export default function Milestones() {
                 <TrendingUp className="w-3 h-3" /> Progress
               </span>
               <span className="text-foreground leading-relaxed">
-                Commercial and internals workstreams on track. Tech & product still unassigned — needs resolution today.
+                Commercial and internals workstreams on track.
               </span>
             </div>
           </div>
