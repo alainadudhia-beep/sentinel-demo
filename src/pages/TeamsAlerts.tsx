@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 interface AlertCard {
   id: string;
   time: string;
-  severity: "critical" | "high" | "medium";
+  severity: "critical" | "high" | "medium" | "info";
   title: string;
   emoji: string;
   shortTitle: string;
@@ -13,6 +13,8 @@ interface AlertCard {
   fields: { label: string; value: string }[];
   actions: { id: string; label: string; recommended?: boolean }[];
   managerResponses: Record<string, string>;
+  isPersonMessage?: boolean;
+  personAvatar?: { initials: string; bg: string };
 }
 
 const ALERTS: AlertCard[] = [
