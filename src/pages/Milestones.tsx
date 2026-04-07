@@ -327,7 +327,7 @@ export default function Milestones() {
                 <X className="w-3 h-3 mr-1" /> Close
               </Button>
               <Button size="sm" onClick={() => setShowDraft(false)}>
-                <Send className="w-3 h-3 mr-1" /> Send via Teams
+                <Send className="w-3 h-3 mr-1" /> Send via Email
               </Button>
             </div>
           </DialogContent>
