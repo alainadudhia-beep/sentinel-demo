@@ -106,7 +106,7 @@ const NEW_QUESTION_FROM_EMAIL: ScopeQuestion = {
   question: "Has FreshCart ever explored or been approached about a side-letter arrangement with any existing investor, and if so what were the terms discussed?",
   workstream: "Legal & Regulatory",
   status: "new",
-  priority: "high",
+  priority: "important",
   deadline: "4 Apr",
   source: "Client email — auto-detected",
   addedDate: "Today",
