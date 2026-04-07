@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { ChevronDown } from "lucide-react";
 import { AlertTriangle, CheckCircle2, Clock, CalendarCheck, Send, X, Flag, TrendingUp, Info } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -161,6 +162,16 @@ function WeekBadge({ badge }: { badge: string }) {
 
 export default function Milestones() {
   const [showDraft, setShowDraft] = useState(false);
+  const [collapsedWeeks, setCollapsedWeeks] = useState<Set<number>>(new Set());
+
+  const toggleWeek = useCallback((weekNum: number) => {
+    setCollapsedWeeks(prev => {
+      const next = new Set(prev);
+      if (next.has(weekNum)) next.delete(weekNum);
+      else next.add(weekNum);
+      return next;
+    });
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -265,7 +276,11 @@ export default function Milestones() {
           {weeks.map((w) => (
             <Card key={w.week} className="overflow-hidden">
               {/* Week header */}
-              <div className="flex items-center gap-3 px-5 py-3 border-b border-border bg-muted/40">
+              <div
+                className="flex items-center gap-3 px-5 py-3 border-b border-border bg-muted/40 cursor-pointer select-none hover:bg-muted/60 transition-colors"
+                onClick={() => toggleWeek(w.week)}
+              >
+                <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${collapsedWeeks.has(w.week) ? "-rotate-90" : ""}`} />
                 <span className="text-sm font-bold text-foreground">Week {w.week}</span>
                 <span className="text-xs text-muted-foreground">{w.range}</span>
                 <span className="text-xs text-muted-foreground">· {w.phase}</span>
@@ -273,42 +288,41 @@ export default function Milestones() {
               </div>
 
               {/* Milestones */}
-              <div className="divide-y divide-border">
-                {w.milestones.map((m, idx) => (
-                  <div key={idx}>
-                    {/* Auto-booked row (extra) rendered first if it exists */}
-                    {m.extra && (
-                      <div className="flex items-center gap-4 px-5 py-2.5 bg-[hsl(264,67%,50%)]/5 border border-dashed border-[hsl(264,67%,50%)]/30 mx-3 my-2 rounded-md">
-                        <span className="text-xs font-medium text-muted-foreground w-20 shrink-0">{m.date}</span>
-                        <span className="text-sm text-[hsl(264,67%,50%)] font-medium">{m.extra.title}</span>
-                        {m.extra.autoBookedNote && (
-                          <span className="ml-auto text-[10px] font-medium text-[hsl(264,67%,50%)]/70 bg-[hsl(264,67%,50%)]/10 px-2 py-0.5 rounded-full">
-                            {m.extra.autoBookedNote}
-                          </span>
-                        )}
-                      </div>
-                    )}
-
-                    {/* Main milestone row */}
-                    <div className="flex items-center gap-4 px-5 py-3">
-                      <span className="text-xs font-medium text-muted-foreground w-20 shrink-0">{m.date}</span>
-                      <span className={`text-sm font-medium flex-1 ${m.status === "done" ? "text-muted-foreground" : "text-foreground"}`}>
-                        {m.title}
-                      </span>
-                      {m.status !== "auto-booked" && <StatusBadge status={m.status} />}
-                      {m.deliverables && m.deliverables.length > 0 && (
-                        <div className="flex items-center gap-1 flex-wrap justify-end">
-                          {m.deliverables.map((d) => (
-                            <span key={d} className="text-[10px] bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
-                              {d}
+              {!collapsedWeeks.has(w.week) && (
+                <div className="divide-y divide-border">
+                  {w.milestones.map((m, idx) => (
+                    <div key={idx}>
+                      {m.extra && (
+                        <div className="flex items-center gap-4 px-5 py-2.5 bg-[hsl(264,67%,50%)]/5 border border-dashed border-[hsl(264,67%,50%)]/30 mx-3 my-2 rounded-md">
+                          <span className="text-xs font-medium text-muted-foreground w-20 shrink-0">{m.date}</span>
+                          <span className="text-sm text-[hsl(264,67%,50%)] font-medium">{m.extra.title}</span>
+                          {m.extra.autoBookedNote && (
+                            <span className="ml-auto text-[10px] font-medium text-[hsl(264,67%,50%)]/70 bg-[hsl(264,67%,50%)]/10 px-2 py-0.5 rounded-full">
+                              {m.extra.autoBookedNote}
                             </span>
-                          ))}
+                          )}
                         </div>
                       )}
+                      <div className="flex items-center gap-4 px-5 py-3">
+                        <span className="text-xs font-medium text-muted-foreground w-20 shrink-0">{m.date}</span>
+                        <span className={`text-sm font-medium flex-1 ${m.status === "done" ? "text-muted-foreground" : "text-foreground"}`}>
+                          {m.title}
+                        </span>
+                        {m.status !== "auto-booked" && <StatusBadge status={m.status} />}
+                        {m.deliverables && m.deliverables.length > 0 && (
+                          <div className="flex items-center gap-1 flex-wrap justify-end">
+                            {m.deliverables.map((d) => (
+                              <span key={d} className="text-[10px] bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
+                                {d}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </Card>
           ))}
         </div>
