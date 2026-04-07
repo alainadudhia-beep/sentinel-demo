@@ -38,6 +38,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     source: "Original scope",
     addedDate: "24 Mar",
     notes: "CFO interview confirmed 62% blended, trending up 200bps/yr",
+    depth: { level: "medium", note: "Management-supplied data, not independently verified" },
   },
   {
     id: "q3",
