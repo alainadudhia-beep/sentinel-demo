@@ -48,7 +48,7 @@ const initialScope = {
       estimatedDays: "1–14",
     },
     {
-      name: "Market Model",
+      name: "Market (Model, Interviews)",
       owner: "Priya Sharma",
       tasks: [
         "Collect market data from data room",
@@ -99,7 +99,7 @@ const initialScope = {
 
 const workstreamNameColors: Record<string, string> = {
   "Commercial (Survey)": "text-blue-600",
-  "Market Model": "text-violet-600",
+  "Market (Model, Interviews)": "text-violet-600",
   "Internals (Analysis, Mgmt Interviews)": "text-emerald-600",
   "Project Management / Client Comms": "text-pink-600",
 };
