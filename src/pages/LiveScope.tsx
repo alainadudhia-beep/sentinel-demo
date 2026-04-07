@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Mail, Plus, Sparkles, ChevronDown, ChevronRight, CheckCircle2, Circle, AlertTriangle, Clock, Eye, ShieldCheck, ShieldAlert, Shield } from "lucide-react";
+import { Mail, Plus, Sparkles, CheckCircle2, Circle, AlertTriangle, Clock, Eye, ShieldCheck, ShieldAlert, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface ScopeQuestion {
@@ -177,7 +177,7 @@ export default function LiveScope() {
   const [showEmailChain, setShowEmailChain] = useState(false);
   const [emailDetected, setEmailDetected] = useState(false);
   const [questionAdded, setQuestionAdded] = useState(false);
-  const [expandedQ, setExpandedQ] = useState<string | null>(null);
+  
 
   const handleSimulateEmail = () => {
     setShowEmailChain(true);
@@ -263,29 +263,23 @@ export default function LiveScope() {
                   {qs.map((q) => {
                     const sc = statusConfig[q.status];
                     const StatusIcon = sc.icon;
-                    const isExpanded = expandedQ === q.id;
+                    
                     const isNew = q.status === "new";
 
                     return (
                       <div
                         key={q.id}
-                        className={`rounded-lg border p-4 transition-all cursor-pointer hover:border-primary/30 ${
+                        className={`rounded-lg border p-4 transition-all ${
                           isNew ? "border-primary/40 bg-primary/5 ring-1 ring-primary/20" : "border-border bg-card"
                         }`}
-                        onClick={() => setExpandedQ(isExpanded ? null : q.id)}
                       >
                         <div className="flex items-start gap-3">
                           <StatusIcon className={`w-4 h-4 mt-0.5 shrink-0 ${sc.color}`} />
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-3">
-                              <p className={`text-sm font-medium ${isNew ? "text-foreground" : "text-foreground"}`}>
+                              <p className="text-sm font-medium text-foreground">
                                 {q.question}
                               </p>
-                              {isExpanded ? (
-                                <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
-                              ) : (
-                                <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
-                              )}
                             </div>
                             <div className="flex items-center gap-2 mt-1.5 flex-wrap">
                               <span className={`text-[11px] px-1.5 py-0.5 rounded ${sc.bg} ${sc.color} font-medium`}>
@@ -300,7 +294,7 @@ export default function LiveScope() {
                               </span>
                               <span className="text-[11px] text-muted-foreground">{q.source}</span>
                             </div>
-                            {isExpanded && q.notes && (
+                            {q.notes && (
                               <div className="mt-3 pt-3 border-t border-border">
                                 <p className="text-xs text-muted-foreground">{q.notes}</p>
                               </div>
