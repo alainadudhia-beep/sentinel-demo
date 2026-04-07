@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Scope from "./pages/Scope";
 import ScopeReview from "./pages/ScopeReview";
 import Plan from "./pages/Plan";
+import LiveScope from "./pages/LiveScope";
 import Project from "./pages/Project";
 import TeamsAlerts from "./pages/TeamsAlerts";
 import NotFound from "./pages/NotFound";
