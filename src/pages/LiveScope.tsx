@@ -153,6 +153,13 @@ const statusConfig = {
   new: { icon: Sparkles, color: "text-primary", bg: "bg-primary/10", label: "New — Auto-detected" },
 };
 
+const priorityConfig: Record<string, { label: string; color: string; bg: string }> = {
+  critical: { label: "Critical", color: "text-rag-red", bg: "bg-rag-red/10" },
+  high: { label: "High", color: "text-rag-amber", bg: "bg-rag-amber/10" },
+  medium: { label: "Medium", color: "text-primary", bg: "bg-primary/10" },
+  low: { label: "Low", color: "text-muted-foreground", bg: "bg-muted" },
+};
+
 const workstreamColors: Record<string, string> = {
   Commercial: "bg-blue-500/10 text-blue-600 border-blue-500/20",
   Financial: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
