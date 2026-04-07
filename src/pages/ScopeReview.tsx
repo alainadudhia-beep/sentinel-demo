@@ -48,7 +48,7 @@ const initialScope = {
       estimatedDays: "1–14",
     },
     {
-      name: "Market Model",
+      name: "Market (Model, Interviews)",
       owner: "Priya Sharma",
       tasks: [
         "Collect market data from data room",
