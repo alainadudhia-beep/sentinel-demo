@@ -49,8 +49,8 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     deadline: "4 Apr",
     source: "Original scope",
     addedDate: "24 Mar",
-    notes: "CTO interview scheduled Thu — architecture diagram received",
-    depth: { level: "low", note: "Architecture diagram only — no independent technical audit yet" },
+    notes: "Market research from Gartner & Statista — 14% share growing 3% annually",
+    depth: { level: "low", note: "Pending expert interview with former CMO for independent verification" },
   },
   {
     id: "q4",
