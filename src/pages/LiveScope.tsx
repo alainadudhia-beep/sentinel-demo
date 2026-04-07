@@ -7,7 +7,7 @@ interface ScopeQuestion {
   question: string;
   workstream: string;
   status: "answered" | "in-progress" | "open" | "new";
-  priority: "critical" | "high" | "medium" | "low";
+  priority: "critical" | "important" | "nice-to-have";
   deadline: string;
   source: string;
   addedDate: string;
@@ -42,7 +42,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     question: "What does the technology architecture look like and what is the estimated technical debt?",
     workstream: "Tech & Product",
     status: "in-progress",
-    priority: "high",
+    priority: "important",
     deadline: "4 Apr",
     source: "Original scope",
     addedDate: "24 Mar",
@@ -53,7 +53,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     question: "What are the key regulatory risks and compliance requirements in target expansion markets?",
     workstream: "Legal & Regulatory",
     status: "in-progress",
-    priority: "high",
+    priority: "important",
     deadline: "4 Apr",
     source: "Original scope",
     addedDate: "24 Mar",
@@ -63,7 +63,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     question: "How defensible is the competitive moat — what are the top 3 switching costs for enterprise customers?",
     workstream: "Commercial",
     status: "open",
-    priority: "high",
+    priority: "important",
     deadline: "7 Apr",
     source: "Original scope",
     addedDate: "24 Mar",
@@ -73,7 +73,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     question: "What is the management team's track record and are there any key-person dependencies?",
     workstream: "Management",
     status: "open",
-    priority: "medium",
+    priority: "nice-to-have",
     deadline: "7 Apr",
     source: "Original scope",
     addedDate: "24 Mar",
@@ -94,7 +94,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     question: "What capex is required to support the 3-year growth plan and what is the payback period?",
     workstream: "Financial",
     status: "open",
-    priority: "medium",
+    priority: "nice-to-have",
     deadline: "9 Apr",
     source: "Original scope",
     addedDate: "24 Mar",
@@ -106,7 +106,7 @@ const NEW_QUESTION_FROM_EMAIL: ScopeQuestion = {
   question: "Has FreshCart ever explored or been approached about a side-letter arrangement with any existing investor, and if so what were the terms discussed?",
   workstream: "Legal & Regulatory",
   status: "new",
-  priority: "high",
+  priority: "important",
   deadline: "4 Apr",
   source: "Client email — auto-detected",
   addedDate: "Today",
@@ -155,9 +155,8 @@ const statusConfig = {
 
 const priorityConfig: Record<string, { label: string; color: string; bg: string }> = {
   critical: { label: "Critical", color: "text-rag-red", bg: "bg-rag-red/10" },
-  high: { label: "High", color: "text-rag-amber", bg: "bg-rag-amber/10" },
-  medium: { label: "Medium", color: "text-primary", bg: "bg-primary/10" },
-  low: { label: "Low", color: "text-muted-foreground", bg: "bg-muted" },
+  important: { label: "Important", color: "text-rag-amber", bg: "bg-rag-amber/10" },
+  "nice-to-have": { label: "Nice to Have", color: "text-muted-foreground", bg: "bg-muted" },
 };
 
 const workstreamColors: Record<string, string> = {
@@ -188,7 +187,16 @@ export default function LiveScope() {
     setQuestionAdded(true);
   };
 
-  const grouped = questions.reduce<Record<string, ScopeQuestion[]>>((acc, q) => {
+  const parseDeadline = (d: string) => {
+    const months: Record<string, number> = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
+    const parts = d.split(" ");
+    if (parts.length === 2) return new Date(2025, months[parts[1]] ?? 0, parseInt(parts[0]));
+    return new Date();
+  };
+
+  const sortedQuestions = [...questions].sort((a, b) => parseDeadline(a.deadline).getTime() - parseDeadline(b.deadline).getTime());
+
+  const grouped = sortedQuestions.reduce<Record<string, ScopeQuestion[]>>((acc, q) => {
     if (!acc[q.workstream]) acc[q.workstream] = [];
     acc[q.workstream].push(q);
     return acc;
