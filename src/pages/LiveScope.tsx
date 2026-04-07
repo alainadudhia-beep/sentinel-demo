@@ -31,7 +31,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
   {
     id: "q2",
     question: "What is the gross margin profile by product line, and how has it trended over the last 3 years?",
-    workstream: "Financial",
+    workstream: "Internals",
     status: "answered",
     priority: "critical",
     deadline: "31 Mar",
@@ -75,7 +75,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
   {
     id: "q6",
     question: "What is the management team's track record and are there any key-person dependencies?",
-    workstream: "Financial",
+    workstream: "Internals",
     status: "open",
     priority: "nice-to-have",
     deadline: "7 Apr",
@@ -97,7 +97,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
   {
     id: "q8",
     question: "What capex is required to support the 3-year growth plan and what is the payback period?",
-    workstream: "Financial",
+    workstream: "Internals",
     status: "open",
     priority: "nice-to-have",
     deadline: "9 Apr",
@@ -109,7 +109,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
 const NEW_QUESTION_FROM_EMAIL: ScopeQuestion = {
   id: "q9",
   question: "Has FreshCart ever explored or been approached about a side-letter arrangement with any existing investor, and if so what were the terms discussed?",
-  workstream: "Legal & Regulatory",
+  workstream: "Internals",
   status: "new",
   priority: "important",
   deadline: "4 Apr",
@@ -143,9 +143,9 @@ James`,
 
 "Has FreshCart ever explored or been approached about a side-letter arrangement with any existing investor, and if so what were the terms discussed?"
 
-Auto-routed to Legal & Regulatory workstream
+Auto-routed to Internals workstream
 Tom Bradley notified
-Added to Internal Analysis task list
+Added to Internals task list
 
 Priority: High — relates to Series B terms
 
@@ -169,10 +169,8 @@ const priorityConfig: Record<string, { label: string; color: string; bg: string 
 
 const workstreamColors: Record<string, string> = {
   Commercial: "bg-blue-500/10 text-blue-600 border-blue-500/20",
-  Financial: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
+  Internals: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
   Market: "bg-violet-500/10 text-violet-600 border-violet-500/20",
-  "Legal & Regulatory": "bg-orange-500/10 text-orange-600 border-orange-500/20",
-  Management: "bg-pink-500/10 text-pink-600 border-pink-500/20",
 };
 
 export default function LiveScope() {

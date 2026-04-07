@@ -15,15 +15,17 @@ interface ScopeQuestionSummary {
 const WORKSTREAM_QUESTIONS: Record<string, ScopeQuestionSummary[]> = {
   "ws-survey": [
     { question: "What is the current customer churn rate by cohort?", status: "answered" },
+    { question: "How defensible is the competitive moat?", status: "open" },
     { question: "What is the net revenue retention rate for enterprise vs. SMB?", status: "in-progress" },
   ],
   "ws-market": [
-    { question: "What is the gross margin profile by product line?", status: "answered" },
-    { question: "What capex is required to support the 3-year growth plan?", status: "open" },
+    { question: "What is the target's market share and how is it trending?", status: "in-progress" },
+    { question: "What are the key regulatory risks in target expansion markets?", status: "in-progress" },
   ],
   "ws-internal": [
-    { question: "How defensible is the competitive moat?", status: "open" },
-    { question: "What are the key regulatory risks?", status: "in-progress" },
+    { question: "What is the gross margin profile by product line?", status: "answered" },
+    { question: "What is the management team's track record?", status: "open" },
+    { question: "What capex is required to support the 3-year growth plan?", status: "open" },
   ],
   "ws-presentation": [],
 };
