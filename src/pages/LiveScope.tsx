@@ -7,6 +7,8 @@ interface ScopeQuestion {
   question: string;
   workstream: string;
   status: "answered" | "in-progress" | "open" | "new";
+  priority: "critical" | "high" | "medium" | "low";
+  deadline: string;
   source: string;
   addedDate: string;
   notes?: string;
