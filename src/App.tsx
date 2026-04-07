@@ -10,6 +10,7 @@ import ScopeReview from "./pages/ScopeReview";
 import Plan from "./pages/Plan";
 import LiveScope from "./pages/LiveScope";
 import Project from "./pages/Project";
+import Milestones from "./pages/Milestones";
 import SlideReview from "./pages/SlideReview";
 import TeamsAlerts from "./pages/TeamsAlerts";
 import NotFound from "./pages/NotFound";
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/scope-review" element={<ScopeReview />} />
           <Route path="/plan" element={<Plan />} />
           <Route path="/live-scope" element={<LiveScope />} />
+          <Route path="/milestones" element={<Milestones />} />
           <Route path="/slide-review" element={<SlideReview />} />
           <Route path="/project" element={<Project />} />
           <Route path="/teams-alerts" element={<TeamsAlerts />} />
