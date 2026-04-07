@@ -54,6 +54,12 @@ const INITIAL_MEETING_MARKERS: MeetingMarker[] = [
   { id: "mk6", day: 15, label: "Final Readout", cssVar: "--rag-green" },
 ];
 
+const workstreamNameColors: Record<string, string> = {
+  Commercial: "text-blue-600",
+  Market: "text-violet-600",
+  Internals: "text-emerald-600",
+};
+
 const STATUS_KEYS = ["complete", "on-track", "at-risk", "blocked", "not-started"] as const;
 type StatusKey = typeof STATUS_KEYS[number];
 
@@ -579,7 +585,7 @@ export default function Plan() {
                 ) : (
                   <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
                 )}
-                <span className="text-xs font-semibold text-foreground">{ws.name}</span>
+                <span className={`text-xs font-semibold ${workstreamNameColors[ws.name] || "text-foreground"}`}>{ws.name}</span>
                 {ws.id === "ws-survey" && (
                   <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-rag-critical/20 text-rag-critical">
                     <AlertTriangle className="w-3 h-3" />Critical
