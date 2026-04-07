@@ -63,7 +63,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     question: "How defensible is the competitive moat — what are the top 3 switching costs for enterprise customers?",
     workstream: "Commercial",
     status: "open",
-    priority: "high",
+    priority: "important",
     deadline: "7 Apr",
     source: "Original scope",
     addedDate: "24 Mar",
