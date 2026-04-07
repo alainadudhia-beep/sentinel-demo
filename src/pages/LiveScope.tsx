@@ -187,7 +187,16 @@ export default function LiveScope() {
     setQuestionAdded(true);
   };
 
-  const grouped = questions.reduce<Record<string, ScopeQuestion[]>>((acc, q) => {
+  const parseDeadline = (d: string) => {
+    const months: Record<string, number> = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
+    const parts = d.split(" ");
+    if (parts.length === 2) return new Date(2025, months[parts[1]] ?? 0, parseInt(parts[0]));
+    return new Date();
+  };
+
+  const sortedQuestions = [...questions].sort((a, b) => parseDeadline(a.deadline).getTime() - parseDeadline(b.deadline).getTime());
+
+  const grouped = sortedQuestions.reduce<Record<string, ScopeQuestion[]>>((acc, q) => {
     if (!acc[q.workstream]) acc[q.workstream] = [];
     acc[q.workstream].push(q);
     return acc;
