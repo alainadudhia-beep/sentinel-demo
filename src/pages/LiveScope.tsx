@@ -91,8 +91,8 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     deadline: "2 Apr",
     source: "Original scope",
     addedDate: "24 Mar",
-    notes: "Data request sent to CFO — expecting response by Wed",
-    depth: { level: "medium", note: "Pending — management data requested, not yet received" },
+    notes: "Currently estimating 66% based on 3 competitors. Data request sent to CFO — expecting response by Wed",
+    depth: { level: "medium", note: "pending — benchmarks only, awaiting management data (requested, not yet received)" },
   },
   {
     id: "q8",
