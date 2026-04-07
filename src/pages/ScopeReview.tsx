@@ -101,7 +101,7 @@ const workstreamNameColors: Record<string, string> = {
   "Commercial (Survey)": "text-blue-600",
   "Market Model": "text-violet-600",
   "Internals (Analysis, Mgmt Interviews)": "text-emerald-600",
-  "Presentation": "text-pink-600",
+  "Project Management / Client Comms": "text-pink-600",
 };
 
 function EditableText({
