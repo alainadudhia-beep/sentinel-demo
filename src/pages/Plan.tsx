@@ -726,6 +726,46 @@ export default function Plan() {
                   </div>
                 </div>
               ))}
+            {/* Scope questions expandable row */}
+            {(() => {
+              const qs = WORKSTREAM_QUESTIONS[ws.id] || [];
+              if (qs.length === 0) return null;
+              const isOpen = scopeExpanded[ws.id] || false;
+              const answered = qs.filter(q => q.status === "answered").length;
+              const inProg = qs.filter(q => q.status === "in-progress").length;
+              const open = qs.filter(q => q.status === "open").length;
+              return (
+                <div className="border-b border-border/50 bg-muted/20">
+                  <button
+                    className="w-full flex items-center gap-2 px-4 pl-7 py-2 text-left hover:bg-muted/40 transition-colors"
+                    onClick={() => setScopeExpanded(prev => ({ ...prev, [ws.id]: !prev[ws.id] }))}
+                  >
+                    {isOpen ? <ChevronDown className="w-3 h-3 text-muted-foreground" /> : <ChevronRight className="w-3 h-3 text-muted-foreground" />}
+                    <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">Scope questions</span>
+                    <span className="text-[10px] text-muted-foreground">
+                      {qs.length} questions · <span className="text-rag-green">{answered} answered</span> · <span className="text-rag-amber">{inProg} in progress</span> · <span>{open} open</span>
+                    </span>
+                  </button>
+                  {isOpen && (
+                    <div className="px-4 pl-12 pb-2 space-y-1">
+                      {qs.map((q, i) => (
+                        <div key={i} className="flex items-center gap-2 text-[11px]">
+                          <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                            q.status === "answered" ? "bg-rag-green" : q.status === "in-progress" ? "bg-rag-amber" : "bg-muted-foreground/40"
+                          }`} />
+                          <span className="text-muted-foreground">{q.question}</span>
+                          <span className={`ml-auto text-[10px] font-medium shrink-0 ${
+                            q.status === "answered" ? "text-rag-green" : q.status === "in-progress" ? "text-rag-amber" : "text-muted-foreground"
+                          }`}>
+                            {q.status === "answered" ? "Answered" : q.status === "in-progress" ? "In progress" : "Open"}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
           </div>
         ))}
         </div>

@@ -255,6 +255,18 @@ export default function Project() {
             </div>
           </div>
 
+          {/* Scope health indicator */}
+          <div className="mb-6 rounded-lg border border-border bg-card px-5 py-3 flex items-center gap-4">
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Scope coverage</span>
+            <span className="text-xs"><span className="font-semibold text-rag-green">2 answered</span></span>
+            <span className="text-xs text-muted-foreground">·</span>
+            <span className="text-xs"><span className="font-semibold text-rag-amber">3 in progress</span></span>
+            <span className="text-xs text-muted-foreground">·</span>
+            <span className="text-xs"><span className="font-semibold text-muted-foreground">2 open</span></span>
+            <span className="text-xs text-muted-foreground">·</span>
+            <span className="text-xs"><span className="font-semibold text-muted-foreground">0 at risk of being missed</span></span>
+          </div>
+
           {/* Outcome-based risk groups */}
           <div className="space-y-4">
             {OUTCOME_GROUPS.map((group) => {
