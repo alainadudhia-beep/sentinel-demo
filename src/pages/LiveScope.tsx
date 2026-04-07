@@ -12,6 +12,7 @@ interface ScopeQuestion {
   source: string;
   addedDate: string;
   notes?: string;
+  depth?: { level: "high" | "medium" | "low"; note: string };
 }
 
 const INITIAL_QUESTIONS: ScopeQuestion[] = [
