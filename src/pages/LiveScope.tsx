@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Mail, Plus, Sparkles, ChevronDown, ChevronRight, CheckCircle2, Circle, AlertTriangle, Clock, Eye } from "lucide-react";
+import { Mail, Plus, Sparkles, ChevronDown, ChevronRight, CheckCircle2, Circle, AlertTriangle, Clock, Eye, ShieldCheck, ShieldAlert, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface ScopeQuestion {
