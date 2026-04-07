@@ -143,9 +143,9 @@ James`,
 
 "Has FreshCart ever explored or been approached about a side-letter arrangement with any existing investor, and if so what were the terms discussed?"
 
-Auto-routed to Legal & Regulatory workstream
+Auto-routed to Internals workstream
 Tom Bradley notified
-Added to Internal Analysis task list
+Added to Internals task list
 
 Priority: High — relates to Series B terms
 
