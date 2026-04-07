@@ -1,15 +1,16 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { FileText, CheckCircle2, ListChecks, AlertTriangle, MessageSquare } from "lucide-react";
+import { FileText, CheckCircle2, ListChecks, AlertTriangle, MessageSquare, Eye } from "lucide-react";
 
 const steps = [
   { label: "Add Scope", path: "/scope", icon: FileText },
   { label: "Workstream Planner", path: "/scope-review", icon: CheckCircle2 },
+  { label: "Live Scope", path: "/live-scope", icon: Eye },
   { label: "Project Plan", path: "/plan", icon: ListChecks },
   { label: "Risk Manager", path: "/project", icon: AlertTriangle },
   { label: "Teams Interface", path: "/teams-alerts", icon: MessageSquare },
 ];
 
-const stepOrder = ["/scope", "/scope-review", "/plan", "/project", "/teams-alerts"];
+const stepOrder = ["/scope", "/scope-review", "/live-scope", "/plan", "/project", "/teams-alerts"];
 
 function getStepIndex(pathname: string) {
   const exactIdx = stepOrder.indexOf(pathname);

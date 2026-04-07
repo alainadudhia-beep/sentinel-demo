@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Scope from "./pages/Scope";
 import ScopeReview from "./pages/ScopeReview";
 import Plan from "./pages/Plan";
+import LiveScope from "./pages/LiveScope";
 import Project from "./pages/Project";
 import TeamsAlerts from "./pages/TeamsAlerts";
 import NotFound from "./pages/NotFound";
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/scope" element={<Scope />} />
           <Route path="/scope-review" element={<ScopeReview />} />
           <Route path="/plan" element={<Plan />} />
+          <Route path="/live-scope" element={<LiveScope />} />
           <Route path="/project" element={<Project />} />
           <Route path="/teams-alerts" element={<TeamsAlerts />} />
           <Route path="*" element={<NotFound />} />
