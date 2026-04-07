@@ -467,10 +467,10 @@ export default function Plan() {
                   title="Drag to move"
                 >
                   <span
-                    className="text-[8px] font-semibold whitespace-nowrap px-1 py-px rounded select-none"
+                    className="text-[8px] font-semibold text-center px-1 py-px rounded select-none leading-tight"
                     style={{ color: `hsl(var(${marker.cssVar}))`, backgroundColor: `hsl(var(${marker.cssVar}) / 0.1)` }}
                   >
-                    {marker.label}
+                    {marker.label.includes(" ") ? marker.label.split(" ").map((word, i) => <span key={i} className="block">{word}</span>) : marker.label}
                   </span>
                 </div>
               );
