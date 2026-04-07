@@ -100,7 +100,7 @@ const weeks: Week[] = [
 
 const earlyWarningDraft = `Hi Marcus,
 
-Quick flag ahead of Monday's interim presentation — our survey completion is behind schedule due to limited respondent availability.
+Quick flag ahead of Monday's interim presentation — our survey completion is behind schedule due to limited respondent availability, at only 62% of target currently.
 
 We have two options:
 1. Proceed on Monday with the survey respondents we have — I'll caveat the findings appropriately
