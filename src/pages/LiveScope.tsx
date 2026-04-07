@@ -135,16 +135,19 @@ James`,
   },
   {
     id: "e2",
-    from: "DD Copilot",
+    from: "Sentinel",
     to: "Sarah Chen",
     time: "Today 8:32 AM",
     subject: "🔔 New scope item detected from client email",
-    body: `Detected a new question from James Morton's email:
+    body: `New scope item detected from James Morton's email:
 
 "Has FreshCart ever explored or been approached about a side-letter arrangement with any existing investor, and if so what were the terms discussed?"
 
-Suggested workstream: Legal & Regulatory
-Suggested priority: High — relates to Series B terms
+Auto-routed to Legal & Regulatory workstream
+Tom Bradley notified
+Added to Internal Analysis task list
+
+Priority: High — relates to Series B terms
 
 Action: Review and confirm addition to live scope →`,
     isBot: true,

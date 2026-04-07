@@ -266,6 +266,7 @@ export default function Plan() {
   const [expanded, setExpanded] = useState<Record<string, boolean>>(
     Object.fromEntries(ganttWorkstreams.map((ws) => [ws.id, true]))
   );
+  const [scopeExpanded, setScopeExpanded] = useState<Record<string, boolean>>({});
   const [workstreams, setWorkstreams] = useState<Workstream[]>(
     () => JSON.parse(JSON.stringify(ganttWorkstreams))
   );
