@@ -216,19 +216,7 @@ export default function Project() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
-      <Tabs defaultValue="risk-manager" className="w-full">
-        <TabsList className="mb-6">
-          <TabsTrigger value="risk-manager" className="gap-2">
-            <ShieldAlert className="w-4 h-4" />
-            Risk Manager
-          </TabsTrigger>
-          <TabsTrigger value="teams-alerts" className="gap-2">
-            <MessageSquare className="w-4 h-4" />
-            Teams Alerts
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="risk-manager">
+      <div className="w-full">
           {/* Header banner */}
           <div className="mb-8 rounded-xl border border-rag-red/30 bg-gradient-to-r from-rag-red/5 via-rag-amber/5 to-transparent p-6">
             <div className="flex items-start justify-between gap-6">
