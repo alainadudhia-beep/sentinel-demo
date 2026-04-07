@@ -128,7 +128,7 @@ const EMAIL_CHAIN = [
 
 Interesting that churn is 8%, that seems low vs competitors. Can you look at elasticity and see where we can move our pricing to drive revenue growth balanced against churn?
 
-Would be great to get this into the commercial workstream.
+Would be great to get this into the commercial analysis workstream.
 
 Best,
 James`,
