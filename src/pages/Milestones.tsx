@@ -110,7 +110,7 @@ We are doing everything we can to increase the incidence, but regards to the Int
 Happy to discuss on today's check-in. Let me know your preference.
 
 Best,
-Emma WIlson`;
+Emma`;
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
