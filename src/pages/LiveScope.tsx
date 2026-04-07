@@ -269,10 +269,9 @@ export default function LiveScope() {
                     return (
                       <div
                         key={q.id}
-                        className={`rounded-lg border p-4 transition-all cursor-pointer hover:border-primary/30 ${
+                        className={`rounded-lg border p-4 transition-all ${
                           isNew ? "border-primary/40 bg-primary/5 ring-1 ring-primary/20" : "border-border bg-card"
                         }`}
-                        onClick={() => setExpandedQ(isExpanded ? null : q.id)}
                       >
                         <div className="flex items-start gap-3">
                           <StatusIcon className={`w-4 h-4 mt-0.5 shrink-0 ${sc.color}`} />
