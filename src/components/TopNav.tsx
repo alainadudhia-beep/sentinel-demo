@@ -6,7 +6,7 @@ const steps = [
   { label: "Workstream Planner", path: "/scope-review", icon: CheckCircle2 },
   { label: "Live Scope", path: "/live-scope", icon: Eye },
   { label: "Project Plan", path: "/plan", icon: ListChecks },
-  { label: "Milestones", path: "/milestones", icon: CalendarCheck },
+  { label: "Milestone Tracker", path: "/milestones", icon: CalendarCheck },
   { label: "Slide Review", path: "/slide-review", icon: Presentation },
   { label: "Risk Manager", path: "/project", icon: AlertTriangle },
 ];
