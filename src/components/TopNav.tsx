@@ -52,7 +52,7 @@ export default function TopNav() {
                   onClick={() => {
                     navigate(step.path);
                   }}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors text-left w-[120px] ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors text-left w-[120px] leading-tight ${
                     isActive
                       ? "bg-primary text-primary-foreground"
                       : isPast
@@ -60,8 +60,8 @@ export default function TopNav() {
                       : "text-muted-foreground hover:bg-accent hover:text-foreground"
                   }`}
                 >
-                  <Icon className="w-3.5 h-3.5" />
-                  {step.label}
+                  <Icon className="w-3.5 h-3.5 shrink-0" />
+                  <span className="whitespace-pre-line">{step.label}</span>
                 </button>
               </div>
             );
