@@ -269,7 +269,7 @@ export default function ScopeReview() {
             <Card key={wsIdx} className="p-4 bg-card">
               <div className="flex items-start justify-between mb-2">
                 <div>
-                  <p className="font-medium text-sm text-foreground">
+                  <p className={`font-medium text-sm ${workstreamNameColors[ws.name] || "text-foreground"}`}>
                     <EditableText value={ws.name} onChange={(v) => updateWorkstream(wsIdx, "name", v)} />
                   </p>
                   <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
