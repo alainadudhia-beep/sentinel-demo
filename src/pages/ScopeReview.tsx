@@ -70,7 +70,7 @@ const initialScope = {
       estimatedDays: "1–10",
     },
     {
-      name: "Presentation",
+      name: "Project Management / Client Comms",
       owner: "Emma Wilson",
       tasks: [
         "Synthesise findings into 40–50 slide deck",
