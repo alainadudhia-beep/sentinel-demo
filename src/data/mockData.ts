@@ -107,7 +107,7 @@ export const ganttWorkstreams: Workstream[] = [
   },
   {
     id: "ws-presentation",
-    name: "Presentation",
+    name: "Client Communication",
     owner: "Emma Wilson",
     items: [
       { id: "p1", label: "Synthesise deck", type: "task", owner: "Emma Wilson", startDay: 11, endDay: 13, status: "not-started", dueDate: "2 Apr", dependency: "All workstream inputs", critical: true },
