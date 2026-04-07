@@ -38,7 +38,6 @@ const SECTIONS: Section[] = [
   { name: "Commercial", done: 6, forReview: 2, inProgress: 0, notStarted: 2, total: 10, status: "on-track" },
   { name: "Internal", done: 4, forReview: 0, inProgress: 2, notStarted: 2, total: 8, status: "on-track" },
   { name: "Market", done: 0, forReview: 0, inProgress: 3, notStarted: 5, total: 8, status: "at-risk" },
-  { name: "Tech & product", done: 0, forReview: 0, inProgress: 0, notStarted: 6, total: 6, status: "off-track" },
 ];
 
 const statusBadge = (s: Section["status"]) => {
