@@ -263,7 +263,7 @@ export default function LiveScope() {
                   {qs.map((q) => {
                     const sc = statusConfig[q.status];
                     const StatusIcon = sc.icon;
-                    const isExpanded = expandedQ === q.id;
+                    
                     const isNew = q.status === "new";
 
                     return (
