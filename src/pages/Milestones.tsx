@@ -162,6 +162,16 @@ function WeekBadge({ badge }: { badge: string }) {
 
 export default function Milestones() {
   const [showDraft, setShowDraft] = useState(false);
+  const [collapsedWeeks, setCollapsedWeeks] = useState<Set<number>>(new Set());
+
+  const toggleWeek = useCallback((weekNum: number) => {
+    setCollapsedWeeks(prev => {
+      const next = new Set(prev);
+      if (next.has(weekNum)) next.delete(weekNum);
+      else next.add(weekNum);
+      return next;
+    });
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
