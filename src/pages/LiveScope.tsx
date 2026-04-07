@@ -94,7 +94,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     question: "What capex is required to support the 3-year growth plan and what is the payback period?",
     workstream: "Financial",
     status: "open",
-    priority: "medium",
+    priority: "nice-to-have",
     deadline: "9 Apr",
     source: "Original scope",
     addedDate: "24 Mar",
