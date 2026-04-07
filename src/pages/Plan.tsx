@@ -54,6 +54,12 @@ const INITIAL_MEETING_MARKERS: MeetingMarker[] = [
   { id: "mk6", day: 15, label: "Final Readout", cssVar: "--rag-green" },
 ];
 
+const workstreamNameColors: Record<string, string> = {
+  Commercial: "text-blue-600",
+  Market: "text-violet-600",
+  Internals: "text-emerald-600",
+};
+
 const STATUS_KEYS = ["complete", "on-track", "at-risk", "blocked", "not-started"] as const;
 type StatusKey = typeof STATUS_KEYS[number];
 
