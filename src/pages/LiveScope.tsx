@@ -50,6 +50,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     source: "Original scope",
     addedDate: "24 Mar",
     notes: "CTO interview scheduled Thu — architecture diagram received",
+    depth: { level: "low", note: "Architecture diagram only — no independent technical audit yet" },
   },
   {
     id: "q4",
