@@ -6,6 +6,28 @@ import { Textarea } from "@/components/ui/textarea";
 import { ganttWorkstreams, GanttItem, Workstream } from "@/data/mockData";
 import { ArrowRight, Clock, Sparkles, ChevronRight, ChevronDown, Diamond, Check, AlertTriangle, Plus, X, GripVertical, Circle, MessageSquare } from "lucide-react";
 
+/* ---- Scope questions mapped to workstreams ---- */
+interface ScopeQuestionSummary {
+  question: string;
+  status: "answered" | "in-progress" | "open";
+}
+
+const WORKSTREAM_QUESTIONS: Record<string, ScopeQuestionSummary[]> = {
+  "ws-survey": [
+    { question: "What is the current customer churn rate by cohort?", status: "answered" },
+    { question: "What is the net revenue retention rate for enterprise vs. SMB?", status: "in-progress" },
+  ],
+  "ws-market": [
+    { question: "What is the gross margin profile by product line?", status: "answered" },
+    { question: "What capex is required to support the 3-year growth plan?", status: "open" },
+  ],
+  "ws-internal": [
+    { question: "How defensible is the competitive moat?", status: "open" },
+    { question: "What are the key regulatory risks?", status: "in-progress" },
+  ],
+  "ws-presentation": [],
+};
+
 const TOTAL_DAYS = 15;
 const TODAY_DAY = 8; // Wednesday Week 2 (26 Mar)
 const WEEKS = [
