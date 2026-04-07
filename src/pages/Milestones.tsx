@@ -207,7 +207,7 @@ export default function Milestones() {
             <div>
               <p className="text-sm font-semibold text-foreground flex items-center gap-2">
                 <CalendarCheck className="w-4 h-4 text-muted-foreground" />
-                Daily check-in · 15 min · Emma WIlson + Marcus Rowe (PE fund)
+                Daily check-in · 15 min · Emma Wilson + Marcus Rowe (PE fund)
               </p>
             </div>
             <div className="flex items-center gap-2">
