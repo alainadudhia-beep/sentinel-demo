@@ -245,7 +245,7 @@ export default function Milestones() {
                 <Flag className="w-3 h-3" /> Flag
               </span>
               <span className="text-foreground leading-relaxed">
-                Expert interviews at 6/15 — on pace for 12 by Friday, 3 below target N. Recommend flagging to client before Monday's interim presentation.
+                Survey at 62% completion — on pace for only 80% by Friday. Recommend flagging to client before Monday's interim presentation.
               </span>
             </div>
 
