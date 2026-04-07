@@ -253,21 +253,37 @@ export default function TeamsAlerts() {
             <div className="flex-1 flex flex-col">
               {/* Chat header */}
               <div className="px-4 py-2.5 border-b border-border bg-card flex items-center gap-2">
-                <Bot className="w-5 h-5 text-muted-foreground" />
-                <span className="text-sm font-semibold text-foreground">Risk Manager Bot</span>
+                {activeAlert.isPersonMessage && activeAlert.personAvatar ? (
+                  <div className={`w-5 h-5 rounded-full ${activeAlert.personAvatar.bg} flex items-center justify-center text-white text-[8px] font-bold`}>
+                    {activeAlert.personAvatar.initials}
+                  </div>
+                ) : (
+                  <Bot className="w-5 h-5 text-muted-foreground" />
+                )}
+                <span className="text-sm font-semibold text-foreground">
+                  {activeAlert.isPersonMessage ? "J. Okafor" : "Risk Manager Bot"}
+                </span>
                 <span className="text-xs text-muted-foreground">· {activeAlert.shortTitle}</span>
               </div>
 
               {/* Messages */}
               <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-muted/20">
-                {/* Bot alert card */}
+                {/* Alert card */}
                 <div className="flex items-start gap-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${severityBotColor[activeAlert.severity]}`}>
-                    <Bot className="w-4 h-4" />
-                  </div>
+                  {activeAlert.isPersonMessage && activeAlert.personAvatar ? (
+                    <div className={`w-8 h-8 rounded-full ${activeAlert.personAvatar.bg} flex items-center justify-center text-white text-[10px] font-bold shrink-0`}>
+                      {activeAlert.personAvatar.initials}
+                    </div>
+                  ) : (
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${severityBotColor[activeAlert.severity]}`}>
+                      <Bot className="w-4 h-4" />
+                    </div>
+                  )}
                   <div className="flex-1 max-w-[480px]">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-semibold text-foreground">Risk Manager Bot</span>
+                      <span className="text-sm font-semibold text-foreground">
+                        {activeAlert.isPersonMessage ? "J. Okafor" : "Risk Manager Bot"}
+                      </span>
                       <span className="text-[11px] text-muted-foreground">Today {activeAlert.time}</span>
                     </div>
                     <div className="rounded-lg border border-border bg-background overflow-hidden">
