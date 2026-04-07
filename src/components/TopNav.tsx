@@ -52,7 +52,7 @@ export default function TopNav() {
                   onClick={() => {
                     navigate(step.path);
                   }}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors text-left ${
                     isActive
                       ? "bg-primary text-primary-foreground"
                       : isPast
