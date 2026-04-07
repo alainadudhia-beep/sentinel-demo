@@ -217,9 +217,15 @@ export default function TeamsAlerts() {
                   >
                     <div className="flex items-start gap-2.5">
                       <div className="relative shrink-0 mt-0.5">
-                        <div className="w-8 h-8 rounded-full bg-muted/60 flex items-center justify-center">
-                          <Bot className="w-4 h-4 text-muted-foreground" />
-                        </div>
+                        {alert.isPersonMessage && alert.personAvatar ? (
+                          <div className={`w-8 h-8 rounded-full ${alert.personAvatar.bg} flex items-center justify-center text-white text-[10px] font-bold`}>
+                            {alert.personAvatar.initials}
+                          </div>
+                        ) : (
+                          <div className="w-8 h-8 rounded-full bg-muted/60 flex items-center justify-center">
+                            <Bot className="w-4 h-4 text-muted-foreground" />
+                          </div>
+                        )}
                         <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-card ${severityDot[alert.severity]}`} />
                       </div>
                       <div className="flex-1 min-w-0">
