@@ -31,7 +31,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
   {
     id: "q2",
     question: "What is the gross margin profile by product line, and how has it trended over the last 3 years?",
-    workstream: "Internals",
+    workstream: "Financial",
     status: "answered",
     priority: "critical",
     deadline: "31 Mar",
