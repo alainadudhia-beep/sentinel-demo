@@ -6,9 +6,10 @@ const steps = [
   { label: "Scope Review", path: "/scope-review", icon: CheckCircle2 },
   { label: "Project Plan", path: "/plan", icon: ListChecks },
   { label: "Risk Manager", path: "/project", icon: AlertTriangle },
+  { label: "Teams Alerts", path: "/teams-alerts", icon: MessageSquare },
 ];
 
-const stepOrder = ["/scope", "/scope-review", "/plan", "/project"];
+const stepOrder = ["/scope", "/scope-review", "/plan", "/project", "/teams-alerts"];
 
 function getStepIndex(pathname: string) {
   const exactIdx = stepOrder.indexOf(pathname);
