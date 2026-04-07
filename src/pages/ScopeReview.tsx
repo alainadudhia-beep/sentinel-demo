@@ -36,7 +36,7 @@ const initialScope = {
   fee: "£285,000 + VAT",
   workstreams: [
     {
-      name: "Commercial Survey",
+      name: "Commercial (Survey)",
       owner: "James Okafor",
       tasks: [
         "Design questionnaire",
