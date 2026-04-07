@@ -102,7 +102,7 @@ const earlyWarningDraft = `Hi Marcus,
 
 Quick flag ahead of Monday's interim presentation — our survey completion is behind schedule due to limited respondent availability, at only 62% of target currently.
 
-We have two options:
+We are doing everything we can to increase the incidence, but regards to the Interim we have two options:
 1. Proceed on Monday with the survey respondents we have — I'll caveat the findings appropriately
 2. Push the interim to Tuesday to allow one more day of fieldwork
 
