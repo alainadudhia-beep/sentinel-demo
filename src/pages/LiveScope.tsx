@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Mail, Plus, Sparkles, ChevronDown, ChevronRight, CheckCircle2, Circle, AlertTriangle, Clock, Eye } from "lucide-react";
+import { Mail, Plus, Sparkles, ChevronDown, ChevronRight, CheckCircle2, Circle, AlertTriangle, Clock, Eye, ShieldCheck, ShieldAlert, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface ScopeQuestion {
@@ -12,6 +12,7 @@ interface ScopeQuestion {
   source: string;
   addedDate: string;
   notes?: string;
+  depth?: { level: "high" | "medium" | "low"; note: string };
 }
 
 const INITIAL_QUESTIONS: ScopeQuestion[] = [
@@ -25,6 +26,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     source: "Original scope",
     addedDate: "24 Mar",
     notes: "Answered via data room — 8.2% annual, primarily driven by pricing sensitivity in SMB segment",
+    depth: { level: "high", note: "Cross-referenced with VDR data and expert interviews" },
   },
   {
     id: "q2",
@@ -36,6 +38,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     source: "Original scope",
     addedDate: "24 Mar",
     notes: "CFO interview confirmed 62% blended, trending up 200bps/yr",
+    depth: { level: "medium", note: "Management-supplied data, not independently verified" },
   },
   {
     id: "q3",
@@ -47,6 +50,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     source: "Original scope",
     addedDate: "24 Mar",
     notes: "CTO interview scheduled Thu — architecture diagram received",
+    depth: { level: "low", note: "Architecture diagram only — no independent technical audit yet" },
   },
   {
     id: "q4",
@@ -88,6 +92,7 @@ const INITIAL_QUESTIONS: ScopeQuestion[] = [
     source: "Original scope",
     addedDate: "24 Mar",
     notes: "Data request sent to CFO — expecting response by Wed",
+    depth: { level: "medium", note: "Pending — management data requested, not yet received" },
   },
   {
     id: "q8",
@@ -298,6 +303,18 @@ export default function LiveScope() {
                             {isExpanded && q.notes && (
                               <div className="mt-3 pt-3 border-t border-border">
                                 <p className="text-xs text-muted-foreground">{q.notes}</p>
+                              </div>
+                            )}
+                            {q.depth && (
+                              <div className={`mt-2 inline-flex items-center gap-1.5 text-[11px] px-2 py-1 rounded-md font-medium ${
+                                q.depth.level === "high"
+                                  ? "bg-rag-green/10 text-rag-green"
+                                  : q.depth.level === "medium"
+                                  ? "bg-rag-amber/10 text-rag-amber"
+                                  : "bg-rag-red/10 text-rag-red"
+                              }`}>
+                                {q.depth.level === "high" ? <ShieldCheck className="w-3 h-3" /> : q.depth.level === "medium" ? <ShieldAlert className="w-3 h-3" /> : <Shield className="w-3 h-3" />}
+                                Depth: {q.depth.level} — {q.depth.note.toLowerCase()}
                               </div>
                             )}
                           </div>
