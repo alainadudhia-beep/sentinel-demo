@@ -427,17 +427,6 @@ export default function Plan() {
         </button>
       </div>
 
-      <div className="flex items-center gap-4 mb-6">
-        <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground bg-secondary px-2.5 py-1 rounded-md">
-          <Clock className="w-3 h-3" />
-          Generated from scope in 12 seconds
-        </span>
-        <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground bg-secondary px-2.5 py-1 rounded-md">
-          <Sparkles className="w-3 h-3" />
-          Found 3 prior retail DDs with similar structure
-        </span>
-      </div>
-
       {/* Legend */}
       <div className="flex items-center gap-5 mb-4 text-xs text-muted-foreground flex-wrap">
         <span className="flex items-center gap-1.5">
