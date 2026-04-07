@@ -47,7 +47,7 @@ const ALERTS: AlertCard[] = [
     severity: "high",
     title: "Partner declined slide review hold",
     emoji: "⚠️",
-    shortTitle: "Slide Review Hold",
+    shortTitle: "Slide Review Declined",
     preview: "Thu 11am removed — commercial slides awaiting review",
     fields: [
       { label: "Event", value: "Thu 3 Apr 11am removed · commercial slides still awaiting review" },
