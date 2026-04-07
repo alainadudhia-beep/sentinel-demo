@@ -176,7 +176,7 @@ export default function Milestones() {
           <AlertTriangle className="h-4 w-4 text-[hsl(var(--rag-amber))]" />
           <AlertDescription className="flex items-center justify-between gap-4">
             <span className="text-sm text-foreground">
-              W3 interim presentation at risk if expert interviews slip — PE fund needs to know before Monday, not on the day
+              W3 interim presentation at risk if survey slips — PE fund needs to know before Monday, not on the day
             </span>
             <Button
               size="sm"
