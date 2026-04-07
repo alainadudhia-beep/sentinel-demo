@@ -149,18 +149,21 @@ const severityColor: Record<string, string> = {
   critical: "bg-rag-red",
   high: "bg-rag-amber",
   medium: "bg-primary",
+  info: "bg-[hsl(258,60%,45%)]",
 };
 
 const severityDot: Record<string, string> = {
   critical: "bg-rag-red",
   high: "bg-rag-amber",
   medium: "bg-primary",
+  info: "bg-[hsl(258,60%,45%)]",
 };
 
 const severityBotColor: Record<string, string> = {
   critical: "bg-rag-red/15 text-rag-red",
   high: "bg-rag-amber/15 text-rag-amber",
   medium: "bg-primary/15 text-primary",
+  info: "bg-[hsl(258,60%,50%)]/15 text-[hsl(258,60%,45%)]",
 };
 
 export default function TeamsAlerts() {
