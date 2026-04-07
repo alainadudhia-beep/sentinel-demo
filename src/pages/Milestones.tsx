@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { ChevronDown } from "lucide-react";
 import { AlertTriangle, CheckCircle2, Clock, CalendarCheck, Send, X, Flag, TrendingUp, Info } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
