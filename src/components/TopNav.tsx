@@ -11,7 +11,7 @@ const steps = [
   { label: "Risk\nManager", path: "/project", icon: AlertTriangle },
 ];
 
-const stepOrder = ["/scope", "/scope-review", "/live-scope", "/plan", "/milestones", "/slide-review", "/project"];
+const stepOrder = ["/scope", "/scope-review", "/live-scope", "/milestones", "/slide-review", "/project"];
 
 function getStepIndex(pathname: string) {
   const exactIdx = stepOrder.indexOf(pathname);
