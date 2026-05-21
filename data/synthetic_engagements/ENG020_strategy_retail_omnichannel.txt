@@ -1,0 +1,56 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-020
+Date: June 2022
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Castleton Retail Group (listed, £1.2bn revenue, UK)
+Type: Strategy — Board mandate
+Engagement type: Strategy
+Sector: Retail
+
+COMMERCIAL TERMS
+Planned duration: 8 weeks
+Actual duration: 11 weeks
+Planned fee: £320k
+Actual fee: £395k
+Team: 1 Partner, 1 Manager, 3 Consultants, 2 Analysts
+
+SCOPE
+Omnichannel strategy review: assessment of Castleton's digital/physical channel integration, customer data and loyalty programme effectiveness, store portfolio rationalisation options, and recommendations for a 3-year omnichannel investment roadmap.
+
+Scope changes:
+- Week 3: CFO requested a parallel workstream on cost of serving customers by channel — not in original brief. Agreed as a new workstream with separate resource allocation. £45k uplift, partly attributed to a separate workstream budget.
+- Week 5: CEO asked for an additional board presentation on "competitor benchmarking deep-dive" following a strategic threat from a new entrant. Added 1 week of work; absorbed.
+- Week 7: Board request to extend the investment roadmap to 5 years (was 3 years). Minor extension, no fee change.
+- Week 9: A new CEO was appointed mid-engagement (the sitting CEO announced departure during week 6). The incoming CEO asked for a full re-brief and had different strategic priorities. This was the primary driver of the overrun.
+
+EXECUTION NOTES
+The CEO transition was the defining event of this engagement and nothing could have anticipated it.
+
+The outgoing CEO had been a strong sponsor of the project and had a clear point of view on the strategic direction. The incoming CEO (internal promotion, previously CFO of a subsidiary) came with different instincts — more operationally focused, more cautious on digital investment. When she re-briefed us in week 9, she indicated the board mandate had shifted and asked us to place more emphasis on store portfolio rationalisation and less on digital transformation.
+
+This required a partial restructure of the recommendation. We maintained the strategic substance but significantly reweighted the emphasis. The Partner managed the CEO transition carefully — a credit to the relationship management throughout.
+
+Separately: this was a large team engagement and coordination overhead was high. Three consultants on a strategy project creates competing analytical approaches that need to be actively managed. The Manager spent more time on team coordination than on direct analysis, which stretched the delivery timeline.
+
+The cost-of-serving analysis (scope change 1) was analytically valuable but created an internal political dynamic at Castleton — the digital team felt it was being used to justify store investment at their expense. We were drawn into stakeholder management that went beyond our normal advisory role.
+
+Expert calls: 8 completed. Omnichannel retail specialists, customer data platform vendors, ex-John Lewis commercial director.
+
+OUTCOME
+Strategy delivered and accepted by the board. Investment roadmap approved (modified version with more store rationalisation than originally envisaged). Castleton retained us for a follow-on implementation planning phase.
+
+KEY LESSONS
+- CEO transitions during strategy projects are a material risk; build in a contingency assumption for senior stakeholder change in engagements >6 weeks
+- Three-consultant strategy projects need active coordination management — appoint a team lead below Manager level
+- Cost-of-serving analyses in omnichannel can become politically charged internally; brief client sponsor on this risk upfront
+- Board strategy projects frequently expand in scope as they progress — build this into fee and timeline conversations at kick-off
+
+RISK FLAGS (materialised)
+- Senior stakeholder change (CRITICAL): CEO transition in week 6; required partial project restructure.
+- Internal politics (MEDIUM): Cost-of-serving analysis created internal tension; required stakeholder management.
+- Scope expansion (HIGH): Four scope additions; primary driver of 3-week overrun.
+
+OVERALL ASSESSMENT
+Significant overrun but largely attributable to an unforeseeable event (CEO change). Client relationship strong; retained for follow-on work. Work product praised at board level.

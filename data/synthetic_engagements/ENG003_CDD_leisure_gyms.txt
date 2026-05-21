@@ -1,0 +1,52 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-003
+Date: June 2023
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Fortis Private Equity
+Target: IronGate Fitness (mid-market gym chain, 34 sites, UK)
+Engagement type: Commercial Due Diligence
+Sector: Leisure
+
+COMMERCIAL TERMS
+Planned duration: 3 weeks
+Actual duration: 4.5 weeks
+Planned fee: £120k
+Actual fee: £148k (scope change, agreed uplift)
+Team: 1 Partner, 1 Manager, 2 Consultants, 1 Analyst (+ 1 additional analyst from week 3)
+
+SCOPE
+Original scope: UK gym market sizing and structural trends (budget vs mid-market dynamics post-COVID), IronGate competitive positioning, member economics (LTV, attrition, cohort analysis by site), and management assessment.
+
+Scope change 1 (week 2): Fortis requested an additional workstream on IronGate's PT (personal training) revenue stream following a site visit that suggested it was more material than the IM had indicated. Added 4 days of work; fee uplift agreed at £18k.
+
+Scope change 2 (week 3): Request to extend geographic analysis to include Scotland (3 sites) which had been excluded from original brief. Absorbed by team — no fee change, but added ~3 days of work, contributing to timeline extension.
+
+EXECUTION NOTES
+The engagement was harder than it looked at the outset. A few issues compounded:
+
+First, IronGate's membership data was held across two legacy systems (a Mindbody instance and a bespoke database from a pre-2019 acquisition) and the reconciliation took significantly longer than anticipated. The CFO was cooperative but not technically capable of helping us bridge the two datasets — we ended up doing it ourselves in week 2, which ate into the competitive analysis time.
+
+Second, the PT revenue workstream (scope change 1) revealed a more complex picture than expected — PT income was partly off-platform and the accounting treatment was inconsistent across sites. This flagged a potential quality of earnings issue that Fortis needed to understand, which generated a round of follow-up questions that ran into week 4.
+
+Client communication was fine but Fortis's deal team was under their own internal pressure from a fund deployment timeline and pushed for the final report 4 days before the revised deadline. We delivered a draft but it required a significant round of revisions based on their feedback, which is unusual for a CDD — the feedback felt like scope creep disguised as review comments.
+
+Expert calls: 9 completed (gym operators, a fitness industry analyst, ex-Nuffield senior commercial lead, two PTs who had worked at IronGate sites).
+
+OUTCOME
+Deal completed after an extended period. Recommended proceed with conditions. The PT revenue quality of earnings issue was flagged prominently and Fortis used it to negotiate a price chip. Member attrition data was concerning in the 18-24 cohort (likely pandemic distortion plus competitive pressure from budget operators).
+
+KEY LESSONS
+- Leisure assets with multi-site member data are a data integration challenge first, analysis challenge second. Always ask about system landscape before scoping
+- PT/ancillary revenue at gym chains is frequently messy; treat as a separate workstream by default, don't bundle with main member economics
+- "Review comments" that constitute new analysis requests should be pushed back on formally — name it as a scope change
+- Post-COVID cohort data for gyms is still distorted; be explicit with clients about which periods are comparable
+
+RISK FLAGS (materialised)
+- Data quality (HIGH): dual-system membership data required significant reconciliation effort. Extended timeline.
+- Scope creep (MEDIUM): client review comments constituted additional analysis requests. Partially absorbed, partially charged.
+- Quality of earnings (MEDIUM): PT revenue accounting inconsistency surfaced mid-project; required follow-up workstream.
+
+OVERALL ASSESSMENT
+Difficult but successful engagement. Overran on both time and fee, though the fee overrun was partially captured through the agreed scope change uplift. Work product was strong. Fortis relationship intact.

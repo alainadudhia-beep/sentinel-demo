@@ -1,0 +1,51 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-004
+Date: November 2022
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Helix Capital (buy-side PE)
+Target: Bramble Foods (ambient snacking brand, UK + selective European distribution)
+Engagement type: Commercial Due Diligence
+Sector: FMCG
+
+COMMERCIAL TERMS
+Planned duration: 4 weeks
+Actual duration: 5.5 weeks
+Planned fee: £155k
+Actual fee: £175k
+Team: 1 Partner, 1 Manager, 2 Consultants, 2 Analysts
+
+SCOPE
+Market assessment for UK better-for-you snacking (growth trajectory, channel dynamics, private label threat), brand equity evaluation, retailer relationship assessment (Bramble's top 4 retail accounts = 78% of revenue), and international opportunity sizing (DACH + Benelux).
+
+Scope changed significantly. Original scope excluded a detailed category management assessment. In week 2, Helix received feedback from a potential co-investor that Bramble's shelf position in Tesco was vulnerable — this triggered a request for an in-depth category captain assessment. We resisted but ultimately agreed to a modified version. In week 3, management requested they present a new product pipeline to us as part of the process, which took a day of team time to review and wasn't factored in. Fee discussion became uncomfortable; the £20k uplift we requested was challenged by Helix.
+
+EXECUTION NOTES
+Several issues made this engagement harder than it should have been.
+
+Bramble's management team were protective of retailer relationship information and reluctant to give us direct access to their retail account managers — understandable given the sensitivity, but it forced us to rely on more indirect methods (expert calls, Nielsen data) than we'd normally use. This reduced confidence in our retailer assessment conclusions.
+
+The international opportunity sizing was difficult. Bramble had very limited in-market data for DACH (they used a distributor), so we were working largely from macro category data and a handful of expert calls. We were transparent with Helix about the confidence level, but they pushed us to be more definitive than the data warranted.
+
+Analyst turnover: one of our analysts was pulled halfway through for a priority resourcing situation on another engagement. The replacement was less familiar with FMCG and took time to get up to speed. This created a quality dip in the category analysis that the Manager had to backstop.
+
+Expert calls: 11 completed. Struggled to get good quality retail buyer contacts — most were unwilling to speak specifically about Bramble.
+
+OUTCOME
+Deal ultimately did not proceed. Helix walked away on price, citing our retailer dependency findings and the limited international evidence base. This was the right outcome based on what we found. Deal abort does not reflect negatively on work quality.
+
+KEY LESSONS
+- FMCG assets with high retailer concentration (>60% in top 3 accounts) should always have retailer health as a standalone workstream, not embedded in competitive analysis
+- Management reluctance to facilitate retailer access is itself a signal — flag it early
+- International opportunity work without in-market data is inherently limited; scope and caveat appropriately, don't let client pressure you into false precision
+- Analyst continuity on 4-week+ engagements is important; flag any risk of mid-project redeployment at the outset
+
+RISK FLAGS (materialised)
+- Client/management access (MEDIUM): Management restricted retailer access, limiting retailer assessment quality
+- Data availability (HIGH): No in-market DACH data; international chapter had low evidential confidence
+- Team continuity (MEDIUM): Analyst replaced mid-project, caused quality dip in category analysis
+- Scope expansion (MEDIUM): Category management assessment added late; fee negotiation was uncomfortable
+
+OVERALL ASSESSMENT
+Challenging engagement with an overrun on both time and fees. Helix relationship strained slightly over the fee uplift conversation. Work product ultimately stood up — the deal abort decision appears to have been the right call.

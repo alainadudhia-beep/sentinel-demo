@@ -1,0 +1,59 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-024
+Date: February 2024
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Pinnacle Services Group (PE-backed, post-acquisition integration)
+Type: Strategy — post-merger integration planning
+Engagement type: Strategy
+Sector: Business Services
+
+COMMERCIAL TERMS
+Planned duration: 10 weeks
+Actual duration: 13 weeks
+Planned fee: £420k
+Actual fee: £510k
+Team: 1 Partner, 2 Managers, 4 Consultants, 2 Analysts
+
+SCOPE
+Post-merger integration strategy for Pinnacle following acquisition of two businesses in quick succession (Apex Workplace Services and Croft Environmental). Scope: commercial synergy identification, operating model design (shared services vs. independent), brand architecture, leadership team integration, and 100-day plan.
+
+This was inherently a large and complex mandate.
+
+Scope changes:
+- Week 2: PE sponsor (Centrus Capital) requested addition of a financial synergy model that they could use with their lenders. Agreed £40k uplift.
+- Week 4: Leadership team conflict between the two acquired CEOs became acute; Partner asked to facilitate a series of executive workshops. Not originally scoped; absorbed in the relationship but not charged.
+- Week 7: One of the acquired businesses (Croft) won a significant new contract mid-engagement. This changed the integration priorities and required a partial reassessment of the operating model workstream.
+- Week 9: Centrus requested a board presentation for their LP review — essentially a narrative packaging of our work in a different format. Absorbed.
+
+EXECUTION NOTES
+This was an exceptionally complex engagement and the overrun was substantially predictable in retrospect.
+
+The fundamental issue was that Pinnacle had moved too quickly. They had acquired both businesses within 4 months and had not yet resolved the most basic questions of integration governance — who reports to whom, which leadership team is in charge of what — before commissioning us. We were being asked to design an operating model while the political questions underneath it were still live. This created significant ambiguity throughout.
+
+The leadership conflict was the most delicate issue. The two acquired CEOs had been told different things about their roles post-acquisition. By the time we arrived, there was open tension in joint sessions. The Partner facilitated this carefully and effectively, but it was executive coaching and conflict resolution work, not strategy consulting. We absorbed it because disengaging would have been worse.
+
+The Croft new contract win (week 7) was good news commercially but bad news for the integration project — it created an argument (from the Croft CEO) that his business should be kept independent given its momentum. We had to rebuild the operating model with this scenario tested explicitly.
+
+Team management: with 4 consultants on a single engagement, quality control was demanding. The Partner and both Managers needed to be actively involved in reviewing outputs, creating bottlenecks. We split the engagement into two workstreams (commercial/financial and organisational) with a Manager leading each, which helped in weeks 6-10.
+
+Expert calls: 8 completed. Post-merger integration specialists, business services operators.
+
+OUTCOME
+Integration plan delivered and accepted. 100-day plan implemented. The operating model recommended was a hybrid — shared services for finance and HR, independent commercial operations for the first 12 months. Centrus pleased with outcome. Leadership conflict not fully resolved at time of delivery but a governance framework was in place.
+
+KEY LESSONS
+- Post-merger integration mandates should not start until basic governance questions are resolved (or explicitly acknowledge that they're not)
+- Leadership conflict in post-merger situations frequently becomes the primary project risk; scope and charge for facilitation work explicitly
+- Four-consultant strategy teams need clear workstream ownership with a Manager lead per stream — otherwise quality control overwhelms the senior team
+- PE sponsor requirements (LP reporting, lender models) are often additions that emerge mid-project; build a £30-40k contingency into large strategy mandates
+
+RISK FLAGS (materialised)
+- Stakeholder conflict (HIGH): Leadership tension between acquired CEOs consumed significant unscoped time.
+- Scope expansion (HIGH): Four additions; two without fee uplift.
+- Structural ambiguity (HIGH): Integration governance questions unresolved at project start; created recurring ambiguity.
+- Deal event (MEDIUM): Mid-project contract win at one acquired business changed integration priorities.
+
+OVERALL ASSESSMENT
+Major overrun (3 weeks, £90k). Root causes: project started before governance resolved, leadership conflict, and PE sponsor requirements. Work product strong. Client and sponsor relationships intact. Would not repeat the same scoping approach.

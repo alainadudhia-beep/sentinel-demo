@@ -1,0 +1,54 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-011
+Date: October 2022
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Aldgate Capital (sell-side PE, vendor)
+Target: Compass Collection (boutique hotel group, 11 properties, UK regional + Edinburgh)
+Engagement type: Vendor Due Diligence
+Sector: Leisure / Hospitality
+
+COMMERCIAL TERMS
+Planned duration: 5 weeks
+Actual duration: 6.5 weeks
+Planned fee: £185k
+Actual fee: £220k
+Team: 1 Partner, 1 Manager, 2 Consultants, 2 Analysts
+
+SCOPE
+Vendor-initiated CDD to support a formal sale process. Scope: UK boutique hotel market dynamics, Compass Collection competitive positioning, RevPAR analysis vs comp set, revenue quality (mix of direct vs OTA, F&B contribution), customer profiling, growth opportunity assessment, and management team assessment for the Information Memorandum.
+
+Scope changes:
+- Week 2: Aldgate's deal team asked us to add a section on development pipeline credibility — one of the hotels had a planning consent for 12 additional rooms. Added 3 days of work, absorbed.
+- Week 4: Following a site visit by a potential bidder, Aldgate asked us to add a response section to specific questions raised by the bidder (without naming them). This is a normal VDD dynamic but added a round of incremental work (2 days) in week 5.
+- Week 5: Aldgate's legal team requested data tables to support the legal DD process. More than scoped — we charged a day of analyst time separately.
+
+EXECUTION NOTES
+A relatively difficult VDD. A few issues:
+
+Compass Collection's property management system data (Opera PMS) was available but the integration between Opera and their revenue management system had gaps — RevPAR reconciliation required us to work from raw rate data. The team's hospitality data experience was adequate but thin; the Manager had done one previous hotel engagement and the consultants had none. This showed in week 1 with a slower-than-ideal ramp.
+
+Aldgate were a good client commercially but put the team under sustained pressure to present conclusions more positively than the evidence warranted. The OTA dependency (62% of room nights via Booking.com / Expedia) was a real structural issue and they wanted it softened. We held the line but had to have an explicit conversation about the purpose of VDD (credibility with sophisticated buyers, not marketing).
+
+F&B revenue: Two of the 11 properties had restaurants that were trading below breakeven. Aldgate did not initially disclose this; it emerged from our revenue analysis. When raised, they asked us to exclude the properties from the benchmark. We declined and instead provided context around the turnaround potential.
+
+Expert calls: 8 completed (hotel operators, OTA strategy specialist, hospitality M&A adviser). Good quality.
+
+OUTCOME
+Sale process ran successfully. VDD report was well-received by bidders and withstood scrutiny. Final deal completed at a price consistent with our valuation framing. Aldgate relationship intact despite the tension during the engagement.
+
+KEY LESSONS
+- Hotel RevPAR reconciliation from PMS data is always messier than it looks; treat as a separate data workstream
+- VDD engagements have an inherent tension: client wants a marketing document, buyers want rigorous analysis. Make this explicit at kick-off
+- High OTA dependency is a structural risk that needs to be named clearly in VDD — softening it creates buyer trust problems that backfire
+- Undisclosed financial issues in target businesses often surface through your own analysis; expect them, don't be defensive about raising them
+
+RISK FLAGS (materialised)
+- Data quality (MEDIUM): PMS-RevM system gaps required raw data reconciliation.
+- Client behaviour (HIGH): Client pressure to soften findings; required explicit conversation to resolve.
+- Data completeness (HIGH): Underperforming F&B properties not initially disclosed; surfaced independently.
+- Team capability (LOW): Limited hospitality sector experience on team; slower initial ramp.
+
+OVERALL ASSESSMENT
+Overran by 1.5 weeks. Most of the overrun was driven by incremental bidder response work and the F&B finding, both of which generated additional time. Work product held up well under scrutiny. Challenging client to manage.

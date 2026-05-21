@@ -1,0 +1,45 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-005
+Date: February 2023
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Apex Ventures (growth equity)
+Target: SoundFrame (premium wireless audio hardware, UK DTC + B2B corporate gifting)
+Engagement type: Commercial Due Diligence
+Sector: Consumer Technology
+
+COMMERCIAL TERMS
+Planned duration: 3 weeks
+Actual duration: 3 weeks
+Planned fee: £125k
+Actual fee: £125k
+Team: 1 Partner, 1 Manager, 1 Consultant, 2 Analysts
+
+SCOPE
+Consumer wireless audio market dynamics (UK + US growth vectors), SoundFrame competitive differentiation, B2B gifting channel assessment, customer lifetime value and repeat purchase analysis, and brand positioning relative to Bose/Sony/premium lifestyle brands.
+
+Scope additions: Apex asked us to include a quick assessment of SoundFrame's Amazon channel strategy in week 1 — not in the original brief but a sensible addition that the team absorbed without timeline impact. One workstream (B2B gifting deep-dive) was de-scoped in week 2 after Apex determined it wasn't relevant to their thesis — this freed up time which we redirected to a more rigorous US market sizing.
+
+EXECUTION NOTES
+Good engagement overall. SoundFrame had strong data hygiene — they ran Shopify + a well-configured Klaviyo instance, and we got clean cohort and repeat purchase data within the first 3 days. Customer survey (n=350, online panel) returned useful signal on willingness to pay and brand attributes.
+
+The consumer tech market context required careful handling — the category had been through significant volatility (supply chain disruption, post-pandemic demand normalisation) and we had to be careful about which periods to use as baselines. The team built a bespoke normalisation approach which added half a day but was the right call.
+
+One area of concern that emerged: SoundFrame's product roadmap was thin for FY24 — the current SKU was 2.5 years old with no successor visible in the pipeline. This was a strategic risk we surfaced proactively and it became a significant focus of the partner review session with Apex.
+
+Expert calls: 5 completed (consumer electronics retail buyers, audio technology commentator, brand strategy consultant).
+
+OUTCOME
+Deal proceeded. Recommended proceed with conditions. Apex accepted the product roadmap concern and built a value creation plan around accelerating new product development. Good outcome.
+
+KEY LESSONS
+- Consumer tech CDDs need a "product pipeline" checkpoint — hardware companies without a clear successor SKU in the 18-month window are a risk
+- Amazon channel strategy is now almost always relevant for DTC consumer tech — consider making it a default workstream
+- Post-pandemic baseline normalisation for hardware categories adds time; factor in from scope stage
+
+RISK FLAGS (materialised)
+- Market context (LOW): Baseline period volatility required additional normalisation work. Managed within timeline.
+
+OVERALL ASSESSMENT
+Clean, well-run engagement. Good client, responsive management, clean data. Work product strong.

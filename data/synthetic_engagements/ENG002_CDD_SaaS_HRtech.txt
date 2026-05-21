@@ -1,0 +1,43 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-002
+Date: September 2022
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Redwood Growth Equity
+Target: PeopleFirst (HR tech SaaS, mid-market UK & Ireland)
+Engagement type: Commercial Due Diligence
+Sector: Technology / SaaS
+
+COMMERCIAL TERMS
+Planned duration: 2 weeks
+Actual duration: 2 weeks
+Planned fee: £95k
+Actual fee: £95k
+Team: 1 Partner, 1 Manager, 1 Consultant, 1 Analyst
+
+SCOPE
+Fast-turn CDD on a HR tech SaaS asset. Scope: TAM/SAM for UK mid-market HR software, competitive moat assessment (vs Personio, BambooHR, HiBob), churn analysis and net revenue retention, ICP validation. No customer survey due to timeline — expert calls and desk research only.
+
+EXECUTION NOTES
+This was a compressed two-week engagement and it ran exactly as planned. Redwood are efficient clients — they'd already done significant work themselves before bringing us in and largely wanted a credibility check and a few areas of independent validation. That framing was helpful; we knew what we needed to deliver and what we didn't.
+
+No scope changes. Management at PeopleFirst were accessible and clearly well-prepared for the DD process. Data quality was high — they had a well-structured Salesforce instance and provided clean cohort data without prompting.
+
+One minor friction point: the Partner on their side was clearly running the process to a tight deadline (signing was imminent) which created some pressure to soften findings around churn in the SMB segment. We held the line on the characterisation, which the client accepted after a brief discussion.
+
+Expert calls: 4 completed (CHRO contacts at mid-market companies, one ex-Personio product lead).
+
+OUTCOME
+Deal completed. Recommended proceed. NRR was genuinely strong (118%) and the ICP was well-defined. The SMB churn issue was flagged as a condition to monitor post-acquisition.
+
+KEY LESSONS
+- Two-week CDDs on SaaS are achievable if the client has done pre-work and the data room is clean; don't discount them
+- Watch for timeline pressure creating subtle pressure to soften findings — name it clearly in the team pre-mortem
+- Redwood are fast, professional clients; good for repeat work
+
+RISK FLAGS (materialised)
+None significant.
+
+OVERALL ASSESSMENT
+Clean engagement, good outcome. Under-resourced slightly (could have used a second consultant) but team performed well given the constraint.

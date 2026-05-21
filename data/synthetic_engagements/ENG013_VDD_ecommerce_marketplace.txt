@@ -1,0 +1,58 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-013
+Date: May 2023
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Ember Capital (sell-side PE, vendor)
+Target: TradeLoop (B2B e-commerce marketplace, UK SME procurement)
+Engagement type: Vendor Due Diligence
+Sector: E-commerce / Business Services
+
+COMMERCIAL TERMS
+Planned duration: 6 weeks
+Planned fee: £210k
+Actual duration: 8 weeks
+Actual fee: £258k
+Team: 1 Partner, 1 Manager, 2 Consultants, 2 Analysts (raised to 3 Consultants from week 4)
+
+SCOPE
+B2B marketplace dynamics, TradeLoop GMV quality and take rate analysis, buyer and seller cohort analysis, competitive positioning (vs Amazon Business, Faire, sector-specific distributors), network effects assessment, international expansion framework.
+
+Scope changes:
+- Week 2: Ember added a detailed supplier (seller-side) health assessment after a bidder in pre-process diligence flagged concerns about supplier concentration. Agreed as a new workstream, £22k uplift.
+- Week 3: TradeLoop management shared a revised GMV bridge that materially changed our understanding of organic vs inorganic growth (an acquisition had been brought forward in the IM timeline). Required partial rebuild of cohort analysis. No uplift agreed — disputed.
+- Week 5: A second bidder question list arrived with 34 questions, many requiring new analysis. Absorbed by expanded team.
+- Week 6: Ember asked for a customer NPS correlation analysis linking NPS scores to retention. This required building a new dataset. £8k uplift agreed for analyst time.
+
+EXECUTION NOTES
+This was the most difficult engagement of the year and the one we learned the most from.
+
+The root problem was a disclosure issue. The revised GMV bridge in week 3 (see above) was not a scope change request — it was a correction to data that should have been accurate in the data room from day one. TradeLoop had reclassified a 2021 acquisition as organic growth in their historical GMV bridge, which inflated their organic growth rate from 31% to 47%. When this was uncovered (through our own cohort analysis, not through their disclosure), it required a near-complete rebuild of the growth chapter. Ember were embarrassed and apologetic; TradeLoop management blamed the confusion on how their corporate development team had categorised the acquisition internally.
+
+Whether this was deliberate misrepresentation or a genuine data governance failure is something we were careful not to conclude definitively. But the effect was a week of rework, a team morale dip, and a very uncomfortable call with Ember's MD.
+
+Separate issue: our FMCG-trained consultant (staffed to cover the buyer-side SME procurement analysis) struggled with the marketplace dynamics and P&L structure. B2B marketplaces have unusual unit economics (take rate, blended margins, off-platform leakage) that require prior experience to navigate quickly. The Manager backstopped effectively but it created a capacity bottleneck.
+
+The extra consultant added in week 4 was strong but staffed on short notice and wasn't briefed well enough at onboarding. Their first week was too slow.
+
+Expert calls: 11 completed. Marketplace specialists, B2B procurement directors, one ex-Faire commercial lead.
+
+OUTCOME
+Sale process ultimately completed but at a lower valuation than originally anticipated. The GMV bridge correction had a direct impact on buyer willingness to pay. Ember were disappointed with the outcome but acknowledged the VDD had performed its function. Relationship somewhat strained.
+
+KEY LESSONS
+- B2B marketplace GMV analysis must reconcile organic vs inorganic growth independently — never accept management's bridge without verification
+- Always audit acquisition treatment in historical financials, particularly in marketplace/platform businesses where GMV composition is a key value driver
+- Team composition for marketplace VDDs should prioritise marketplace/platform sector experience — traditional retail/FMCG experience doesn't transfer cleanly
+- Incremental resource additions need a proper onboarding block, even 3 hours, or you lose a week
+- Dispute the fee uplift earlier and more firmly — absorbing GMV rebuild work without charge was the wrong call
+
+RISK FLAGS (materialised)
+- Data integrity (CRITICAL): Organic GMV overstated due to acquisition reclassification. Required material rework.
+- Team capability (MEDIUM): Consultant sector mismatch slowed marketplace economics analysis.
+- Scope expansion (HIGH): Four discrete scope additions; two without agreed uplifts.
+- Onboarding (LOW): Additional resource not properly briefed at onboarding.
+
+OVERALL ASSESSMENT
+Significant overrun (2 weeks, £48k over fee). The data integrity issue was the primary driver and was not foreseeable. Work product ultimately robust. Ember relationship requires careful management.

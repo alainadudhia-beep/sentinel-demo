@@ -1,0 +1,48 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-018
+Date: November 2023
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Harlow Capital Partners (sell-side PE)
+Target: The Tool Shed (specialty retail, trade and DIY tools, 45 stores + e-commerce, UK)
+Engagement type: Vendor Due Diligence
+Sector: Retail
+
+COMMERCIAL TERMS
+Planned duration: 5 weeks
+Actual duration: 5 weeks
+Planned fee: £175k
+Actual fee: £175k
+Team: 1 Partner, 1 Manager, 2 Consultants, 2 Analysts
+
+SCOPE
+UK tools and hardware retail market, omnichannel positioning assessment, like-for-like store performance analysis, e-commerce growth trajectory and channel economics, Trade Account programme assessment (B2B recurring revenue), Amazon and marketplace threat, brand vs own-label mix strategy.
+
+Scope additions (week 2): Harlow asked for a view on the store estate footprint and optimal store size, as a bidder had already indicated they would want to rationalise the smaller stores. Added half a workstream; absorbed within timeline.
+
+EXECUTION NOTES
+A straightforward VDD that ran as expected. Harlow were experienced and well-organised; The Tool Shed management team had been prepped and were responsive.
+
+Like-for-like analysis was the key analytical challenge. The estate had 12 stores opened in the last 3 years (Harlow's expansion programme) which needed to be stripped out of the organic LFL calculation. The IM presented LFL inclusive of new stores, which inflated the organic growth picture. We rebuilt it on a true LFL basis and the organic figure was lower (4.2% vs 6.8% presented) — this was flagged and Harlow accepted the adjustment.
+
+Trade Account programme was a genuine differentiator — 22% of revenue, high margin, high retention. We spent additional time here to support the investment thesis.
+
+E-commerce trajectory was positive but Amazon marketplace was taking share in the power tool sub-category. We were direct about this structural risk.
+
+Expert calls: 7 completed. Specialty retail operators, tools market experts, ex-Screwfix commercial lead.
+
+OUTCOME
+Sale process ran to plan. VDD well received. Deal at strong multiple — Trade Account programme and e-commerce trajectory were the key thesis validators.
+
+KEY LESSONS
+- Omnichannel retailers with recent estate expansion will almost always have overstated LFLs in IMs; rebuild from true comparable stores
+- B2B recurring revenue programmes in retail (trade accounts, subscriptions) are often undervalued and warrant detailed analysis
+- Amazon share-taking in power tools is a real and ongoing structural trend; address it proactively rather than waiting for bidder questions
+
+RISK FLAGS (materialised)
+- Revenue quality (LOW): IM LFL calculation included new stores; corrected in VDD.
+- Market risk (LOW): Amazon competitive pressure in power tool sub-category. Flagged as ongoing risk.
+
+OVERALL ASSESSMENT
+Strong engagement. Clean delivery. Good outcome for client.

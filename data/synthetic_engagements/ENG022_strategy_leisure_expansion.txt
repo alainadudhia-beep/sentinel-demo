@@ -1,0 +1,47 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-022
+Date: January 2024
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Aqua Leisure Holdings (PE-backed, 18 sites, indoor leisure/swimming)
+Type: Growth strategy mandate — PE portfolio support
+Engagement type: Strategy
+Sector: Leisure
+
+COMMERCIAL TERMS
+Planned duration: 4 weeks
+Actual duration: 4 weeks
+Planned fee: £160k
+Actual fee: £160k
+Team: 1 Partner, 1 Manager, 2 Consultants, 1 Analyst
+
+SCOPE
+Estate expansion strategy: identification and prioritisation of new site locations for Aqua's rollout plan over 3 years, demand modelling framework, competitive catchment analysis, site assessment criteria, and partnership model options (landlord JV vs owned vs leased).
+
+No scope changes.
+
+EXECUTION NOTES
+Clean engagement. The mandate was well-defined from the outset — Aqua's PE sponsor (Redwood Growth, a repeat client) had a clear thesis and wanted rigorous analytical support for the site selection framework.
+
+Demand modelling for leisure rollout is a well-established methodology and the team had done similar work previously. We built a catchment demand model using MOSAIC data, competitor proximity, and demographic segmentation that Aqua found directly usable.
+
+Management were collaborative and brought strong operational context — they knew their current sites well and had strong instincts about the characteristics of high-performing catchments. Our job was to formalise and test those instincts rather than build from scratch.
+
+One area of productive challenge: management believed that new site payback was 4 years. Our modelling suggested the payback at current build costs was closer to 5.5-6 years at base case. This was a meaningful difference for the investment thesis. We worked through the assumptions with the CFO and arrived at an agreed model; management accepted the revised payback assumption.
+
+Expert calls: 4 completed. Leisure property specialists, ex-David Lloyd estates director.
+
+OUTCOME
+Strategy delivered and accepted. Site expansion prioritisation shortlist of 8 locations delivered. Aqua have since opened 2 of the 8 and are in heads of terms on a third.
+
+KEY LESSONS
+- Leisure site rollout demand modelling benefits from MOSAIC + competitor proximity combination — standard approach that works well
+- Management's operational intuition about their own estate is usually reliable; the job is to formalise it, not replace it
+- PE portfolio strategy engagements are efficient when the sponsor has a clear thesis; align with sponsor before kick-off, not just with management
+
+RISK FLAGS
+None materialised.
+
+OVERALL ASSESSMENT
+Very clean engagement. Good outcome. Good template for leisure estate expansion strategy work.

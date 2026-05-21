@@ -1,0 +1,50 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-023
+Date: April 2022
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Vertex Analytics (B2B SaaS, data analytics, Series C, UK)
+Type: Board strategy — commercial
+Engagement type: Strategy
+Sector: Technology / SaaS
+
+COMMERCIAL TERMS
+Planned duration: 3 weeks
+Actual duration: 3 weeks
+Planned fee: £130k
+Actual fee: £130k
+Team: 1 Partner, 1 Manager, 1 Consultant, 1 Analyst
+
+SCOPE
+Pricing architecture and monetisation strategy review. Scope: assessment of current pricing tiers vs customer willingness to pay, competitive pricing benchmarking, usage-based vs seat-based pricing analysis, packaging optimisation, and recommendations for a new pricing architecture.
+
+Scope addition (week 2): Client asked for a section on enterprise pricing negotiation protocols — how their sales team should handle enterprise deal exceptions. Absorbed within existing timeline.
+
+EXECUTION NOTES
+A focused, well-scoped engagement. Vertex had a clear problem: they believed they were leaving revenue on the table with their current pricing but didn't know where. The mandate was sharply defined.
+
+The team conducted 12 customer interviews (in scope) to build a direct willingness-to-pay picture, supplemented by conjoint analysis methodology adapted for a lean budget. The WTP data showed clearly that the enterprise tier was underpriced relative to perceived value, while the SMB tier pricing was at the upper bound of tolerance.
+
+Competitive pricing benchmarking was complicated by the number of competitors offering opaque or sales-negotiated enterprise pricing. We used a combination of G2/Capterra data, direct outreach to contacts at competitor customers, and analyst interviews.
+
+Vertex's CEO had strong instincts about the market. Unlike ENG-021's dynamic, his instincts were largely correct — he'd independently identified the enterprise tier underpricing. The project validated rather than challenged his hypothesis, which made for a smoother engagement.
+
+One note: Vertex's Head of Sales had a strong view that any pricing change would cause churn. His concerns were noted in the report but we assessed them as overstated based on the WTP data. He remained uncomfortable with the recommendations at delivery.
+
+Expert calls: 4 completed, plus 12 customer interviews.
+
+OUTCOME
+Pricing recommendations delivered and accepted. Vertex implemented a revised pricing architecture 3 months later. Based on a follow-up conversation, enterprise ARR per account increased by c.18% in the first 6 months post-implementation.
+
+KEY LESSONS
+- Pricing strategy mandates with a well-formed management hypothesis are faster to execute — spend time in week 1 validating or stress-testing the hypothesis rather than building from first principles
+- Customer WTP interviews are more valuable than any secondary source for SaaS pricing work; prioritise them
+- Sales team resistance to pricing changes is common and frequently overstated; address it with data
+- Opaque competitor pricing is normal in enterprise SaaS; build a multi-source triangulation approach
+
+RISK FLAGS (materialised)
+None significant.
+
+OVERALL ASSESSMENT
+Clean engagement. Strong impact (18% ARR uplift per enterprise account). Good template for SaaS pricing strategy work.

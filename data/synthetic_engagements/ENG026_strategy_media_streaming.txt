@@ -1,0 +1,47 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-026
+Date: August 2022
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Channel 9 Media Group (broadcast + digital, UK, private)
+Type: Board strategy
+Engagement type: Strategy
+Sector: Media
+
+COMMERCIAL TERMS
+Planned duration: 5 weeks
+Actual duration: 5 weeks
+Planned fee: £200k
+Actual fee: £200k
+Team: 1 Partner, 1 Manager, 2 Consultants, 1 Analyst
+
+SCOPE
+Strategic options assessment for Channel 9's transition from linear broadcast to streaming/digital. Scope: UK streaming market dynamics and competitive intensity, Channel 9's audience and content strengths, build vs. partner vs. white-label platform options, revenue model scenarios (AVOD vs. SVOD vs. hybrid), and board recommendation.
+
+Scope addition (week 3): Board member requested inclusion of a licensing and content syndication revenue assessment — not in original brief but directly relevant to the strategic options and sensible to add. Absorbed without timeline impact.
+
+EXECUTION NOTES
+A well-run and intellectually interesting engagement. The Channel 9 mandate came from a board that was genuinely uncertain about the right strategic direction and wanted an independent, expert view. This is the best kind of strategy mandate — open questions, genuine uncertainty, board-level engagement.
+
+The UK streaming market context required careful framing. The "peak streaming" narrative was emerging in mid-2022 and we had to address it directly in the market dynamics chapter. We were careful to distinguish between SVOD saturation (real) and AVOD/hybrid growth (still strong), which was the critical nuance for Channel 9's options.
+
+The build vs. partner vs. white-label analysis was the strategic core. Our recommendation was white-label platform (Brightcove or equivalent) + AVOD model + content syndication. The board found this helpful and it was consistent with what they had instinctively sensed but couldn't confirm.
+
+Content strengths analysis was the most qualitative workstream and required careful methodology — we combined audience data with qualitative assessment of content positioning, which was a somewhat subjective exercise. We were explicit about this.
+
+Expert calls: 7 completed. Streaming platform operators, media M&A advisers, content syndication specialist, ex-ITV digital lead.
+
+OUTCOME
+Board accepted the recommendation. Channel 9 is in vendor selection for the white-label platform. Good outcome.
+
+KEY LESSONS
+- Streaming market strategy work requires a nuanced treatment of SVOD vs. AVOD dynamics — don't conflate "peak streaming" narrative with the full market picture
+- Build vs. partner vs. white-label is a well-established strategic choice framework for media businesses; use it explicitly
+- Boards that are genuinely uncertain make the best strategy clients — they engage with the analysis rather than looking for confirmation
+
+RISK FLAGS
+None materialised.
+
+OVERALL ASSESSMENT
+Clean engagement. Strong analytical work. Good board engagement. Good outcome. Good template for media strategy mandates.

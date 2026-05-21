@@ -1,0 +1,59 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-025
+Date: December 2023
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Hartwell & Partners (partnership structure, professional services, UK, ~£90m revenue)
+Type: Board strategy — digital transformation and business model evolution
+Engagement type: Strategy
+Sector: Professional Services
+
+COMMERCIAL TERMS
+Planned duration: 12 weeks
+Actual duration: 15 weeks
+Planned fee: £480k
+Actual fee: £560k (partial scope change capture; significant absorbed time)
+Team: 1 Partner, 1 Manager, 3 Consultants, 2 Analysts
+
+SCOPE
+Strategic review of Hartwell's business model in context of AI-driven disruption to professional services. Scope: market dynamics and disruption assessment, Hartwell's competitive position and differentiation, revenue model scenarios (hourly billing vs. value-based vs. productised services), technology investment prioritisation, talent model implications, and 5-year strategic options.
+
+Scope changes:
+- Week 3: The managing partner requested a separate workstream on partnership governance and equity model — a contentious internal topic that he wanted the cover of external consultants to explore. Added £50k to fee. This was misaligned with the original mandate in retrospect.
+- Week 6: A new competitor (US-backed AI-native legal/professional services disruptor) published a high-profile piece on the UK market. The partnership requested an urgent competitive response briefing. 1 day absorbed.
+- Week 8: Partnership vote on the digital transformation direction produced a fractured result (6-5 in favour of transformation with conditions). This invalidated part of our strategic options work and required a redesign of the recommendation framework.
+- Week 10: Two senior partners resigned from the firm, citing unhappiness with the direction being discussed. Managing partner asked us to address retention implications in the strategic plan. Added 1.5 weeks of work; charged only a portion.
+
+EXECUTION NOTES
+This was the hardest engagement of the period and generated the most significant lessons.
+
+The fundamental problem was governance. Hartwell is a partnership structure, which means decision-making authority is distributed. The managing partner who commissioned us had a stronger personal mandate for transformation than the partnership collectively held. We discovered this progressively — in week 3 when we first presented to the full partnership, in week 8 when the vote fractured, and most clearly when two partners resigned.
+
+We should have mapped the internal political landscape and governance structure in week 1. We didn't — we treated the managing partner as the effective decision-maker and designed the process accordingly. This was a mistake.
+
+The governance workstream (scope change 1, week 3) was a warning sign. When a strategy client adds a governance and equity model workstream, it usually means the underlying political consensus for the strategy work is weaker than presented. We recognised this in retrospect but not at the time.
+
+The two partner resignations in week 10 were genuinely destabilising. They were partly caused by the strategy work surfacing difficult conversations about the firm's future that the managing partner had moved too quickly. We had some responsibility for the pace of those conversations.
+
+On the positive side: the analytical work product on AI disruption and business model scenarios was strong and has been cited by the managing partner as having changed his thinking. The talent model section was particularly well-received. The engagement generated a follow-on mandate (implementation planning, 2024).
+
+Expert calls: 9 completed. Professional services strategy specialists, AI/LLM product leads, ex-McKinsey partner, professional services HR specialist.
+
+OUTCOME
+Strategy delivered (incomplete — two of five strategic options withdrawn following political developments). Managing partner retains mandate, is implementing a modified version of the digital transformation programme. Retention implications partially addressed.
+
+KEY LESSONS
+- Partnership-structure clients require a political landscape and governance mapping exercise in week 1 — non-negotiable
+- Adding a governance/equity workstream mid-project in professional services is almost always a signal that the core mandate has a weaker consensus than presented
+- As the strategic advisor, you have responsibility for the pace of difficult internal conversations — be careful not to accelerate organisational conflict
+- Mandate sponsor and effective decision-making authority are different things in partnerships; verify alignment early
+
+RISK FLAGS (materialised)
+- Internal politics (CRITICAL): Partnership governance fractured during engagement; two partner resignations.
+- Mandate validity (HIGH): Managing partner's mandate not fully supported by partnership; discovered late.
+- Scope expansion (HIGH): Governance workstream added; partner resignation implications added.
+- Stakeholder change (HIGH): Two senior partners left during engagement.
+
+OVERALL ASSESSMENT
+Significant overrun (3 weeks, £80k absorbed). Root causes: governance failure to assess partnership mandate, political dynamics. Analytical work product strong. Managing partner relationship strong. Difficult engagement with important lessons for professional services strategy mandates.

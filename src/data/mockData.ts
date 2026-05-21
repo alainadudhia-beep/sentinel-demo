@@ -1,19 +1,57 @@
+export const sampleScopingTranscript = `SCOPING CALL TRANSCRIPT — CONFIDENTIAL
+
+Call participants:
+Client: James Morton, Senior Associate, CVC Capital Partners
+Partner: Fred Ward, OC&C
+Date: 14 March 2025
+
+---
+
+James: Thanks for jumping on. So we're looking at FreshCart — UK online grocery delivery, about £180m revenue, growing fast but we want to understand whether the growth is sustainable and whether the unit economics actually work at scale. Given your experience in consumer retail, we're keen to get OC&C on the CDD.
+
+Fred: Got it. What are the key questions keeping you up at night?
+
+James: Honestly, customer retention. The cohort data looks good on the surface but we're not sure if it's real or if they're buying retention through discounts. And the competitive position — Ocado and the supermarkets are all moving into this space, we want to know if FreshCart has a genuine moat or if they're just riding a wave. What's their market share looking like, how's it trending, who is winning, etc. According to some but not all experts we spoke to, it looks like their market share may be declining? We need to be certain if that's true, and what the drivers are — and whether we can use this to come in at a lower valuation and then be able to turn this around.
+
+Fred: Makes sense. What about the management team?
+
+James: Mixed feelings. The CEO is impressive but the CFO is relatively new and the growth plan feels optimistic. We'd want a real stress test of the assumptions, particularly the new geography expansion.
+
+Fred: And timeline — when do you need this?
+
+James: IC is in four weeks. Assuming you guys have a ramp up week, then we'll start in one week. Need interim findings by middle of week two and the full deck by end of week three. But let's aim for the middle of the week in case there are iterations.
+
+Fred: Absolutely. What about the financial model — do you want us to build our own or work from theirs?
+
+James: Build your own. We don't trust theirs.
+
+Fred: Fine. We'll need data room access from day one of the full project — can you confirm that's in place? We've had delays on similar deals that compressed the timeline significantly.
+
+James: Should be. I'll chase the target today.
+
+Fred: Great. We'll come back to you with a draft scope by end of tomorrow. To confirm, the key questions are market size, share and drivers; competitive positioning and trends; customer retention and perception of FreshCart; financial model and growth plan assessment. Does that sound right?
+
+James: Yep that's all I can think of for now. Thanks.
+
+Fred: Great, I'll get started on ramp up with the manager to get going on prepping the data request, drafting a survey and setting up interviews. Let's speak tomorrow re scope. Thanks James.`;
+
 export const sampleEngagementLetter = `ENGAGEMENT LETTER — CONFIDENTIAL
 
 Project: Commercial Due Diligence — Project Falcon
-Client: Meridian Capital Partners
+Client: CVC Capital Partners
 Target: FreshCart Ltd (UK online grocery delivery)
 Date: 14 March 2025
 Prepared by: Apex Strategy Consulting
 
 1. OBJECTIVE
-Apex Strategy Consulting ("Apex") has been engaged by Meridian Capital Partners ("the Client") to conduct a commercial due diligence assessment of FreshCart Ltd ("the Target"), a UK-based online grocery delivery platform. The objective is to evaluate market positioning, competitive dynamics, customer retention economics, and growth sustainability to support the Client's investment decision.
+Apex Strategy Consulting ("Apex") has been engaged by CVC Capital Partners ("the Client") to conduct a commercial due diligence assessment of FreshCart Ltd ("the Target"), a UK-based online grocery delivery platform. The objective is to evaluate market positioning, competitive dynamics, customer retention economics, and growth sustainability to support the Client's investment decision.
 
 2. TIMELINE & FEES
-The engagement will run for 3 weeks:
-  • Week 1 (17–21 Mar): Scoping, survey design, initial data room review, management interview scheduling
-  • Week 2 (24–28 Mar): Survey launch, expert interviews, market model build, consumer insights analysis
-  • Week 3 (31 Mar–4 Apr): Synthesis, draft deck, partner review, final presentation
+The engagement will run for 4 weeks (including Week 0 ramp):
+  • Week 0 (10–14 Mar): Ramp — finalise scope, draft consumer survey, contact expert networks, schedule management interviews. Reduced team: Partners + Manager + Analyst.
+  • Week 1 (17–21 Mar): Survey live, expert interviews begin, data room access open, begin market model and financial analysis
+  • Week 2 (24–28 Mar): Consumer insights analysis, market model completion, management interview synthesis, interim findings
+  • Week 3 (31 Mar–4 Apr): Synthesis, draft deck, partner review, IC presentation
 
 Total fees: £285,000 + VAT
 Payment terms: 50% on engagement, 50% on delivery of final report.
@@ -30,6 +68,7 @@ Payment terms: 50% on engagement, 50% on delivery of final report.
   • Interim findings deck (end of Week 2)
   • Draft final report (Wednesday, Week 3)
   • Final presentation to Investment Committee (Friday, Week 3)
+  • Week 0 ramp output: confirmed scope, survey draft, interview schedule
   • Survey raw data and model files delivered alongside final report
 
 5. TEAM

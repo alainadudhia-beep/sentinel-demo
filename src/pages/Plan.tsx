@@ -1,542 +1,600 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useLayoutEffect } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Textarea } from "@/components/ui/textarea";
-import { ganttWorkstreams, GanttItem, Workstream } from "@/data/mockData";
-import { ArrowRight, Clock, Sparkles, ChevronRight, ChevronDown, Diamond, Check, AlertTriangle, Plus, X, GripVertical, Circle, MessageSquare } from "lucide-react";
+import { ArrowRight, ExternalLink, AlertTriangle, X } from "lucide-react";
+import {
+  useProject,
+  type InputPipelineRow,
+  type WorkstreamDef,
+  type ClientTouchpoint,
+} from "@/context/ProjectContext";
+import {
+  CLIENT_HISTORY,
+  SIMILAR_DEALS,
+  clientStats,
+  similarStats,
+  formatFee,
+  HistoryModal,
+} from "@/pages/Engagement";
+import { RISK_FLAGS } from "@/context/ProjectContext";
 
-/* ---- Scope questions mapped to workstreams ---- */
-interface ScopeQuestionSummary {
-  question: string;
-  status: "answered" | "in-progress" | "open";
+// ─── Layout constants ─────────────────────────────────────────────────────────
+
+const COL_W   = 46;
+const LABEL_W = 168;
+const ROW_H   = 36;
+
+const WEEKS       = [0, 1, 2, 3] as const;
+const DAYS        = [0, 1, 2, 3, 4] as const;
+const WEEK_LABELS = ["Week 0", "Week 1", "Week 2", "Week 3"] as const;
+const DAY_LABELS  = ["Mon", "Tue", "Wed", "Thu", "Fri"] as const;
+
+// ─── Color maps ───────────────────────────────────────────────────────────────
+
+const INPUT_HEX: Record<string, string> = {
+  "data-room": "#14b8a6", "survey": "#0f766e", "expert": "#06b6d4", "mgmt": "#0ea5e9",
+};
+const INPUT_LIGHT_BG: Record<string, string> = {
+  "data-room": "#f0fdfa", "survey": "#ccfbf1", "expert": "#ecfeff", "mgmt": "#f0f9ff",
+};
+const WS_HEX: Record<string, string> = {
+  market: "#3b82f6", competitive: "#8b5cf6", commercial: "#10b981", financials: "#f97316", management: "#f43f5e",
+};
+const WS_LIGHT_BG: Record<string, string> = {
+  market: "#eff6ff", competitive: "#f5f3ff", commercial: "#f0fdf4", financials: "#fff7ed", management: "#fff1f2",
+};
+const WS_COLORS: Record<string, { dot: string }> = {
+  market:      { dot: "bg-blue-500"    },
+  competitive: { dot: "bg-violet-500"  },
+  commercial:  { dot: "bg-emerald-500" },
+  financials:  { dot: "bg-orange-400"  },
+  management:  { dot: "bg-rose-500"    },
+};
+const MEETING_HEX: Record<string, string> = { client: "#a855f7", internal: "#94a3b8", partner: "#475569" };
+
+// Abbreviations for input names
+const INPUT_SHORT: Record<string, string> = {
+  "Data room": "Data room",
+  "Consumer survey": "Survey",
+  "Expert interviews": "Expert interviews",
+  "Management interviews": "Mgmt interviews",
+};
+
+// Milestone colours
+const MILESTONE_CLIENT_HEX   = "#a855f7"; // purple  — Client Owned
+const MILESTONE_INTERNAL_HEX = "#f97316"; // orange  — OC&C Owned
+const MILESTONE_TARGET_HEX   = "#94a3b8"; // grey    — Target Owned
+const MILESTONE_EXTERNAL_HEX = MILESTONE_CLIENT_HEX; // alias kept for legacy refs
+
+function milestoneHex(ownership?: "client" | "internal" | "target") {
+  if (ownership === "internal") return MILESTONE_INTERNAL_HEX;
+  if (ownership === "target")   return MILESTONE_TARGET_HEX;
+  return MILESTONE_CLIENT_HEX;
+}
+function milestoneLabel(ownership?: "client" | "internal" | "target") {
+  if (ownership === "internal") return "Milestone — OC&C Owned";
+  if (ownership === "target")   return "Milestone — Target Owned";
+  return "Milestone — Client Owned";
+}
+function milestoneTextClass(ownership?: "client" | "internal" | "target") {
+  if (ownership === "internal") return "text-orange-500";
+  if (ownership === "target")   return "text-slate-500";
+  return "text-purple-600";
 }
 
-const WORKSTREAM_QUESTIONS: Record<string, ScopeQuestionSummary[]> = {
-  "ws-survey": [
-    { question: "What is the current customer churn rate by cohort?", status: "answered" },
-    { question: "How defensible is the competitive moat?", status: "open" },
-    { question: "What is the net revenue retention rate for enterprise vs. SMB?", status: "in-progress" },
-  ],
-  "ws-market": [
-    { question: "What is the target's market share and how is it trending?", status: "in-progress" },
-    { question: "What are the key regulatory risks in target expansion markets?", status: "in-progress" },
-  ],
-  "ws-internal": [
-    { question: "What is the gross margin profile by product line?", status: "answered" },
-    { question: "What is the management team's track record?", status: "open" },
-    { question: "What capex is required to support the 3-year growth plan?", status: "open" },
-  ],
-  "ws-presentation": [],
-};
+// Phase opacity levels
+const PHASE_OPACITY = { prep: 0.28, analysis: 0.62, iteration: 0.90 } as const;
 
-const TOTAL_DAYS = 15;
-const TODAY_DAY = 8; // Wednesday Week 2 (26 Mar)
-const WEEKS = [
-  { label: "Week 1 · 17–21 Mar", days: ["Mon", "Tue", "Wed", "Thu", "Fri"] },
-  { label: "Week 2 · 24–28 Mar", days: ["Mon", "Tue", "Wed", "Thu", "Fri"] },
-  { label: "Week 3 · 31 Mar–4 Apr", days: ["Mon", "Tue", "Wed", "Thu", "Fri"] },
-];
+// ─── Deliverable phase data ───────────────────────────────────────────────────
+// Columns: W0=0-4, W1=5-9, W2=10-14, W3=15-19  (Mon=+0 … Fri=+4)
 
-interface MeetingMarker {
-  id: string;
-  day: number;
-  label: string;
-  cssVar: string;
+interface DeliverablePhases {
+  prep:      { startCol: number; endCol: number };
+  analysis:  { startCol: number; endCol: number };
+  iteration: { startCol: number; endCol: number };
 }
 
-const INITIAL_MEETING_MARKERS: MeetingMarker[] = [
-  { id: "mk1", day: 1, label: "Status Update", cssVar: "--rag-blue" },
-  { id: "mk2", day: 6, label: "Status Update", cssVar: "--rag-blue" },
-  { id: "mk3", day: 10, label: "Interim", cssVar: "--rag-amber" },
-  { id: "mk4", day: 11, label: "Status Update", cssVar: "--rag-blue" },
-  { id: "mk5", day: 13, label: "Draft Review", cssVar: "--rag-amber" },
-  { id: "mk6", day: 15, label: "Final Readout", cssVar: "--rag-green" },
-];
-
-const workstreamNameColors: Record<string, string> = {
-  Commercial: "text-blue-600",
-  Market: "text-violet-600",
-  Internals: "text-emerald-600",
-  "Client Comms": "text-pink-600",
+const DELIVERABLE_PHASES: Record<string, DeliverablePhases> = {
+  // Market
+  "d-m1":  { prep: { startCol: 5,  endCol: 9  }, analysis: { startCol: 10, endCol: 14 }, iteration: { startCol: 15, endCol: 17 } },
+  "d-m2":  { prep: { startCol: 9,  endCol: 11 }, analysis: { startCol: 12, endCol: 17 }, iteration: { startCol: 17, endCol: 19 } },
+  // Competitive
+  "d-c1":  { prep: { startCol: 5,  endCol: 9  }, analysis: { startCol: 10, endCol: 14 }, iteration: { startCol: 15, endCol: 19 } },
+  "d-c2":  { prep: { startCol: 10, endCol: 13 }, analysis: { startCol: 14, endCol: 16 }, iteration: { startCol: 17, endCol: 19 } },
+  // Commercial
+  "d-cc1": { prep: { startCol: 9,  endCol: 10 }, analysis: { startCol: 11, endCol: 15 }, iteration: { startCol: 16, endCol: 19 } },
+  "d-cc2": { prep: { startCol: 5,  endCol: 6  }, analysis: { startCol: 7,  endCol: 9  }, iteration: { startCol: 10, endCol: 14 } },
+  "d-cc3": { prep: { startCol: 5,  endCol: 6  }, analysis: { startCol: 7,  endCol: 9  }, iteration: { startCol: 10, endCol: 14 } },
+  // Financials
+  "d-f1":  { prep: { startCol: 5,  endCol: 6  }, analysis: { startCol: 7,  endCol: 9  }, iteration: { startCol: 10, endCol: 14 } },
+  "d-f2":  { prep: { startCol: 5,  endCol: 6  }, analysis: { startCol: 7,  endCol: 9  }, iteration: { startCol: 10, endCol: 14 } },
+  // Management
+  "d-mg1": { prep: { startCol: 5,  endCol: 7  }, analysis: { startCol: 8,  endCol: 11 }, iteration: { startCol: 12, endCol: 14 } },
+  "d-mg2": { prep: { startCol: 5,  endCol: 7  }, analysis: { startCol: 8,  endCol: 11 }, iteration: { startCol: 12, endCol: 17 } },
 };
 
-const STATUS_KEYS = ["complete", "on-track", "at-risk", "blocked", "not-started"] as const;
-type StatusKey = typeof STATUS_KEYS[number];
+// ─── Coverage helper ─────────────────────────────────────────────────────────
 
-const STATUS_LABELS: Record<StatusKey, string> = {
-  complete: "Complete",
-  "on-track": "On track",
-  "at-risk": "At risk",
-  blocked: "Blocked",
-  "not-started": "Not started",
-};
+interface CoverageItem { name: string; wsId: string; suffix: string }
 
-const statusColors: Record<string, string> = {
-  complete: "bg-rag-green",
-  "on-track": "bg-rag-green-light",
-  "at-risk": "bg-rag-amber",
-  blocked: "bg-rag-red",
-  "not-started": "bg-muted-foreground/30",
-};
+function getWorkstreamCoverage(workstreams: WorkstreamDef[], meetingCol: number): CoverageItem[] {
+  const result: CoverageItem[] = [];
+  for (const ws of workstreams) {
+    for (const d of ws.deliverables) {
+      const phases = DELIVERABLE_PHASES[d.id];
+      if (!phases) continue;
+      if (phases.analysis.startCol > meetingCol) continue;          // analysis not started → exclude
+      let suffix = "";
+      if (phases.iteration.endCol > meetingCol) suffix = " — Preliminary";
+      else suffix = " — Final";
+      result.push({ name: d.name, wsId: ws.id, suffix });
+    }
+  }
+  return result;
+}
 
-const milestoneColors: Record<string, string> = {
-  complete: "text-rag-green",
-  "on-track": "text-rag-green-light",
-  "at-risk": "text-rag-amber",
-  blocked: "text-rag-red",
-  "not-started": "text-muted-foreground",
-};
+// ─── Gantt data types ─────────────────────────────────────────────────────────
 
-const statusIconColors: Record<string, string> = {
-  complete: "text-rag-green",
-  "on-track": "text-rag-green-light",
-  "at-risk": "text-rag-amber",
-  blocked: "text-rag-red",
-  "not-started": "text-muted-foreground",
-};
-
-type DragMode = "move" | "resize-left" | "resize-right";
-
+interface GanttSpan {
+  id: string; label: string;
+  startWeek: 0|1|2|3; startDay: 0|1|2|3|4;
+  endWeek:   0|1|2|3; endDay:   0|1|2|3|4;
+}
+interface GanttMilestone {
+  id: string; label: string;
+  week: 0|1|2|3; day: 0|1|2|3|4;
+  ownership?: "client" | "internal" | "target"; // default = "client"
+  subRowIdx?: number;
+}
+interface GanttSubRow {
+  id: string; rowLabel: string; spans: GanttSpan[];
+  clientIntel?: string;
+}
+export interface GanttInputSection {
+  inputId: string; inputLabel: string;
+  subRows: GanttSubRow[];
+  milestones?: GanttMilestone[];
+}
 interface DragState {
-  itemId: string;
-  wsId: string;
-  mode: DragMode;
-  startX: number;
-  originalStart: number;
-  originalEnd: number;
+  mode: "move"|"left"|"right";
+  startCol: number; origStartCol: number; origEndCol: number;
+  sectionId?: string; subRowId?: string; spanId?: string;
+  meetingId?: string;
 }
 
-function GanttBar({
-  item,
-  onDragStart,
-  onUpdateNotes,
-}: {
-  item: GanttItem;
-  onDragStart?: (e: React.MouseEvent, mode: DragMode) => void;
-  onUpdateNotes?: (notes: string) => void;
+// ─── Static Gantt data ────────────────────────────────────────────────────────
+
+export const INITIAL_GANTT_SECTIONS: GanttInputSection[] = [
+  {
+    inputId: "data-room", inputLabel: "Data Room",
+    milestones: [
+      { id: "m-dr-1", label: "Access requested", week: 0, day: 0, ownership: "internal", subRowIdx: 0 },
+      { id: "m-dr-2", label: "Access granted",   week: 0, day: 4, ownership: "target",   subRowIdx: 0 },
+    ],
+    subRows: [
+      { id: "dr-r1", rowLabel: "Preparation & Access", spans: [{ id: "dr-s1", label: "Preparation & Access", startWeek: 0, startDay: 0, endWeek: 0, endDay: 4 }] },
+      { id: "dr-r2", rowLabel: "Analysis window",       spans: [{ id: "dr-s2", label: "Analysis window open", startWeek: 1, startDay: 0, endWeek: 3, endDay: 4 }] },
+    ],
+  },
+  {
+    inputId: "survey", inputLabel: "Consumer Survey",
+    milestones: [
+      { id: "m-sv-draft", label: "Survey draft to client",      week: 0, day: 3, ownership: "internal", subRowIdx: 0 },
+      { id: "m-sv-1",     label: "Survey signed off by client", week: 1, day: 1, ownership: "client",   subRowIdx: 1 },
+      { id: "m-sv-2",     label: "Fieldwork complete",          week: 2, day: 4, ownership: "target",   subRowIdx: 2 },
+    ],
+    subRows: [
+      { id: "sv-r1", rowLabel: "Drafting",        spans: [{ id: "sv-s1", label: "Draft",                startWeek: 0, startDay: 0, endWeek: 0, endDay: 3 }] },
+      { id: "sv-r2", rowLabel: "Draft Iteration", spans: [{ id: "sv-s2", label: "Iteration & sign-off", startWeek: 0, startDay: 3, endWeek: 1, endDay: 1 }],
+        clientIntel: "3 days for client review — estimated based on 12 previous engagements with client" },
+      { id: "sv-r3", rowLabel: "Fieldwork",       spans: [{ id: "sv-s3", label: "Fieldwork",            startWeek: 1, startDay: 4, endWeek: 2, endDay: 4 }] },
+    ],
+  },
+  {
+    inputId: "expert", inputLabel: "Expert Interviews",
+    milestones: [],
+    subRows: [
+      { id: "ex-r1", rowLabel: "Outreach",               spans: [{ id: "ex-s1", label: "Outreach",               startWeek: 0, startDay: 2, endWeek: 0, endDay: 3 }] },
+      { id: "ex-r2", rowLabel: "Screening & Scheduling", spans: [{ id: "ex-s2", label: "Screening & Scheduling", startWeek: 0, startDay: 4, endWeek: 2, endDay: 0 }] },
+      { id: "ex-r3", rowLabel: "Conducting",             spans: [{ id: "ex-s3", label: "Conducting",             startWeek: 1, startDay: 1, endWeek: 2, endDay: 4 }] },
+      { id: "ex-r4", rowLabel: "Synthesis",              spans: [{ id: "ex-s4", label: "Synthesis",              startWeek: 2, startDay: 4, endWeek: 3, endDay: 1 }] },
+    ],
+  },
+  {
+    inputId: "mgmt", inputLabel: "Management Interviews",
+    milestones: [
+      { id: "m-mg-1", label: "CVC confirms interview plan", week: 0, day: 3, ownership: "client", subRowIdx: 0 },
+      { id: "m-mg-2", label: "Interviews complete",          week: 1, day: 4, ownership: "target", subRowIdx: 2 },
+    ],
+    subRows: [
+      { id: "mg-r1", rowLabel: "Plan to CVC", spans: [{ id: "mg-s1", label: "Plan to CVC", startWeek: 0, startDay: 1, endWeek: 0, endDay: 3 }] },
+      { id: "mg-r2", rowLabel: "Scheduling",  spans: [{ id: "mg-s2", label: "Scheduling",  startWeek: 0, startDay: 3, endWeek: 1, endDay: 0 }] },
+      { id: "mg-r3", rowLabel: "Conducting",  spans: [{ id: "mg-s3", label: "Conducting",  startWeek: 1, startDay: 2, endWeek: 1, endDay: 4 }],
+        clientIntel: "Best case scenario — target early completion to allow for delay into W2" },
+      { id: "mg-r4", rowLabel: "Synthesis",   spans: [{ id: "mg-s4", label: "Synthesis",   startWeek: 2, startDay: 0, endWeek: 2, endDay: 2 }] },
+    ],
+  },
+];
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function colIdx(week: number, day: number) { return week * 5 + day; }
+function colToWD(col: number): { week: 0|1|2|3; day: 0|1|2|3|4 } {
+  const c = Math.max(0, Math.min(19, col));
+  return { week: Math.floor(c / 5) as 0|1|2|3, day: (c % 5) as 0|1|2|3|4 };
+}
+function colToSpanStart(col: number): Pick<GanttSpan, "startWeek"|"startDay"> {
+  const { week: startWeek, day: startDay } = colToWD(col);
+  return { startWeek, startDay };
+}
+function colToSpanEnd(col: number): Pick<GanttSpan, "endWeek"|"endDay"> {
+  const { week: endWeek, day: endDay } = colToWD(col);
+  return { endWeek, endDay };
+}
+function computeInputAvailWeeks(pipeline: InputPipelineRow[]): Record<string, number> {
+  const map: Record<string, number> = {};
+  for (const row of pipeline) {
+    if (!row.phases.length) continue;
+    const last = row.phases.reduce((a, p) => p.week > a.week || (p.week === a.week && p.day > a.day) ? p : a);
+    map[row.inputLabel] = last.week;
+  }
+  return map;
+}
+function critInputLabels(d: WorkstreamDef["deliverables"][number]): string[] {
+  return Object.entries(d.inputMap).filter(([, r]) => r === "critical").map(([l]) => INPUT_SHORT[l] ?? l);
+}
+function phaseToSpan(id: string, label: string, startCol: number, endCol: number): GanttSpan {
+  return { id, label, ...colToSpanStart(startCol), ...colToSpanEnd(endCol) };
+}
+
+// ─── Primitives ───────────────────────────────────────────────────────────────
+
+function GridBg() {
+  return (
+    <>
+      <div className="absolute inset-y-0 pointer-events-none" style={{ left: 0, width: 5 * COL_W, backgroundColor: "rgba(0,0,0,0.018)" }} />
+      {[1, 2, 3].map(w => (
+        <div key={w} className="absolute inset-y-0 pointer-events-none" style={{ left: w * 5 * COL_W - 1, width: 2, backgroundColor: "rgba(0,0,0,0.13)" }} />
+      ))}
+      {Array.from({ length: 19 }, (_, i) => i + 1).filter(i => i % 5 !== 0).map(i => (
+        <div key={i} className="absolute inset-y-0 w-px pointer-events-none" style={{ left: i * COL_W, backgroundColor: "rgba(0,0,0,0.04)" }} />
+      ))}
+    </>
+  );
+}
+
+/** Single span bar with optional label and drag handles */
+function SpanBar({ span, colorHex, opacity = 0.78, showLabel = true, onMoveStart, onResizeStart }: {
+  span: GanttSpan; colorHex: string; opacity?: number; showLabel?: boolean;
+  onMoveStart?: (e: React.MouseEvent) => void;
+  onResizeStart?: (e: React.MouseEvent, edge: "left"|"right") => void;
 }) {
-  const [hovered, setHovered] = useState(false);
-  const [editingNotes, setEditingNotes] = useState(false);
-  const [notesDraft, setNotesDraft] = useState(item.notes || "");
-  const hoverTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const showPopover = hovered || editingNotes;
-
-  const handleMouseEnter = () => {
-    hoverTimeout.current = setTimeout(() => setHovered(true), 300);
-  };
-  const handleMouseLeave = () => {
-    if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
-    if (!editingNotes) setHovered(false);
-  };
-
-  const saveNotes = () => {
-    onUpdateNotes?.(notesDraft);
-    setEditingNotes(false);
-    setHovered(false);
-  };
-
-  const popoverContent = showPopover ? (
-    <div
-      className="absolute z-30 bg-popover border border-border rounded-lg shadow-lg p-3 w-56 text-xs"
-      style={{ bottom: "calc(100% + 6px)", left: "50%", transform: "translateX(-50%)" }}
-      onMouseEnter={() => { if (hoverTimeout.current) clearTimeout(hoverTimeout.current); setHovered(true); }}
-      onMouseLeave={() => { if (!editingNotes) setHovered(false); }}
-    >
-      <p className="font-medium text-foreground mb-1">{item.label}</p>
-      {editingNotes ? (
-        <div className="space-y-1.5">
-          <Textarea
-            autoFocus
-            value={notesDraft}
-            onChange={(e) => setNotesDraft(e.target.value)}
-            className="text-xs min-h-[60px] resize-none"
-            placeholder="Add notes…"
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) saveNotes();
-              if (e.key === "Escape") { setEditingNotes(false); setHovered(false); }
-            }}
-          />
-          <div className="flex justify-end gap-1">
-            <Button variant="ghost" size="sm" className="h-6 text-[10px] px-2" onClick={() => { setEditingNotes(false); setHovered(false); }}>
-              Cancel
-            </Button>
-            <Button size="sm" className="h-6 text-[10px] px-2" onClick={saveNotes}>
-              Save
-            </Button>
-          </div>
+  const left  = colIdx(span.startWeek, span.startDay) * COL_W + 2;
+  const right = (colIdx(span.endWeek, span.endDay) + 1) * COL_W - 2;
+  const width = Math.max(right - left, 6);
+  return (
+    <div style={{ position: "absolute", left, width, top: 5, height: ROW_H - 10, backgroundColor: colorHex, opacity, borderRadius: 4, cursor: onMoveStart ? "grab" : "default", userSelect: "none" }}
+      onMouseDown={onMoveStart ? e => { e.preventDefault(); e.stopPropagation(); onMoveStart(e); } : undefined}>
+      {onResizeStart && width > 18 && (
+        <div style={{ position: "absolute", left: 0, top: 0, width: 7, height: "100%", cursor: "w-resize", zIndex: 2, borderRadius: "4px 0 0 4px" }}
+          onMouseDown={e => { e.preventDefault(); e.stopPropagation(); onResizeStart(e, "left"); }} />
+      )}
+      {showLabel && width > 28 && (
+        <div className="flex items-center h-full overflow-hidden" style={{ paddingLeft: 6, paddingRight: 6 }}>
+          <span className="text-[8px] font-semibold text-white truncate leading-none select-none">{span.label}</span>
         </div>
-      ) : (
-        <>
-          <p className="text-muted-foreground leading-relaxed">
-            {item.notes || <span className="italic">No notes</span>}
-          </p>
-          <button
-            className="flex items-center gap-1 text-[10px] text-muted-foreground hover:text-foreground mt-1.5 transition-colors"
-            onClick={(e) => { e.stopPropagation(); setNotesDraft(item.notes || ""); setEditingNotes(true); }}
-          >
-            <MessageSquare className="w-3 h-3" />
-            {item.notes ? "Edit notes" : "Add notes"}
-          </button>
-        </>
+      )}
+      {onResizeStart && width > 18 && (
+        <div style={{ position: "absolute", right: 0, top: 0, width: 7, height: "100%", cursor: "e-resize", zIndex: 2, borderRadius: "0 4px 4px 0" }}
+          onMouseDown={e => { e.preventDefault(); e.stopPropagation(); onResizeStart(e, "right"); }} />
       )}
     </div>
-  ) : null;
+  );
+}
 
-  if (item.type === "milestone") {
-    const left = ((item.startDay - 1) / TOTAL_DAYS) * 100;
-    return (
-      <div
-        className="absolute top-1/2 -translate-y-1/2 cursor-grab active:cursor-grabbing"
-        style={{ left: `${left}%` }}
-        onMouseDown={(e) => { if (!editingNotes) onDragStart?.(e, "move"); }}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        <Diamond className={`w-3.5 h-3.5 fill-current ${milestoneColors[item.status]}`} />
-        {popoverContent}
-      </div>
-    );
-  }
+/** Three-phase bar for workstream deliverables: prep / analysis / iteration */
+function PhaseBar({ delivId, colorHex }: { delivId: string; colorHex: string }) {
+  const phases = DELIVERABLE_PHASES[delivId];
+  if (!phases) return null;
+  return (
+    <>
+      <SpanBar
+        span={phaseToSpan(`${delivId}-prep`, "Prep", phases.prep.startCol, phases.prep.endCol)}
+        colorHex={colorHex} opacity={PHASE_OPACITY.prep} showLabel
+      />
+      <SpanBar
+        span={phaseToSpan(`${delivId}-analysis`, "Analysis", phases.analysis.startCol, phases.analysis.endCol)}
+        colorHex={colorHex} opacity={PHASE_OPACITY.analysis} showLabel
+      />
+      <SpanBar
+        span={phaseToSpan(`${delivId}-iteration`, "Iteration", phases.iteration.startCol, phases.iteration.endCol)}
+        colorHex={colorHex} opacity={PHASE_OPACITY.iteration} showLabel
+      />
+    </>
+  );
+}
 
-  const left = ((item.startDay - 1) / TOTAL_DAYS) * 100;
-  const width = ((item.endDay - item.startDay + 1) / TOTAL_DAYS) * 100;
+/** Diamond milestone marker — fixed-position tooltip */
+function MilestoneMark({ m }: { m: GanttMilestone }) {
+  const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null);
+  const markerRef = useRef<HTMLDivElement>(null);
+  const color = milestoneHex(m.ownership);
+  const cx = colIdx(m.week, m.day) * COL_W + Math.floor(COL_W / 2);
+  const cy = Math.floor(ROW_H / 2);
 
   return (
     <div
-      className={`absolute top-1/2 -translate-y-1/2 h-5 rounded-sm ${statusColors[item.status]} cursor-grab active:cursor-grabbing group/bar`}
-      style={{ left: `${left}%`, width: `${width}%`, minWidth: "6px" }}
-      onMouseDown={(e) => { if (!editingNotes) onDragStart?.(e, "move"); }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      ref={markerRef}
+      style={{ position: "absolute", left: cx - 7, top: cy - 7, zIndex: 6, width: 14, height: 14 }}
+      onMouseEnter={() => {
+        if (markerRef.current) {
+          const r = markerRef.current.getBoundingClientRect();
+          setTooltipPos({ x: r.left + r.width / 2, y: r.top });
+        }
+      }}
+      onMouseLeave={() => setTooltipPos(null)}
     >
-      <div
-        className="absolute left-0 top-0 bottom-0 w-1.5 cursor-col-resize opacity-0 group-hover/bar:opacity-100 bg-foreground/20 rounded-l-sm"
-        onMouseDown={(e) => { e.stopPropagation(); onDragStart?.(e, "resize-left"); }}
-      />
-      <div
-        className="absolute right-0 top-0 bottom-0 w-1.5 cursor-col-resize opacity-0 group-hover/bar:opacity-100 bg-foreground/20 rounded-r-sm"
-        onMouseDown={(e) => { e.stopPropagation(); onDragStart?.(e, "resize-right"); }}
-      />
-      {popoverContent}
+      <div style={{ width: 14, height: 14, backgroundColor: color, border: "2.5px solid white", transform: "rotate(45deg)", borderRadius: 2, boxShadow: "0 1px 4px rgba(0,0,0,0.22)", cursor: "default" }} />
+      {tooltipPos && createPortal(
+        <div style={{ position: "fixed", left: tooltipPos.x, top: tooltipPos.y - 8, transform: "translate(-50%, -100%)", zIndex: 9999, width: 200, pointerEvents: "none" }}
+          className="bg-card border border-border rounded-lg shadow-xl p-2">
+          <p className={`text-[9px] font-bold uppercase tracking-wide mb-1 ${milestoneTextClass(m.ownership)}`}>
+            {milestoneLabel(m.ownership)}
+          </p>
+          <p className="text-[10px] text-foreground leading-snug">{m.label}</p>
+        </div>,
+        document.body
+      )}
     </div>
   );
 }
 
-function StatusPicker({
-  currentStatus,
-  onChangeStatus,
-}: {
-  currentStatus: string;
-  onChangeStatus: (status: string) => void;
-}) {
-  const icon =
-    currentStatus === "complete" ? (
-      <Check className={`w-3.5 h-3.5 ${statusIconColors[currentStatus]}`} />
-    ) : currentStatus === "on-track" ? (
-      <Circle className={`w-3 h-3 fill-current ${statusIconColors[currentStatus]}`} />
-    ) : currentStatus === "at-risk" || currentStatus === "blocked" ? (
-      <AlertTriangle className={`w-3 h-3 ${statusIconColors[currentStatus]}`} />
-    ) : (
-      <span className={`w-3 h-3 rounded-full border-2 border-muted-foreground/40 inline-block`} />
-    );
+/** Client Intel badge — hover tooltip, click to open modal */
+function ClientIntelBadge({ text, onOpenModal }: { text: string; onOpenModal: () => void }) {
+  const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <button
-          className="shrink-0 rounded hover:bg-accent p-0.5 transition-colors"
-          title={`Status: ${STATUS_LABELS[currentStatus as StatusKey] || currentStatus} — click to change`}
-        >
-          {icon}
-        </button>
-      </PopoverTrigger>
-      <PopoverContent className="w-36 p-1" align="start" side="bottom">
-        {STATUS_KEYS.map((status) => (
-          <button
-            key={status}
-            className={`w-full flex items-center gap-2 px-2 py-1.5 text-xs rounded hover:bg-accent transition-colors ${
-              status === currentStatus ? "bg-accent font-medium" : ""
-            }`}
-            onClick={() => onChangeStatus(status)}
-          >
-            <span className={`w-2.5 h-2.5 rounded-sm ${statusColors[status]} inline-block`} />
-            {STATUS_LABELS[status]}
-          </button>
-        ))}
-      </PopoverContent>
-    </Popover>
+    <div
+      ref={ref}
+      className="shrink-0 ml-1 cursor-pointer"
+      onMouseEnter={() => {
+        if (ref.current) {
+          const r = ref.current.getBoundingClientRect();
+          setTooltipPos({ x: r.left + r.width / 2, y: r.top });
+        }
+      }}
+      onMouseLeave={() => setTooltipPos(null)}
+      onClick={e => { e.stopPropagation(); setTooltipPos(null); onOpenModal(); }}
+    >
+      <div className="w-3.5 h-3.5 rounded-full bg-amber-100 border border-amber-400 flex items-center justify-center hover:bg-amber-200 transition-colors">
+        <span className="text-[8px] font-black text-amber-600 leading-none">!</span>
+      </div>
+      {tooltipPos && createPortal(
+        <div style={{ position: "fixed", left: tooltipPos.x, top: tooltipPos.y - 8, transform: "translate(-50%, -100%)", zIndex: 9999, width: 220, pointerEvents: "none" }}
+          className="bg-card border border-amber-300 rounded-lg shadow-xl p-2.5">
+          <div className="flex items-center gap-1.5 mb-1">
+            <div className="w-3 h-3 rounded-full bg-amber-100 border border-amber-400 flex items-center justify-center shrink-0">
+              <span className="text-[7px] font-black text-amber-600 leading-none">!</span>
+            </div>
+            <p className="text-[9px] font-bold text-amber-700 uppercase tracking-wide">Client intel · click to expand</p>
+          </div>
+          <p className="text-[10px] text-foreground leading-snug">{text}</p>
+        </div>,
+        document.body
+      )}
+    </div>
   );
 }
 
-export default function Plan() {
-  const navigate = useNavigate();
-  const [expanded, setExpanded] = useState<Record<string, boolean>>(
-    Object.fromEntries(ganttWorkstreams.map((ws) => [ws.id, true]))
+/** Meeting pill — coloured box, hover tooltip with workstream coverage */
+function MeetingPill({ tp, colorHex, coverage, onMoveStart, onDelete }: {
+  tp: ClientTouchpoint; colorHex: string;
+  coverage?: CoverageItem[];
+  onMoveStart?: (e: React.MouseEvent) => void;
+  onDelete?: () => void;
+}) {
+  const [hover, setHover] = useState(false);
+  const left  = colIdx(tp.week, tp.day) * COL_W + 3;
+  const width = COL_W - 6;
+  const hasCoverage = coverage && coverage.length > 0;
+  const tooltipWidth = hasCoverage ? 220 : 200;
+  return (
+    <div
+      style={{ position: "absolute", left, width, top: 5, height: ROW_H - 10, cursor: onMoveStart ? "grab" : "default" }}
+      onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
+      onMouseDown={onMoveStart ? e => { e.preventDefault(); e.stopPropagation(); onMoveStart(e); } : undefined}
+      onClick={e => e.stopPropagation()}
+      className="relative"
+    >
+      <div style={{ height: "100%", backgroundColor: colorHex + "30", border: `1.5px solid ${colorHex}88`, borderRadius: 4 }} />
+      {hover && onDelete && (
+        <button className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-card border border-border rounded-full flex items-center justify-center shadow-sm hover:bg-red-50 hover:border-red-300 text-muted-foreground hover:text-red-500 z-20"
+          onMouseDown={e => e.stopPropagation()}
+          onClick={e => { e.stopPropagation(); onDelete(); }}>
+          <span className="text-[9px] font-bold leading-none">×</span>
+        </button>
+      )}
+      {hover && (
+        <div className="absolute z-50 bottom-full mb-2 left-1/2 -translate-x-1/2 bg-card border border-border rounded-lg shadow-xl p-2.5 pointer-events-none" style={{ width: tooltipWidth, minWidth: 160 }}>
+          <p className="text-[10px] font-semibold text-foreground mb-1 leading-snug">{tp.label}</p>
+          <p className="text-[9px] text-muted-foreground leading-relaxed mb-1.5">{tp.agenda}</p>
+          {hasCoverage && (
+            <>
+              <div className="border-t border-border/40 pt-1.5 mt-1">
+                <p className="text-[8px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">Expected coverage</p>
+                <ul className="space-y-0.5">
+                  {coverage!.map((c, i) => (
+                    <li key={i} className="flex items-start gap-1">
+                      <span className={`w-1 h-1 rounded-full mt-[3px] shrink-0 ${WS_COLORS[c.wsId]?.dot ?? "bg-muted-foreground/40"}`} />
+                      <span className="text-[9px] text-foreground/70 leading-snug">
+                        {c.name}{c.suffix && <span className="text-muted-foreground/60">{c.suffix}</span>}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </div>
   );
-  const [scopeExpanded, setScopeExpanded] = useState<Record<string, boolean>>({});
-  const [workstreams, setWorkstreams] = useState<Workstream[]>(
-    () => JSON.parse(JSON.stringify(ganttWorkstreams))
+}
+
+/** Standard Gantt data row — sticky label + relative grid */
+function GanttDataRow({ label, sublabel, colorHex, indent = false, isGroupHeader = false, clientIntel, onClientIntelClick, onGridClick, children }: {
+  label: string; sublabel?: string; colorHex?: string;
+  indent?: boolean; isGroupHeader?: boolean;
+  clientIntel?: string; onClientIntelClick?: () => void;
+  onGridClick?: (col: number) => void; children?: React.ReactNode;
+}) {
+  const rowH = sublabel ? 46 : ROW_H;
+  return (
+    <div className="flex border-b border-border/30" style={{ height: rowH }}>
+      <div className="sticky left-0 z-10 border-r border-border/40 flex items-center shrink-0"
+        style={{ width: LABEL_W, minWidth: LABEL_W, backgroundColor: isGroupHeader && colorHex ? colorHex + "0e" : "var(--card)" }}>
+        {colorHex && (
+          <div style={{ width: isGroupHeader ? 3 : 2.5, minHeight: 14, height: isGroupHeader ? "62%" : "50%", backgroundColor: colorHex, borderRadius: 2, marginLeft: indent ? 22 : 10, marginRight: 6, flexShrink: 0 }} />
+        )}
+        <div className="min-w-0 flex-1 pr-1 flex items-center gap-1">
+          <div className="min-w-0 flex-1">
+            <span className={`block truncate ${isGroupHeader ? "text-[10px] font-semibold" : "text-[10px] text-foreground/60"}`}
+              style={{ color: isGroupHeader && colorHex ? colorHex : undefined }}>{label}</span>
+            {sublabel && <span className="block truncate text-[9px] text-foreground/35 leading-tight mt-0.5">{sublabel}</span>}
+          </div>
+          {clientIntel && onClientIntelClick && <ClientIntelBadge text={clientIntel} onOpenModal={onClientIntelClick} />}
+        </div>
+      </div>
+      <div className="relative shrink-0" style={{ width: 20 * COL_W, height: rowH, cursor: onGridClick ? "crosshair" : undefined }}
+        onClick={onGridClick ? e => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          onGridClick(Math.max(0, Math.min(19, Math.floor((e.clientX - rect.left) / COL_W))));
+        } : undefined}>
+        <GridBg />
+        {children}
+      </div>
+    </div>
   );
-  const [markers, setMarkers] = useState<MeetingMarker[]>(() => [...INITIAL_MEETING_MARKERS]);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [rowDrag, setRowDrag] = useState<{ wsId: string; itemId: string; overItemId: string | null } | null>(null);
-  const dragRef = useRef<DragState | null>(null);
-  const markerDragRef = useRef<{ markerId: string; startX: number; originalDay: number } | null>(null);
-  const timelineRef = useRef<HTMLDivElement | null>(null);
-  const markerTimelineRef = useRef<HTMLDivElement | null>(null);
+}
 
-  const toggleWorkstream = (id: string) =>
-    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
-
-  const updateItem = useCallback((wsId: string, itemId: string, updates: Partial<GanttItem>) => {
-    setWorkstreams((prev) =>
-      prev.map((ws) =>
-        ws.id === wsId
-          ? {
-              ...ws,
-              items: ws.items.map((item) =>
-                item.id === itemId ? { ...item, ...updates } : item
-              ),
-            }
-          : ws
-      )
-    );
-  }, []);
-
-  const addItem = useCallback((wsId: string) => {
-    setWorkstreams((prev) =>
-      prev.map((ws) => {
-        if (ws.id !== wsId) return ws;
-        const lastItem = ws.items[ws.items.length - 1];
-        const startDay = lastItem ? Math.min(lastItem.endDay + 1, TOTAL_DAYS) : 1;
-        const newItem: GanttItem = {
-          id: `new-${Date.now()}`,
-          label: "New task",
-          type: "task",
-          owner: ws.owner,
-          startDay,
-          endDay: Math.min(startDay + 1, TOTAL_DAYS),
-          status: "not-started",
-        };
-        return { ...ws, items: [...ws.items, newItem] };
-      })
-    );
-    setExpanded((prev) => ({ ...prev, [wsId]: true }));
-  }, []);
-
-  const removeItem = useCallback((wsId: string, itemId: string) => {
-    setWorkstreams((prev) =>
-      prev.map((ws) =>
-        ws.id === wsId
-          ? { ...ws, items: ws.items.filter((item) => item.id !== itemId) }
-          : ws
-      )
-    );
-  }, []);
-
-  const handleRowDrop = useCallback((wsId: string, dragItemId: string, dropItemId: string) => {
-    setWorkstreams((prev) =>
-      prev.map((ws) => {
-        if (ws.id !== wsId) return ws;
-        const items = [...ws.items];
-        const fromIdx = items.findIndex((i) => i.id === dragItemId);
-        const toIdx = items.findIndex((i) => i.id === dropItemId);
-        if (fromIdx === -1 || toIdx === -1 || fromIdx === toIdx) return ws;
-        const [moved] = items.splice(fromIdx, 1);
-        items.splice(toIdx, 0, moved);
-        return { ...ws, items };
-      })
-    );
-  }, []);
-
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
-      const drag = dragRef.current;
-      if (!drag || !timelineRef.current) return;
-
-      const rect = timelineRef.current.getBoundingClientRect();
-      const dayWidth = rect.width / TOTAL_DAYS;
-      const deltadays = Math.round((e.clientX - drag.startX) / dayWidth);
-
-      if (deltadays === 0) return;
-
-      if (drag.mode === "move") {
-        const newStart = Math.max(1, Math.min(TOTAL_DAYS, drag.originalStart + deltadays));
-        const duration = drag.originalEnd - drag.originalStart;
-        const newEnd = Math.min(TOTAL_DAYS, newStart + duration);
-        const adjustedStart = newEnd - duration;
-        updateItem(drag.wsId, drag.itemId, { startDay: adjustedStart, endDay: newEnd });
-      } else if (drag.mode === "resize-left") {
-        const newStart = Math.max(1, Math.min(drag.originalEnd, drag.originalStart + deltadays));
-        updateItem(drag.wsId, drag.itemId, { startDay: newStart });
-      } else if (drag.mode === "resize-right") {
-        const newEnd = Math.max(drag.originalStart, Math.min(TOTAL_DAYS, drag.originalEnd + deltadays));
-        updateItem(drag.wsId, drag.itemId, { endDay: newEnd });
-      }
-    },
-    [updateItem]
+function SectionDivider({ label }: { label: string }) {
+  return (
+    <div className="flex border-b border-border/40" style={{ height: 26 }}>
+      <div className="sticky left-0 z-10 bg-muted/30 border-r border-border/40 flex items-center shrink-0" style={{ width: LABEL_W, minWidth: LABEL_W }}>
+        <span className="text-[9px] font-bold text-muted-foreground/55 uppercase tracking-widest px-3">{label}</span>
+      </div>
+      <div className="flex-1 bg-muted/10 flex items-center"><div className="w-full h-px bg-border/25" /></div>
+    </div>
   );
+}
 
-  const handleMouseUp = useCallback(() => {
-    dragRef.current = null;
-    document.removeEventListener("mousemove", handleMouseMove);
-    document.removeEventListener("mouseup", handleMouseUp);
-    document.body.style.userSelect = "";
-    document.body.style.cursor = "";
-  }, [handleMouseMove]);
+function GroupHeader({ label, sublabel, hex, lightBg }: { label: string; sublabel?: string; hex: string; lightBg: string }) {
+  const h = sublabel ? 32 : 24;
+  return (
+    <div className="flex border-b border-border/30" style={{ height: h }}>
+      <div className="sticky left-0 z-10 border-r border-border/40 flex items-center shrink-0"
+        style={{ width: LABEL_W, minWidth: LABEL_W, backgroundColor: lightBg }}>
+        <div style={{ width: 3, minHeight: 14, height: "65%", backgroundColor: hex, borderRadius: 2, marginLeft: 8, marginRight: 6, flexShrink: 0 }} />
+        <div className="min-w-0">
+          <span className="text-[10px] font-semibold block truncate" style={{ color: hex }}>{label}</span>
+          {sublabel && <span className="text-[9px] block truncate leading-tight" style={{ color: hex + "90" }}>{sublabel}</span>}
+        </div>
+      </div>
+      <div className="shrink-0" style={{ width: 20 * COL_W, backgroundColor: lightBg + "55" }} />
+    </div>
+  );
+}
 
-  const startDrag = useCallback(
-    (e: React.MouseEvent, mode: DragMode, wsId: string, item: GanttItem) => {
+// ─── Gantt chart ──────────────────────────────────────────────────────────────
+
+function GanttChart({
+  ganttSections, workstreams, clientTouchpoints, availMap,
+  onInputSpanChange, onMeetingMove, onMeetingAdd, onMeetingDelete, onClientIntelClick,
+}: {
+  ganttSections: GanttInputSection[];
+  workstreams: WorkstreamDef[];
+  clientTouchpoints: ClientTouchpoint[];
+  availMap: Record<string, number>;
+  onInputSpanChange: (sId: string, rId: string, spId: string, s: number, e: number) => void;
+  onMeetingMove: (meetingId: string, col: number) => void;
+  onMeetingAdd: (type: "client"|"internal"|"partner", col: number) => void;
+  onMeetingDelete: (meetingId: string) => void;
+  onClientIntelClick: () => void;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const dragRef      = useRef<DragState | null>(null);
+  const lastColRef   = useRef(-1);
+  const [dragging, setDragging] = useState(false);
+  const cbRef = useRef({ onInputSpanChange, onMeetingMove });
+  useLayoutEffect(() => { cbRef.current = { onInputSpanChange, onMeetingMove }; });
+
+  function getCol(clientX: number): number {
+    if (!containerRef.current) return 0;
+    const rect = containerRef.current.getBoundingClientRect();
+    const scroll = containerRef.current.scrollLeft;
+    return Math.max(0, Math.min(19, Math.floor((clientX - rect.left + scroll - LABEL_W) / COL_W)));
+  }
+
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      const d = dragRef.current;
+      if (!d) return;
       e.preventDefault();
-      dragRef.current = {
-        itemId: item.id,
-        wsId,
-        mode,
-        startX: e.clientX,
-        originalStart: item.startDay,
-        originalEnd: item.endDay,
-      };
-      document.body.style.userSelect = "none";
-      document.body.style.cursor = mode === "move" ? "grabbing" : "col-resize";
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-    },
-    [handleMouseMove, handleMouseUp]
-  );
+      const col = getCol(e.clientX);
+      if (col === lastColRef.current) return;
+      lastColRef.current = col;
+      const { mode, origStartCol, origEndCol, startCol } = d;
+      const dur = origEndCol - origStartCol;
+      const { onInputSpanChange, onMeetingMove } = cbRef.current;
+      if (d.meetingId) {
+        onMeetingMove(d.meetingId, col);
+      } else if (mode === "move") {
+        const ns = Math.max(0, Math.min(19 - dur, origStartCol + col - startCol));
+        onInputSpanChange(d.sectionId!, d.subRowId!, d.spanId!, ns, ns + dur);
+      } else if (mode === "left") {
+        onInputSpanChange(d.sectionId!, d.subRowId!, d.spanId!, Math.max(0, Math.min(origEndCol - 1, col)), origEndCol);
+      } else {
+        onInputSpanChange(d.sectionId!, d.subRowId!, d.spanId!, origStartCol, Math.max(origStartCol + 1, Math.min(19, col)));
+      }
+    };
+    const onUp = () => { if (!dragRef.current) return; dragRef.current = null; lastColRef.current = -1; setDragging(false); };
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
+    return () => { document.removeEventListener("mousemove", onMove); document.removeEventListener("mouseup", onUp); };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleLabelChange = (wsId: string, itemId: string, newLabel: string) => {
-    updateItem(wsId, itemId, { label: newLabel });
-    setEditingId(null);
-  };
-
-  const handleMarkerMouseMove = useCallback((e: MouseEvent) => {
-    const md = markerDragRef.current;
-    const el = markerTimelineRef.current;
-    if (!md || !el) return;
-    const rect = el.getBoundingClientRect();
-    const dayWidth = rect.width / TOTAL_DAYS;
-    const deltaDays = Math.round((e.clientX - md.startX) / dayWidth);
-    if (deltaDays === 0) return;
-    const newDay = Math.max(1, Math.min(TOTAL_DAYS, md.originalDay + deltaDays));
-    setMarkers((prev) => prev.map((m) => m.id === md.markerId ? { ...m, day: newDay } : m));
-  }, []);
-
-  const handleMarkerMouseUp = useCallback(() => {
-    markerDragRef.current = null;
-    document.removeEventListener("mousemove", handleMarkerMouseMove);
-    document.removeEventListener("mouseup", handleMarkerMouseUp);
-    document.body.style.userSelect = "";
-    document.body.style.cursor = "";
-  }, [handleMarkerMouseMove]);
-
-  const startMarkerDrag = useCallback((e: React.MouseEvent, marker: MeetingMarker) => {
-    e.preventDefault();
-    markerDragRef.current = { markerId: marker.id, startX: e.clientX, originalDay: marker.day };
-    document.body.style.userSelect = "none";
-    document.body.style.cursor = "grabbing";
-    document.addEventListener("mousemove", handleMarkerMouseMove);
-    document.addEventListener("mouseup", handleMarkerMouseUp);
-  }, [handleMarkerMouseMove, handleMarkerMouseUp]);
+  function startInputDrag(e: React.MouseEvent, mode: "move"|"left"|"right", span: GanttSpan, sectionId: string, subRowId: string) {
+    const sc = getCol(e.clientX);
+    dragRef.current = { mode, startCol: sc, origStartCol: colIdx(span.startWeek, span.startDay), origEndCol: colIdx(span.endWeek, span.endDay), sectionId, subRowId, spanId: span.id };
+    lastColRef.current = sc; setDragging(true);
+  }
+  function startMeetingDrag(e: React.MouseEvent, tp: ClientTouchpoint) {
+    const col = getCol(e.clientX);
+    dragRef.current = { mode: "move", startCol: col, origStartCol: colIdx(tp.week, tp.day), origEndCol: colIdx(tp.week, tp.day), meetingId: tp.id };
+    lastColRef.current = col; setDragging(true);
+  }
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10">
-      {/* Header */}
-      <div className="flex items-start justify-between mb-6">
-        <div>
-          <h2 className="text-xl font-semibold text-foreground">Generated Project Plan</h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            Commercial DD — Project Falcon · FreshCart Ltd · 3 weeks
-          </p>
-        </div>
-        <button
-          onClick={() => navigate("/project")}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold bg-rag-red/15 text-rag-red border border-rag-red/25 hover:bg-rag-red/25 transition-colors cursor-pointer"
-        >
-          <AlertTriangle className="w-4 h-4" />
-          Project at risk! If unresolved, synthesis delayed +2 days → partner review at risk
-        </button>
-      </div>
+    <div ref={containerRef} className="overflow-x-auto border border-border rounded-xl bg-card shadow-sm select-none"
+      style={{ cursor: dragging ? "grabbing" : undefined }}>
+      <div style={{ width: LABEL_W + 20 * COL_W }}>
 
-      {/* Legend */}
-      <div className="flex items-center gap-5 mb-4 text-xs text-muted-foreground flex-wrap">
-        <span className="flex items-center gap-1.5">
-          <span className="w-8 h-3 rounded-sm bg-rag-green inline-block" /> Complete
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-8 h-3 rounded-sm bg-rag-green-light inline-block" /> On track
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-8 h-3 rounded-sm bg-rag-amber inline-block" /> At risk
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-8 h-3 rounded-sm bg-rag-red inline-block" /> Blocked
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-8 h-3 rounded-sm bg-muted-foreground/30 inline-block" /> Not started
-        </span>
-        <span className="flex items-center gap-1.5">
-          <Diamond className="w-3 h-3 fill-current text-muted-foreground" /> Milestone
-        </span>
-      </div>
-
-      {/* Gantt Chart */}
-      <div className="border border-border rounded-lg overflow-x-auto bg-card relative">
-        <div className="min-w-[1200px] relative">
-        {/* Meeting marker callouts row */}
-        <div className="flex border-b border-border bg-secondary/30">
-          <div className="w-[460px] min-w-[460px] shrink-0" />
-          <div className="flex-1 relative h-6" ref={markerTimelineRef}>
-            {markers.map((marker) => {
-              const left = ((marker.day - 1 + 0.5) / TOTAL_DAYS) * 100;
-              return (
-                <div
-                  key={marker.id}
-                  className="absolute bottom-0 flex flex-col items-center -translate-x-1/2 cursor-grab active:cursor-grabbing"
-                  style={{ left: `${left}%` }}
-                  onMouseDown={(e) => startMarkerDrag(e, marker)}
-                  title="Drag to move"
-                >
-                  <span
-                    className="text-[8px] font-semibold text-center px-1 py-px rounded select-none leading-tight"
-                    style={{ color: `white`, backgroundColor: `hsl(var(${marker.cssVar}))` }}
-                  >
-                    {marker.label.includes(" ") ? marker.label.split(" ").map((word, i) => <span key={i} className="block">{word}</span>) : marker.label}
-                  </span>
+        {/* Header */}
+        <div className="flex border-b-2 border-border" style={{ height: 44 }}>
+          <div className="sticky left-0 z-30 bg-muted/20 border-r-2 border-border shrink-0" style={{ width: LABEL_W, minWidth: LABEL_W }} />
+          <div className="flex shrink-0" style={{ width: 20 * COL_W }}>
+            {WEEKS.map(week => (
+              <div key={week} style={{ width: 5 * COL_W }} className={`flex flex-col ${week > 0 ? "border-l-2 border-border" : ""}`}>
+                <div className="flex items-center justify-center border-b border-border/30 bg-muted/15" style={{ height: 24 }}>
+                  <span className="text-[9.5px] font-semibold text-muted-foreground">{WEEK_LABELS[week]}</span>
+                  {week === 0 && <span className="text-[8px] text-muted-foreground/40 ml-1">· Ramp</span>}
                 </div>
-              );
-            })}
-            {/* Today marker label */}
-            <div
-              className="absolute bottom-0 flex flex-col items-center -translate-x-1/2 z-20"
-              style={{ left: `${((TODAY_DAY - 1 + 0.5) / TOTAL_DAYS) * 100}%` }}
-            >
-              <span className="text-[8px] font-bold whitespace-nowrap px-1.5 py-px rounded bg-primary text-primary-foreground">
-                Today
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Timeline header */}
-        <div className="flex border-b border-border bg-secondary/50">
-          <div className="w-[460px] min-w-[460px] shrink-0 flex text-[10px] font-medium text-muted-foreground">
-            <div className="w-[240px] px-4 py-2">Task</div>
-            <div className="w-[60px] px-2 py-2">Due</div>
-            <div className="w-[160px] px-2 py-2">Dependency</div>
-            
-          </div>
-          <div className="flex-1 flex" ref={timelineRef}>
-            {WEEKS.map((week, wi) => (
-              <div key={wi} className="flex-1 border-l border-border">
-                <div className="text-[10px] font-medium text-muted-foreground px-2 py-1 border-b border-border/50">
-                  {week.label}
-                </div>
-                <div className="flex">
-                  {week.days.map((d, di) => (
-                    <div key={di} className="flex-1 text-center text-[10px] text-muted-foreground/60 py-1 border-r border-border/30 last:border-0">
-                      {d}
+                <div className="flex" style={{ height: 20 }}>
+                  {DAYS.map(day => (
+                    <div key={day} style={{ width: COL_W }} className={`flex items-center justify-center ${day > 0 ? "border-l border-border/20" : ""}`}>
+                      <span className="text-[8px] text-muted-foreground/45">{DAY_LABELS[day]}</span>
                     </div>
                   ))}
                 </div>
@@ -545,245 +603,488 @@ export default function Plan() {
           </div>
         </div>
 
-        {/* Vertical dotted lines for meeting markers + Today line */}
-        <div className="absolute top-0 bottom-0 pointer-events-none z-10" style={{ left: '460px', right: 0 }}>
-          {markers.map((marker, i) => {
-            const left = ((marker.day - 1 + 0.5) / TOTAL_DAYS) * 100;
-            return (
-              <div
-                key={i}
-                className="absolute top-0 bottom-0"
-                style={{
-                  left: `${left}%`,
-                  borderLeft: `1.5px dashed hsl(var(${marker.cssVar}))`,
-                  opacity: 0.25,
-                }}
-              />
-            );
-          })}
-          {/* Today vertical line */}
-          <div
-            className="absolute top-0 bottom-0"
-            style={{
-              left: `${((TODAY_DAY - 1 + 0.5) / TOTAL_DAYS) * 100}%`,
-              borderLeft: `2px solid hsl(var(--primary))`,
-              opacity: 0.6,
-            }}
-          />
+        {/* Legend bar */}
+        <div className="flex items-center gap-4 px-3 py-1.5 border-b border-border/20 bg-muted/5">
+          {([["client", MILESTONE_CLIENT_HEX, "Client Owned"], ["internal", MILESTONE_INTERNAL_HEX, "OC&C Owned"], ["target", MILESTONE_TARGET_HEX, "Target Owned"]] as const).map(([, hex, lbl]) => (
+            <div key={lbl} className="flex items-center gap-1.5">
+              <div style={{ width: 9, height: 9, backgroundColor: hex, transform: "rotate(45deg)", borderRadius: 1, border: "1.5px solid white", boxShadow: "0 1px 2px rgba(0,0,0,0.15)" }} />
+              <span className="text-[9px] text-muted-foreground/70">Milestone — {lbl}</span>
+            </div>
+          ))}
+          <div className="flex items-center gap-1.5">
+            <div className="w-3 h-3 rounded-full bg-amber-100 border border-amber-400 flex items-center justify-center">
+              <span className="text-[7px] font-black text-amber-600 leading-none">!</span>
+            </div>
+            <span className="text-[9px] text-muted-foreground/70">Client intel</span>
+          </div>
+          <div className="ml-2 flex items-center gap-3 border-l border-border/30 pl-3">
+            {(["prep","analysis","iteration"] as const).map((p, i) => (
+              <div key={p} className="flex items-center gap-1">
+                <div style={{ width: 16, height: 8, backgroundColor: "#6b7280", opacity: [PHASE_OPACITY.prep, PHASE_OPACITY.analysis, PHASE_OPACITY.iteration][i], borderRadius: 2 }} />
+                <span className="text-[9px] text-muted-foreground/70 capitalize">{p}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Workstream rows */}
-        {workstreams.map((ws) => (
-          <div key={ws.id}>
-            {/* Workstream header row */}
-            <div
-              className="flex border-b border-border hover:bg-accent/50 transition-colors cursor-pointer group/ws"
-              onClick={() => toggleWorkstream(ws.id)}
-            >
-              <div className="w-[460px] min-w-[460px] shrink-0 px-4 py-2.5 flex items-center gap-2">
-                {expanded[ws.id] ? (
-                  <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
-                ) : (
-                  <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
-                )}
-                <span className={`text-xs font-semibold ${workstreamNameColors[ws.name] || "text-foreground"}`}>{ws.name}</span>
-                {ws.id === "ws-survey" && (
-                  <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-rag-critical/20 text-rag-critical">
-                    <AlertTriangle className="w-3 h-3" />Critical
-                  </span>
-                )}
-                {ws.id === "ws-market" && (
-                  <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-rag-red/10 text-rag-red">
-                    <AlertTriangle className="w-3 h-3" />High
-                  </span>
-                )}
-                {ws.id === "ws-internal" && (
-                  <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-rag-amber/10 text-rag-amber">
-                    <AlertTriangle className="w-3 h-3" />Medium
-                  </span>
-                )}
-                <span className="text-[10px] text-muted-foreground ml-1">{ws.owner}</span>
-                {/* Scope questions summary */}
-                {(() => {
-                  const qs = WORKSTREAM_QUESTIONS[ws.id] || [];
-                  const answered = qs.filter(q => q.status === "answered").length;
-                  const inProg = qs.filter(q => q.status === "in-progress").length;
-                  const open = qs.filter(q => q.status === "open").length;
-                  return qs.length > 0 ? (
-                    <span className="text-[10px] text-muted-foreground ml-2 flex items-center gap-1">
-                      · <span className="text-rag-green font-medium">{answered} answered</span> ·{" "}
-                      <span className="text-rag-amber font-medium">{inProg} in progress</span> ·{" "}
-                      <span>{open} open</span>
-                    </span>
-                  ) : (
-                    <span className="text-[10px] text-muted-foreground/60 ml-2">· 0 questions assigned</span>
-                  );
-                })()}
-                <button
-                  className="ml-auto opacity-0 group-hover/ws:opacity-100 transition-opacity p-0.5 rounded hover:bg-accent"
-                  onClick={(e) => { e.stopPropagation(); addItem(ws.id); }}
-                  title="Add task"
-                >
-                  <Plus className="w-3 h-3 text-muted-foreground" />
-                </button>
-              </div>
-              <div className="flex-1 relative">
-                <div className="absolute inset-0 flex">
-                  {Array.from({ length: 3 }).map((_, i) => (
-                    <div key={i} className="flex-1 border-l border-border" />
-                  ))}
-                </div>
-                {!expanded[ws.id] &&
-                  ws.items.map((item) => (
-                    <GanttBar key={item.id} item={item} onUpdateNotes={(notes) => updateItem(ws.id, item.id, { notes })} />
-                  ))}
-              </div>
-            </div>
-
-            {/* Sub-items */}
-            {expanded[ws.id] &&
-              ws.items.map((item, idx) => (
-                <div
-                  key={item.id}
-                  draggable
-                  onDragStart={(e) => {
-                    e.dataTransfer.effectAllowed = "move";
-                    setRowDrag({ wsId: ws.id, itemId: item.id, overItemId: null });
-                  }}
-                  onDragOver={(e) => {
-                    e.preventDefault();
-                    e.dataTransfer.dropEffect = "move";
-                    if (rowDrag && rowDrag.wsId === ws.id) {
-                      setRowDrag({ ...rowDrag, overItemId: item.id });
-                    }
-                  }}
-                  onDrop={(e) => {
-                    e.preventDefault();
-                    if (rowDrag && rowDrag.wsId === ws.id) {
-                      handleRowDrop(ws.id, rowDrag.itemId, item.id);
-                    }
-                    setRowDrag(null);
-                  }}
-                  onDragEnd={() => setRowDrag(null)}
-                  className={`flex border-b border-border/50 hover:bg-accent/30 transition-colors group/item ${
-                    rowDrag?.overItemId === item.id && rowDrag?.itemId !== item.id
-                      ? "border-t-2 border-t-primary"
-                      : ""
-                  }`}
-                >
-                  <div className="w-[460px] min-w-[460px] shrink-0 flex items-center">
-                    {/* Task name column */}
-                    <div className="w-[240px] px-4 py-2 pl-7 flex items-center gap-1.5">
-                      <GripVertical className="w-3 h-3 text-muted-foreground/30 shrink-0 cursor-grab active:cursor-grabbing opacity-0 group-hover/item:opacity-100 transition-opacity" />
-                      <StatusPicker
-                        currentStatus={item.status}
-                        onChangeStatus={(status) => updateItem(ws.id, item.id, { status: status as GanttItem["status"] })}
-                      />
-                      {editingId === item.id ? (
-                        <input
-                          autoFocus
-                          defaultValue={item.label}
-                          className="text-xs text-foreground bg-transparent border-b border-primary outline-none w-full"
-                          onBlur={(e) => handleLabelChange(ws.id, item.id, e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                              handleLabelChange(ws.id, item.id, (e.target as HTMLInputElement).value);
-                            } else if (e.key === "Escape") {
-                              setEditingId(null);
-                            }
-                          }}
-                        />
-                      ) : (
-                        <span
-                          className="text-xs text-foreground cursor-text hover:text-primary transition-colors break-words"
-                          onDoubleClick={() => setEditingId(item.id)}
-                          title="Double-click to edit"
-                        >
-                          {item.label}
-                        </span>
-                      )}
-                      <button
-                        className="ml-auto opacity-0 group-hover/item:opacity-100 transition-opacity p-0.5 rounded hover:bg-destructive/10 shrink-0"
-                        onClick={() => removeItem(ws.id, item.id)}
-                        title="Remove task"
-                      >
-                        <X className="w-3 h-3 text-muted-foreground hover:text-destructive" />
-                      </button>
-                    </div>
-                    {/* Due date column */}
-                    <div className="w-[60px] px-2 py-2">
-                      <span className="text-[10px] text-muted-foreground whitespace-nowrap">{item.dueDate || "—"}</span>
-                    </div>
-                    {/* Dependency column */}
-                    <div className="w-[160px] px-2 py-2">
-                      <span className="text-[10px] text-muted-foreground block break-words">{item.dependency || "—"}</span>
-                    </div>
-                  </div>
-                  <div className="flex-1 relative py-1">
-                    <div className="absolute inset-0 flex">
-                      {Array.from({ length: 3 }).map((_, i) => (
-                        <div key={i} className="flex-1 border-l border-border/50" />
-                      ))}
-                    </div>
-                    <div className="relative h-6">
-                      <GanttBar
-                        item={item}
-                        onDragStart={(e, mode) => startDrag(e, mode, ws.id, item)}
-                        onUpdateNotes={(notes) => updateItem(ws.id, item.id, { notes })}
-                      />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            {/* Scope questions expandable row */}
-            {(() => {
-              const qs = WORKSTREAM_QUESTIONS[ws.id] || [];
-              if (qs.length === 0) return null;
-              const isOpen = scopeExpanded[ws.id] || false;
-              const answered = qs.filter(q => q.status === "answered").length;
-              const inProg = qs.filter(q => q.status === "in-progress").length;
-              const open = qs.filter(q => q.status === "open").length;
-              return (
-                <div className="border-b border-border/50 bg-muted/20">
-                  <button
-                    className="w-full flex items-center gap-2 px-4 pl-7 py-2 text-left hover:bg-muted/40 transition-colors"
-                    onClick={() => setScopeExpanded(prev => ({ ...prev, [ws.id]: !prev[ws.id] }))}
-                  >
-                    {isOpen ? <ChevronDown className="w-3 h-3 text-muted-foreground" /> : <ChevronRight className="w-3 h-3 text-muted-foreground" />}
-                    <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">Scope questions</span>
-                    <span className="text-[10px] text-muted-foreground">
-                      {qs.length} questions · <span className="text-rag-green">{answered} answered</span> · <span className="text-rag-amber">{inProg} in progress</span> · <span>{open} open</span>
-                    </span>
-                  </button>
-                  {isOpen && (
-                    <div className="px-4 pl-12 pb-2 space-y-1">
-                      {qs.map((q, i) => (
-                        <div key={i} className="flex items-center gap-2 text-[11px]">
-                          <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                            q.status === "answered" ? "bg-rag-green" : q.status === "in-progress" ? "bg-rag-amber" : "bg-muted-foreground/40"
-                          }`} />
-                          <span className="text-muted-foreground">{q.question}</span>
-                          <span className={`ml-auto text-[10px] font-medium shrink-0 ${
-                            q.status === "answered" ? "text-rag-green" : q.status === "in-progress" ? "text-rag-amber" : "text-muted-foreground"
-                          }`}>
-                            {q.status === "answered" ? "Answered" : q.status === "in-progress" ? "In progress" : "Open"}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })()}
+        {/* INPUTS */}
+        <SectionDivider label="Inputs" />
+        {ganttSections.map(section => (
+          <div key={section.inputId}>
+            <GroupHeader label={section.inputLabel} hex={INPUT_HEX[section.inputId] ?? "#94a3b8"} lightBg={INPUT_LIGHT_BG[section.inputId] ?? "#f8fafc"} />
+            {section.subRows.map((subRow, rIdx) => (
+              <GanttDataRow key={subRow.id} label={subRow.rowLabel} colorHex={INPUT_HEX[section.inputId]} indent
+                clientIntel={subRow.clientIntel} onClientIntelClick={subRow.clientIntel ? onClientIntelClick : undefined}>
+                {subRow.spans.map(span => (
+                  <SpanBar key={span.id} span={span} colorHex={INPUT_HEX[section.inputId] ?? "#94a3b8"}
+                    opacity={0.75} showLabel={false}
+                    onMoveStart={e => startInputDrag(e, "move", span, section.inputId, subRow.id)}
+                    onResizeStart={(e, edge) => startInputDrag(e, edge === "left" ? "left" : "right", span, section.inputId, subRow.id)}
+                  />
+                ))}
+                {section.milestones?.filter(m => (m.subRowIdx ?? 0) === rIdx).map(m => (
+                  <MilestoneMark key={m.id} m={m} />
+                ))}
+              </GanttDataRow>
+            ))}
           </div>
         ))}
+
+        {/* WORKSTREAMS */}
+        <SectionDivider label="Workstreams" />
+        {workstreams.map(ws => {
+          const hex     = WS_HEX[ws.id] ?? "#94a3b8";
+          const lightBg = WS_LIGHT_BG[ws.id] ?? "#f8fafc";
+          const wsInputs = [...new Set(ws.deliverables.flatMap(d => critInputLabels(d)))];
+          return (
+            <div key={ws.id}>
+              <GroupHeader label={ws.name} hex={hex} lightBg={lightBg}
+                sublabel={wsInputs.length ? `Requires: ${wsInputs.join(" · ")}` : undefined} />
+              {ws.deliverables.map(d => {
+                const blockingInputs = critInputLabels(d);
+                return (
+                  <GanttDataRow key={d.id} label={d.name}
+                    sublabel={blockingInputs.length ? `↳ ${blockingInputs.join(", ")}` : undefined}
+                    colorHex={hex} indent>
+                    <PhaseBar delivId={d.id} colorHex={hex} />
+                  </GanttDataRow>
+                );
+              })}
+            </div>
+          );
+        })}
+
+        {/* SCHEDULE */}
+        <SectionDivider label="Schedule" />
+        {(["client", "internal", "partner"] as const).map(type => {
+          const meetings = clientTouchpoints.filter(tp => (tp.type ?? "client") === type);
+          const hex      = MEETING_HEX[type];
+          const rowLabel = type === "client" ? "Client meetings" : type === "internal" ? "Internal holds" : "Partner reviews";
+          return (
+            <GanttDataRow key={type} label={rowLabel} colorHex={hex} onGridClick={col => onMeetingAdd(type, col)}>
+              {meetings.map(tp => {
+                const meetingCol = colIdx(tp.week, tp.day);
+                const coverage   = type === "client" ? getWorkstreamCoverage(workstreams, meetingCol) : undefined;
+                return (
+                  <MeetingPill key={tp.id} tp={tp} colorHex={hex} coverage={coverage}
+                    onMoveStart={e => startMeetingDrag(e, tp)}
+                    onDelete={() => onMeetingDelete(tp.id)}
+                  />
+                );
+              })}
+            </GanttDataRow>
+          );
+        })}
+
+      </div>
+    </div>
+  );
+}
+
+// ─── Sequencing summary ───────────────────────────────────────────────────────
+
+function dayLabel(week: number, day: number): string {
+  return `W${week} ${DAY_LABELS[day]}`;
+}
+
+interface TimelineEvent {
+  week: number; day: number;
+  type: "milestone-external" | "milestone-internal" | "client-meeting";
+  label: string;
+  subLabel?: string;
+  coverage?: CoverageItem[];
+  ownership?: "client" | "internal" | "target";
+}
+
+export function SequencingSummary({ workstreams, clientTouchpoints, ganttSections }: {
+  workstreams: WorkstreamDef[];
+  clientTouchpoints: ClientTouchpoint[];
+  ganttSections: GanttInputSection[];
+}) {
+  const events: TimelineEvent[] = [];
+
+  for (const section of ganttSections) {
+    for (const m of section.milestones ?? []) {
+      events.push({ week: m.week, day: m.day, type: "milestone-external", label: `${section.inputLabel} — ${m.label}`, ownership: m.ownership });
+    }
+  }
+
+  const clientMeetings = clientTouchpoints.filter(tp => (tp.type ?? "client") === "client");
+  for (const tp of clientMeetings) {
+    const meetingCol = colIdx(tp.week, tp.day);
+    events.push({ week: tp.week, day: tp.day, type: "client-meeting", label: tp.label, subLabel: tp.agenda, coverage: getWorkstreamCoverage(workstreams, meetingCol) });
+  }
+
+  events.sort((a, b) => a.week !== b.week ? a.week - b.week : a.day - b.day);
+
+  const grouped: Map<string, TimelineEvent[]> = new Map();
+  for (const ev of events) {
+    const key = `${ev.week}-${ev.day}`;
+    if (!grouped.has(key)) grouped.set(key, []);
+    grouped.get(key)!.push(ev);
+  }
+
+  const keys = Array.from(grouped.keys());
+
+  return (
+    <div className="space-y-3">
+      <div className="bg-card border border-border rounded-lg overflow-hidden">
+        <div className="flex items-center gap-3 px-3 py-2 border-b border-border/40 bg-muted/10">
+          {([["client", MILESTONE_CLIENT_HEX, "Client Owned"], ["internal", MILESTONE_INTERNAL_HEX, "OC&C Owned"], ["target", MILESTONE_TARGET_HEX, "Target Owned"]] as const).map(([, hex, lbl]) => (
+            <div key={lbl} className="flex items-center gap-1">
+              <div style={{ width: 7, height: 7, backgroundColor: hex, transform: "rotate(45deg)", borderRadius: 1 }} />
+              <span className="text-[8px] text-muted-foreground/60">{lbl}</span>
+            </div>
+          ))}
+          <div className="flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0" />
+            <span className="text-[8px] text-muted-foreground/60">Client meeting</span>
+          </div>
+        </div>
+
+        <div className="divide-y divide-border/30">
+          {keys.map(key => {
+            const [wStr, dStr] = key.split("-");
+            const week = parseInt(wStr);
+            const day  = parseInt(dStr);
+            const dayEvents = grouped.get(key)!;
+            return (
+              <div key={key} className="flex items-start">
+                <div className="shrink-0 px-3 py-2.5 w-16">
+                  <span className="text-[10px] font-semibold text-muted-foreground whitespace-nowrap">{dayLabel(week, day)}</span>
+                </div>
+                <div className="flex-1 border-l border-border/30 px-3 py-2 space-y-1.5">
+                  {dayEvents.map((ev, i) => {
+                    if (ev.type === "milestone-external" || ev.type === "milestone-internal") {
+                      const hex = milestoneHex(ev.ownership);
+                      return (
+                        <div key={i} className="flex items-start gap-1.5">
+                          <div className="shrink-0 mt-[3px]" style={{ width: 8, height: 8, backgroundColor: hex, transform: "rotate(45deg)", borderRadius: 1 }} />
+                          <div>
+                            <span className="text-[10px] font-medium text-foreground/80 leading-tight block">{ev.label}</span>
+                          </div>
+                        </div>
+                      );
+                    }
+                    if (ev.type === "client-meeting") {
+                      return (
+                        <div key={i} className="flex items-start gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0 mt-[3px]" />
+                          <div className="min-w-0 flex-1">
+                            <span className="text-[10px] font-medium text-foreground/80 leading-tight block">{ev.label}</span>
+                            {ev.coverage && ev.coverage.length > 0 ? (
+                              <ul className="mt-0.5 space-y-0.5">
+                                {ev.coverage.map((c, ci) => (
+                                  <li key={ci} className="flex items-start gap-1">
+                                    <span className={`w-1 h-1 rounded-full mt-[3px] shrink-0 ${WS_COLORS[c.wsId]?.dot ?? "bg-muted-foreground/40"}`} />
+                                    <span className="text-[9px] text-foreground/60 leading-snug">
+                                      {c.name}{c.suffix && <span className="text-muted-foreground/50 italic">{c.suffix}</span>}
+                                    </span>
+                                  </li>
+                                ))}
+                              </ul>
+                            ) : (
+                              <span className="text-[9px] text-muted-foreground/50 leading-snug block mt-0.5">Scope &amp; input alignment</span>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
+
+export default function Plan() {
+  const navigate = useNavigate();
+  const { workstreams, inputPipeline, clientTouchpoints, setClientTouchpoints, advanceScopingStep, approvedFlags, approveFlag } = useProject();
+
+  const [ganttSections, setGanttSections] = useState<GanttInputSection[]>(INITIAL_GANTT_SECTIONS);
+  const [showClientIntelModal, setShowClientIntelModal] = useState(false);
+  const [showSimilarModal, setShowSimilarModal] = useState(false);
+  const [activeFlagId, setActiveFlagId] = useState<string | null>(null);
+
+  const availMap          = computeInputAvailWeeks(inputPipeline);
+  const totalDeliverables = workstreams.reduce((s, ws) => s + ws.deliverables.length, 0);
+  const totalQuestions    = workstreams.reduce((s, ws) => s + ws.questions.length, 0);
+
+  const handleInputSpanChange = useCallback((sectionId: string, subRowId: string, spanId: string, startCol: number, endCol: number) => {
+    setGanttSections(prev => prev.map(sec =>
+      sec.inputId !== sectionId ? sec : {
+        ...sec,
+        subRows: sec.subRows.map(row =>
+          row.id !== subRowId ? row : { ...row, spans: row.spans.map(sp => sp.id !== spanId ? sp : { ...sp, ...colToSpanStart(startCol), ...colToSpanEnd(endCol) }) }
+        ),
+      }
+    ));
+  }, []);
+
+  const handleMeetingMove = useCallback((meetingId: string, col: number) => {
+    const { week, day } = colToWD(col);
+    setClientTouchpoints(prev => prev.map(tp =>
+      tp.id !== meetingId ? tp : { ...tp, week: week as ClientTouchpoint["week"], day: day as ClientTouchpoint["day"] }
+    ));
+  }, [setClientTouchpoints]);
+
+  const handleMeetingAdd = useCallback((type: "client"|"internal"|"partner", col: number) => {
+    const { week, day } = colToWD(col);
+    setClientTouchpoints(prev => [...prev, {
+      id: `tp-${Date.now()}`, label: "New meeting",
+      week: week as ClientTouchpoint["week"], day: day as ClientTouchpoint["day"],
+      type, agenda: "Add agenda here",
+    }]);
+  }, [setClientTouchpoints]);
+
+  const handleMeetingDelete = useCallback((meetingId: string) => {
+    setClientTouchpoints(prev => prev.filter(tp => tp.id !== meetingId));
+  }, [setClientTouchpoints]);
+
+  return (
+    <div className="max-w-5xl xl:max-w-[1700px] mx-auto px-6 py-10">
+
+      <div className="flex items-start justify-between gap-4 mb-8">
+        <div>
+          <h2 className="text-xl font-semibold text-foreground">Planning</h2>
+          <p className="text-sm text-muted-foreground mt-1">
+            {workstreams.length} workstreams · {totalDeliverables} deliverables · {totalQuestions} questions
+            <span className="ml-2 text-muted-foreground/40">· drag input bars to move · drag edges to resize · click schedule rows to add meetings</span>
+          </p>
         </div>
       </div>
 
-      {/* Today marker note */}
-      <p className="text-[10px] text-muted-foreground mt-3">
-        Today is Wednesday Week 2 (26 Mar). Drag bars to move or resize. Double-click labels to edit. Click status icons to change progress.
-      </p>
+      {/* ── Project Intel and Risk Flags ── */}
+      <h3 className="text-base font-semibold text-foreground mb-3">Project Intel and Risk Flags</h3>
+      <div className="grid grid-cols-2 gap-4 mb-4">
+
+        {/* Client history */}
+        <div className="bg-card border border-border rounded-lg overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-2.5 border-b border-border bg-muted/20">
+            <p className="text-xs font-semibold text-foreground">CVC — client history</p>
+            <button onClick={() => setShowClientIntelModal(true)} className="flex items-center gap-1 text-xs text-primary hover:underline">
+              See all <ExternalLink className="w-3 h-3" />
+            </button>
+          </div>
+          <div className="grid grid-cols-2 gap-px bg-border">
+            {[
+              { label: "Engagements",      value: clientStats.count },
+              { label: "% on time",        value: `${clientStats.onTimePct}%` },
+              { label: "Avg weekly fee",   value: formatFee(clientStats.avgWeeklyFee) },
+              { label: "Average Team Satisfaction", value: `${clientStats.avgSat} / 5` },
+            ].map(({ label, value }) => (
+              <div key={label} className="bg-card px-4 py-2.5">
+                <p className="text-lg font-semibold text-foreground">{value}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Comparable deals */}
+        <div className="bg-card border border-border rounded-lg overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-2.5 border-b border-border bg-muted/20">
+            <p className="text-xs font-semibold text-foreground">Consumer Retail CDDs — comparable deals</p>
+            <button onClick={() => setShowSimilarModal(true)} className="flex items-center gap-1 text-xs text-primary hover:underline">
+              See all <ExternalLink className="w-3 h-3" />
+            </button>
+          </div>
+          <div className="grid grid-cols-2 gap-px bg-border">
+            {[
+              { label: "Comparable deals", value: similarStats.count },
+              { label: "% on time",        value: `${similarStats.onTimePct}%` },
+              { label: "Avg weekly fee",   value: formatFee(similarStats.avgWeeklyFee) },
+              { label: "Average Team Satisfaction", value: `${similarStats.avgSat} / 5` },
+            ].map(({ label, value }) => (
+              <div key={label} className="bg-card px-4 py-2.5">
+                <p className="text-lg font-semibold text-foreground">{value}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+      </div>
+
+      {/* ── Risk flag pills ── */}
+      <div className="mb-6">
+        <div className="flex flex-wrap gap-2">
+          {RISK_FLAGS.map((flag) => {
+            const approved = approvedFlags.has(flag.id);
+            const isCritical = flag.severity === "critical";
+            return (
+              <button
+                key={flag.id}
+                onClick={() => setActiveFlagId(flag.id)}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium transition-colors hover:shadow-sm ${
+                  approved
+                    ? "border-green-200 bg-green-50 text-green-700"
+                    : isCritical
+                    ? "border-red-200 bg-red-50 text-red-700 hover:bg-red-100"
+                    : "border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100"
+                }`}
+              >
+                <AlertTriangle className="w-3 h-3 shrink-0" />
+                {flag.title}
+                <span className={`text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded border ml-0.5 ${
+                  approved ? "bg-green-100 text-green-700 border-green-200"
+                  : isCritical ? "bg-red-100 text-red-700 border-red-200"
+                  : "bg-amber-100 text-amber-700 border-amber-200"
+                }`}>
+                  {approved ? "Noted" : isCritical ? "Critical" : "Amber"}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ── Risk flag detail modal ── */}
+      {activeFlagId && (() => {
+        const flag = RISK_FLAGS.find(f => f.id === activeFlagId)!;
+        const approved = approvedFlags.has(flag.id);
+        const isCritical = flag.severity === "critical";
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black/40" onClick={() => setActiveFlagId(null)} />
+            <div className="relative bg-card border border-border rounded-xl shadow-xl w-full max-w-lg p-5 space-y-3">
+              <div className="flex items-start gap-3">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${isCritical ? "bg-red-100 border border-red-200" : "bg-amber-100 border border-amber-200"}`}>
+                  <AlertTriangle className={`w-4 h-4 ${isCritical ? "text-red-600" : "text-amber-600"}`} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className={`text-[9px] font-bold uppercase tracking-wide ${isCritical ? "text-red-700" : "text-amber-700"}`}>{isCritical ? "Critical risk" : "Amber risk"}</span>
+                  <h3 className="text-sm font-semibold text-foreground leading-snug">{flag.title}</h3>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">{flag.historical}</p>
+                </div>
+                <button onClick={() => setActiveFlagId(null)} className="text-muted-foreground hover:text-foreground shrink-0 text-lg leading-none">×</button>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">{flag.detail}</p>
+              <div className="rounded-md bg-muted/30 border border-border px-3 py-2.5">
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground mb-1">Recommendation for letter</p>
+                <p className="text-sm text-foreground leading-relaxed">{flag.recommendation}</p>
+              </div>
+              <div className="pt-2 border-t border-border flex items-center justify-between">
+                {approved ? (
+                  <p className="text-xs font-medium text-green-700">✓ Noted — protection included in letter</p>
+                ) : (
+                  <p className="text-xs text-muted-foreground">This will appear in the Conditions section of the engagement letter.</p>
+                )}
+                <div className="flex gap-2">
+                  <button onClick={() => setActiveFlagId(null)} className="text-xs text-muted-foreground hover:text-foreground px-3 py-1.5 rounded border border-border transition-colors">Dismiss</button>
+                  {!approved && (
+                    <button
+                      onClick={() => { approveFlag(flag.id); setActiveFlagId(null); }}
+                      className="text-xs font-medium bg-primary text-primary-foreground px-3 py-1.5 rounded hover:bg-primary/90 transition-colors"
+                    >
+                      Add to letter
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* ── Project Plan ── */}
+      <h3 className="text-base font-semibold text-foreground mb-4">Project Plan</h3>
+
+      <div className="flex flex-col xl:flex-row xl:gap-8 xl:items-start">
+
+        <div className="hidden xl:flex xl:flex-col xl:w-[400px] xl:shrink-0 xl:sticky xl:top-16 xl:self-start xl:gap-3">
+          <h4 className="text-sm font-semibold text-foreground">Milestone Summary</h4>
+          <SequencingSummary workstreams={workstreams} clientTouchpoints={clientTouchpoints} ganttSections={ganttSections} />
+        </div>
+
+        <div className="xl:flex-1 min-w-0 flex flex-col gap-3">
+          <h4 className="text-sm font-semibold text-foreground">Visual Timeline</h4>
+          <GanttChart
+            ganttSections={ganttSections}
+            workstreams={workstreams}
+            clientTouchpoints={clientTouchpoints}
+            availMap={availMap}
+            onInputSpanChange={handleInputSpanChange}
+            onMeetingMove={handleMeetingMove}
+            onMeetingAdd={handleMeetingAdd}
+            onMeetingDelete={handleMeetingDelete}
+            onClientIntelClick={() => setShowClientIntelModal(true)}
+          />
+        </div>
+
+      </div>
+
+      <div className="xl:hidden mt-8 flex flex-col gap-3">
+        <h4 className="text-sm font-semibold text-foreground">Milestone Summary</h4>
+        <SequencingSummary workstreams={workstreams} clientTouchpoints={clientTouchpoints} ganttSections={ganttSections} />
+      </div>
+
+      <div className="flex items-center justify-between pt-6 mt-8 border-t border-border">
+        <p className="text-xs text-muted-foreground">
+          {totalDeliverables} deliverables · {workstreams.length} workstreams · 3 delivery weeks + Week 0 ramp
+        </p>
+        <Button onClick={() => { advanceScopingStep(4); navigate("/team"); }} className="gap-2">
+          Approve plan <ArrowRight className="w-4 h-4" />
+        </Button>
+      </div>
+
+      {showClientIntelModal && (
+        <HistoryModal
+          title="CVC Capital Partners — client history"
+          subtitle={`${clientStats.count} engagements on record · basis for timeline estimates`}
+          stats={[
+            { label: "Engagements",      value: clientStats.count },
+            { label: "On time",          value: `${clientStats.onTimePct}%` },
+            { label: "Avg weekly fee",   value: formatFee(clientStats.avgWeeklyFee) },
+            { label: "Average Team Satisfaction", value: `${clientStats.avgSat} / 5` },
+          ]}
+          sections={[{ heading: "All CVC engagements", engagements: CLIENT_HISTORY, showClient: false }]}
+          onClose={() => setShowClientIntelModal(false)}
+        />
+      )}
+
+      {showSimilarModal && (
+        <HistoryModal
+          title="Consumer Retail CDDs — comparable deals"
+          subtitle={`${similarStats.count} comparable engagements from other PE clients`}
+          stats={[
+            { label: "Deals",            value: similarStats.count },
+            { label: "On time",          value: `${similarStats.onTimePct}%` },
+            { label: "Avg weekly fee",   value: formatFee(similarStats.avgWeeklyFee) },
+            { label: "Average Team Satisfaction", value: `${similarStats.avgSat} / 5` },
+          ]}
+          sections={[{ heading: "Comparable consumer retail deals", engagements: SIMILAR_DEALS, showClient: true }]}
+          onClose={() => setShowSimilarModal(false)}
+        />
+      )}
+
     </div>
   );
 }

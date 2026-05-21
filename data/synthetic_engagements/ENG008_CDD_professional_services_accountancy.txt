@@ -1,0 +1,50 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-008
+Date: January 2023
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Kinross Equity Partners
+Target: Thornton Clark (mid-market accountancy & advisory firm, 8 offices, UK regional)
+Engagement type: Commercial Due Diligence
+Sector: Professional Services
+
+COMMERCIAL TERMS
+Planned duration: 3 weeks
+Actual duration: 4 weeks
+Planned fee: £130k
+Actual fee: £152k
+Team: 1 Partner, 1 Manager, 2 Consultants, 1 Analyst
+
+SCOPE
+UK mid-market accountancy market, consolidation dynamics and roll-up thesis validation, Thornton Clark's client retention and revenue quality, partner dependency risk, competitive positioning vs regional and national firms, growth levers.
+
+Scope changes: Kinross added a workstream on referral network mapping in week 2 — they wanted to understand the dependency on a small number of introducers (IFAs, solicitors) for client origination. Sensible addition, £15k uplift agreed. In week 3, at Thornton Clark management's suggestion, we were asked to include a benchmarking of staff utilisation and billing rates. We declined to add this as it fell outside the commercial mandate and started to feel like an operational assessment.
+
+EXECUTION NOTES
+This was a harder-than-expected engagement for a few reasons.
+
+Partner dependency turned out to be a significant issue — two partners accounted for approximately 40% of client relationships, and one of those partners was already in informal conversations with a rival firm (which we became aware of partway through the engagement via an expert contact). This created a sensitive situation: we had an obligation to Kinross to share what we knew, but we had to be careful about how we'd learned it.
+
+Thornton Clark's senior management were cooperative on the surface but clearly uncomfortable with aspects of the process. Access to client revenue data was initially resisted — they wanted to aggregate it by service line rather than allowing us to analyse at client level. We pushed back (with Kinross's support) and eventually received the granular data in week 3, which delayed the client quality analysis.
+
+The utilisation benchmarking request from management (see above) felt like an attempt to redirect us into work that would support their own internal narratives rather than Kinross's diligence objectives. This was pushed back on.
+
+Expert calls: 7 completed. Found a particularly useful former Managing Partner contact who gave candid views on the firm's culture and talent pipeline.
+
+OUTCOME
+Deal proceeded but with significant conditions. We flagged the partner dependency risk prominently. Kinross negotiated retention arrangements for the two key partners as a condition of completion. The partner we'd heard about did ultimately leave 8 months post-close, which validated our concern.
+
+KEY LESSONS
+- Professional services CDDs always need a partner dependency matrix — it should be default scope, not an add-on
+- Management requests to extend scope can be a deflection tactic; assess the motivation before agreeing
+- Sensitive market intelligence from expert calls requires careful handling — establish a protocol for how to share and attribute in advance
+- Resistance to client-level data is itself a material finding; document it
+
+RISK FLAGS (materialised)
+- Client/management access (HIGH): Management initially resisted granular client data. Delayed analysis by ~4 days.
+- Key person risk (HIGH): Two partners = 40% of client relationships. One subsequently departed post-close.
+- Scope tension (LOW): Management-initiated scope extension felt misaligned with client's objectives.
+
+OVERALL ASSESSMENT
+Overran by one week due to data access delays. Fee uplift partially captured the scope addition. Work product was strong and the key findings proved accurate post-close. Kinross relationship in good standing.

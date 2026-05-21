@@ -1,0 +1,48 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-017
+Date: September 2023
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Greystone Capital (sell-side PE)
+Target: Meridian Advisory Group (specialist management consulting, infrastructure & public sector)
+Engagement type: Vendor Due Diligence
+Sector: Professional Services
+
+COMMERCIAL TERMS
+Planned duration: 4 weeks
+Actual duration: 4 weeks
+Planned fee: £160k
+Actual fee: £160k
+Team: 1 Partner, 1 Manager, 2 Consultants, 1 Analyst
+
+SCOPE
+UK management consulting market (infrastructure and public sector segment), Meridian competitive positioning vs Arcadis, Mott MacDonald, and the Big 4, revenue quality (project-based vs framework contract), client concentration and retention, partner/senior consultant dependency analysis, growth pipeline credibility.
+
+Scope addition (week 1): Greystone requested a view on Meridian's framework contract pipeline — several large government frameworks were due for renewal in the next 18 months, which was a known risk. Incorporated into the revenue quality workstream without extending scope.
+
+EXECUTION NOTES
+A well-run engagement with a few notable dynamics.
+
+Consulting firm VDDs are meta — there's an inevitable self-consciousness about consultants assessing consultants, and Meridian's senior leadership were acutely aware of the process. They were cooperative but occasionally challenged our methodology in sessions, which the team handled well.
+
+Revenue quality analysis required careful treatment. Meridian's revenue was a mix of framework contract drawdown (predictable, lower margin), bespoke project work (higher margin, less predictable), and a small but growing advisory retainer book. We built a three-stream revenue model which Greystone found helpful.
+
+Framework contract renewal risk was the key issue. Two frameworks (representing c.35% of revenue) were up for renewal within 18 months. Meridian's win rate on framework re-bids had been 100% historically, but one of the frameworks was being expanded in scope, meaning new competitors could join. We flagged this as a medium-high risk rather than low risk, which Greystone accepted with some pushback.
+
+Expert calls: 6 completed. Public sector procurement specialists, ex-infrastructure consulting MD, framework contract specialist.
+
+OUTCOME
+Deal completed. Recommended proceed with conditions (framework renewal risk flagged as a warranty item). Sale process ran well. Greystone very pleased with the work product.
+
+KEY LESSONS
+- Professional services firms are self-aware subjects; expect methodology challenges from management in sessions — prepare for it
+- Framework contract renewal risk in public sector consulting can be systematically assessed; don't treat as unknowable
+- Three-stream revenue model (contract drawdown, project, retainer) is a useful structure for professional services VDDs
+- "100% historical win rate" on re-bids is not a forward-looking assurance; always assess the forward competitive environment
+
+RISK FLAGS (materialised)
+- Market risk (MEDIUM): Framework contract renewal risk flagged; incorporated into deal structure.
+
+OVERALL ASSESSMENT
+Clean delivery on time and budget. Strong work product. Good client. Greystone confirmed they would use us on future processes.

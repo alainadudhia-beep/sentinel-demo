@@ -15,20 +15,20 @@ export default function Home() {
         </div>
 
         <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight leading-tight text-foreground">
-          Keep due diligence projects on track before they slip
+          From scoping call to final deck — without the overruns
         </h1>
 
         <p className="text-base text-muted-foreground leading-relaxed max-w-lg mx-auto">
-          Sentinel turns your engagement scope into a live project plan, adapts the plan as new information and questions come in, detects delivery risks early, and helps managers act before delays hit the client - all within your native toolkit.
+          Sentinel turns your scoping conversation into a structured scope, flags delivery risks before the engagement starts, and keeps the project on track from kickoff to IC presentation.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
-          <Button onClick={() => navigate("/scope")} className="gap-2">
-            Use sample engagement letter
+          <Button onClick={() => navigate("/scoping-call")} className="gap-2">
+            Load sample scoping call
             <ArrowRight className="w-4 h-4" />
           </Button>
-          <Button variant="outline" onClick={() => navigate("/scope?empty=1")}>
-            Paste engagement letter
+          <Button variant="outline" onClick={() => navigate("/scoping-call")}>
+            Start from scratch
           </Button>
         </div>
       </div>

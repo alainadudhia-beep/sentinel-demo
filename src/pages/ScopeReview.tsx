@@ -1,434 +1,289 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import {
-  ArrowRight,
-  CheckCircle2,
-  Calendar,
-  Users,
-  Flag,
-  ListChecks,
-  Loader2,
-  Plus,
-  X,
-} from "lucide-react";
+import { Plus, X, ArrowRight, Check } from "lucide-react";
+import { useProject, type InputRelationship } from "@/context/ProjectContext";
 
-interface WorkstreamData {
-  name: string;
-  owner: string;
-  tasks: string[];
-  estimatedDays: string;
-}
+// ─── Cell ─────────────────────────────────────────────────────────────────────
 
-interface MilestoneData {
-  label: string;
-  date: string;
-  type: "recurring" | "key" | "deadline";
-}
+const CYCLE: (InputRelationship | null)[] = [null, "critical", "supporting"];
 
-const initialScope = {
-  project: "Commercial Due Diligence — Project Falcon",
-  client: "Meridian Capital Partners",
-  target: "FreshCart Ltd (UK online grocery delivery)",
-  duration: "3 weeks (17 Mar – 4 Apr 2025)",
-  fee: "£285,000 + VAT",
-  workstreams: [
-    {
-      name: "Commercial (Survey)",
-      owner: "James Okafor",
-      tasks: [
-        "Design questionnaire",
-        "Launch survey (n=100)",
-        "Collect & close responses",
-        "Run analysis (initial + final)",
-        "Slide up findings",
-      ],
-      estimatedDays: "1–14",
-    },
-    {
-      name: "Market (Model, Interviews)",
-      owner: "Priya Sharma",
-      tasks: [
-        "Collect market data from data room",
-        "Build bottom-up sizing model (TAM/SAM/SOM)",
-        "Conduct 8–10 expert interviews for inputs",
-        "5-year growth projections",
-      ],
-      estimatedDays: "1–10",
-    },
-    {
-      name: "Internals (Financial Analysis, Mgmt Interviews)",
-      owner: "Tom Bradley",
-      tasks: [
-        "Schedule management interviews",
-        "Conduct 3 management sessions",
-        "Collect and itemise internal data",
-        "Analyse internal data",
-      ],
-      estimatedDays: "1–10",
-    },
-    {
-      name: "Project Management / Client Comms",
-      owner: "Emma Wilson",
-      tasks: [
-        "Synthesise findings into 40–50 slide deck",
-        "Partner review",
-        "Final presentation to IC",
-      ],
-      estimatedDays: "11–15",
-    },
-  ] as WorkstreamData[],
-  milestones: [
-    { label: "Weekly status call #1", date: "17 Mar (Mon, Wk 1)", type: "recurring" as const },
-    { label: "Weekly status call #2", date: "24 Mar (Mon, Wk 2)", type: "recurring" as const },
-    { label: "Survey launch", date: "20 Mar (Thu, Wk 1)", type: "key" as const },
-    { label: "Interim findings deck", date: "28 Mar (Fri, Wk 2)", type: "key" as const },
-    { label: "Weekly status call #3", date: "31 Mar (Mon, Wk 3)", type: "recurring" as const },
-    { label: "Draft final report", date: "2 Apr (Wed, Wk 3)", type: "key" as const },
-    { label: "Final presentation to IC", date: "4 Apr (Fri, Wk 3)", type: "deadline" as const },
-  ] as MilestoneData[],
-  assumptions: [
-    "Data room access available by 17 March",
-    "Management availability confirmed for Weeks 1–2",
-    "Survey panel recruitment: 5-day turnaround",
-    "All deliverables subject to Apex quality review",
-  ],
-};
-
-const workstreamNameColors: Record<string, string> = {
-  "Commercial (Survey)": "text-blue-600",
-  "Market (Model, Interviews)": "text-violet-600",
-  "Internals (Financial Analysis, Mgmt Interviews)": "text-emerald-600",
-  "Project Management / Client Comms": "text-pink-600",
-};
-
-function EditableText({
+function MatrixCell({
   value,
   onChange,
-  className = "",
-  inputClassName = "",
 }: {
-  value: string;
-  onChange: (v: string) => void;
-  className?: string;
-  inputClassName?: string;
+  value: InputRelationship | null;
+  onChange: (next: InputRelationship | null) => void;
 }) {
-  const [editing, setEditing] = useState(false);
+  const next = CYCLE[(CYCLE.indexOf(value) + 1) % CYCLE.length];
 
-  if (editing) {
+  if (value === "critical") {
     return (
-      <input
-        autoFocus
-        defaultValue={value}
-        className={`bg-transparent border-b border-primary outline-none w-full ${inputClassName}`}
-        onBlur={(e) => {
-          onChange(e.target.value);
-          setEditing(false);
-        }}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            onChange((e.target as HTMLInputElement).value);
-            setEditing(false);
-          } else if (e.key === "Escape") {
-            setEditing(false);
-          }
-        }}
-      />
+      <button
+        onClick={() => onChange(next)}
+        title="Critical — click to change"
+        className="w-full h-full flex items-center justify-center"
+      >
+        <span className="text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded bg-red-50 text-red-700 border border-red-200 select-none">
+          C
+        </span>
+      </button>
+    );
+  }
+  if (value === "supporting") {
+    return (
+      <button
+        onClick={() => onChange(next)}
+        title="Supporting — click to change"
+        className="w-full h-full flex items-center justify-center"
+      >
+        <span className="text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 select-none">
+          S
+        </span>
+      </button>
+    );
+  }
+  return (
+    <button
+      onClick={() => onChange(next)}
+      title="Click to set"
+      className="w-full h-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity"
+    >
+      <span className="text-muted-foreground/30 select-none text-base leading-none">+</span>
+    </button>
+  );
+}
+
+// ─── Add column input ─────────────────────────────────────────────────────────
+
+function AddColumnInput({ onAdd }: { onAdd: (label: string) => void }) {
+  const [active, setActive] = useState(false);
+  const [text, setText] = useState("");
+  const ref = useRef<HTMLInputElement>(null);
+
+  useEffect(() => { if (active) ref.current?.focus(); }, [active]);
+
+  const commit = () => {
+    const t = text.trim();
+    if (t) onAdd(t);
+    setActive(false);
+    setText("");
+  };
+
+  if (!active) {
+    return (
+      <button
+        onClick={() => setActive(true)}
+        className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
+      >
+        <Plus className="w-3 h-3" />
+        Add input
+      </button>
     );
   }
 
   return (
-    <span
-      className={`cursor-text hover:bg-accent/50 rounded px-0.5 -mx-0.5 transition-colors ${className}`}
-      onClick={() => setEditing(true)}
-      title="Click to edit"
-    >
-      {value}
-    </span>
+    <div className="flex items-center gap-1">
+      <input
+        ref={ref}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") commit();
+          if (e.key === "Escape") { setActive(false); setText(""); }
+        }}
+        onBlur={() => { if (!text.trim()) { setActive(false); setText(""); } }}
+        placeholder="Label…"
+        className="text-xs bg-background border border-primary/40 rounded px-1.5 py-0.5 w-24 focus:outline-none focus:ring-1 focus:ring-primary/50"
+      />
+      <button onClick={commit} disabled={!text.trim()} className="text-primary disabled:text-muted-foreground">
+        <Check className="w-3 h-3" />
+      </button>
+      <button onClick={() => { setActive(false); setText(""); }} className="text-muted-foreground hover:text-foreground">
+        <X className="w-3 h-3" />
+      </button>
+    </div>
   );
 }
 
+// ─── Main ─────────────────────────────────────────────────────────────────────
+
 export default function ScopeReview() {
   const navigate = useNavigate();
-  const [approved, setApproved] = useState(false);
-  const [generating, setGenerating] = useState(false);
+  const { workstreams, setWorkstreams, inputColumns, setInputColumns, advanceScopingStep } = useProject();
 
-  const [project, setProject] = useState(initialScope.project);
-  const [client, setClient] = useState(initialScope.client);
-  const [target, setTarget] = useState(initialScope.target);
-  const [duration, setDuration] = useState(initialScope.duration);
-  const [workstreams, setWorkstreams] = useState<WorkstreamData[]>(initialScope.workstreams);
-  const [milestones, setMilestones] = useState<MilestoneData[]>(initialScope.milestones);
-  const [assumptions, setAssumptions] = useState<string[]>(initialScope.assumptions);
+  // Flat list of all deliverables with their workstream attached
+  const rows = workstreams.flatMap((ws) =>
+    ws.deliverables.map((d) => ({ ws, d }))
+  );
 
-  const handleApprove = () => {
-    setApproved(true);
-    setGenerating(true);
-    setTimeout(() => navigate("/plan"), 1500);
-  };
+  // ── Handlers ──
 
-  const updateWorkstream = (idx: number, field: keyof WorkstreamData, value: string) => {
-    setWorkstreams((prev) => prev.map((ws, i) => (i === idx ? { ...ws, [field]: value } : ws)));
-  };
-
-  const updateTask = (wsIdx: number, taskIdx: number, value: string) => {
+  const setCell = (wsId: string, dId: string, col: string, value: InputRelationship | null) =>
     setWorkstreams((prev) =>
-      prev.map((ws, i) =>
-        i === wsIdx ? { ...ws, tasks: ws.tasks.map((t, j) => (j === taskIdx ? value : t)) } : ws
+      prev.map((ws) =>
+        ws.id !== wsId ? ws : {
+          ...ws,
+          deliverables: ws.deliverables.map((d) => {
+            if (d.id !== dId) return d;
+            const next = { ...d.inputMap };
+            if (value === null) delete next[col];
+            else next[col] = value;
+            return { ...d, inputMap: next };
+          }),
+        }
       )
+    );
+
+  const addColumn = (label: string) => {
+    if (!inputColumns.includes(label))
+      setInputColumns((prev) => [...prev, label]);
+  };
+
+  const removeColumn = (col: string) => {
+    setInputColumns((prev) => prev.filter((c) => c !== col));
+    setWorkstreams((prev) =>
+      prev.map((ws) => ({
+        ...ws,
+        deliverables: ws.deliverables.map((d) => {
+          const next = { ...d.inputMap };
+          delete next[col];
+          return { ...d, inputMap: next };
+        }),
+      }))
     );
   };
 
-  const removeTask = (wsIdx: number, taskIdx: number) => {
+  const removeDeliverable = (wsId: string, dId: string) =>
     setWorkstreams((prev) =>
-      prev.map((ws, i) =>
-        i === wsIdx ? { ...ws, tasks: ws.tasks.filter((_, j) => j !== taskIdx) } : ws
+      prev.map((ws) =>
+        ws.id !== wsId ? ws : {
+          ...ws,
+          deliverables: ws.deliverables.filter((d) => d.id !== dId),
+        }
       )
     );
-  };
 
-  const addTask = (wsIdx: number) => {
-    setWorkstreams((prev) =>
-      prev.map((ws, i) =>
-        i === wsIdx ? { ...ws, tasks: [...ws.tasks, "New task"] } : ws
-      )
-    );
-  };
-
-  const updateMilestone = (idx: number, field: keyof MilestoneData, value: string) => {
-    setMilestones((prev) => prev.map((ms, i) => (i === idx ? { ...ms, [field]: value } : ms)));
-  };
-
-  const removeMilestone = (idx: number) => {
-    setMilestones((prev) => prev.filter((_, i) => i !== idx));
-  };
-
-  const updateAssumption = (idx: number, value: string) => {
-    setAssumptions((prev) => prev.map((a, i) => (i === idx ? value : a)));
-  };
-
-  const removeAssumption = (idx: number) => {
-    setAssumptions((prev) => prev.filter((_, i) => i !== idx));
-  };
+  const totalDeliverables = rows.length;
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-10">
-      {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center gap-2 mb-1">
-          <Badge variant="outline" className="text-xs font-normal">
-            AI Interpretation
-          </Badge>
+    <div className="max-w-5xl mx-auto px-6 py-10 space-y-8">
+
+      {/* ── Header ── */}
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h2 className="text-xl font-semibold text-foreground">Analytical Work Map</h2>
+          <p className="text-sm text-muted-foreground mt-1">
+            Deliverables vs. inputs. Click a cell to set the relationship.
+            <span className="ml-3 inline-flex items-center gap-2 text-xs">
+              <span className="px-1.5 py-0.5 rounded bg-red-50 text-red-700 border border-red-200 font-semibold">C</span>
+              Critical
+              <span className="px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 font-semibold">S</span>
+              Supporting
+            </span>
+          </p>
         </div>
-        <h2 className="text-xl font-semibold text-foreground">Scope Review</h2>
-        <p className="text-sm text-muted-foreground mt-1">
-          We've extracted the following from the engagement letter. Click any text to edit. Approve when ready.
-        </p>
+        <span className="text-xs text-muted-foreground shrink-0 mt-1">
+          {totalDeliverables} deliverables · {inputColumns.length} inputs
+        </span>
       </div>
 
-      {/* Project summary */}
-      <Card className="p-5 mb-6 bg-card">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-          <div>
-            <p className="text-muted-foreground text-xs mb-0.5">Project</p>
-            <p className="font-medium text-foreground">
-              <EditableText value={project} onChange={setProject} />
-            </p>
-          </div>
-          <div>
-            <p className="text-muted-foreground text-xs mb-0.5">Client</p>
-            <p className="font-medium text-foreground">
-              <EditableText value={client} onChange={setClient} />
-            </p>
-          </div>
-          <div>
-            <p className="text-muted-foreground text-xs mb-0.5">Target</p>
-            <p className="font-medium text-foreground">
-              <EditableText value={target} onChange={setTarget} />
-            </p>
-          </div>
-          <div>
-            <p className="text-muted-foreground text-xs mb-0.5">Duration</p>
-            <p className="font-medium text-foreground">
-              <EditableText value={duration} onChange={setDuration} />
-            </p>
-          </div>
-        </div>
-      </Card>
+      {/* ── Table ── */}
+      <div className="bg-card border border-border rounded-lg overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border-collapse">
 
-      {/* Workstreams */}
-      <div className="mb-6">
-        <h3 className="text-sm font-semibold text-foreground flex items-center gap-2 mb-3">
-          <ListChecks className="w-4 h-4 text-primary" />
-          Workstreams & Key Tasks
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {workstreams.map((ws, wsIdx) => (
-            <Card key={wsIdx} className="p-4 bg-card">
-              <div className="flex items-start justify-between mb-2">
-                <div>
-                  <p className={`font-medium text-sm ${workstreamNameColors[ws.name] || "text-foreground"}`}>
-                    <EditableText value={ws.name} onChange={(v) => updateWorkstream(wsIdx, "name", v)} />
-                  </p>
-                  <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
-                    <Users className="w-3 h-3" />
-                    <EditableText
-                      value={ws.owner}
-                      onChange={(v) => updateWorkstream(wsIdx, "owner", v)}
-                      className="text-muted-foreground"
-                      inputClassName="text-xs"
-                    />
-                  </p>
-                </div>
-                <Badge variant="secondary" className="text-[10px]">
-                  Days{" "}
-                  <EditableText
-                    value={ws.estimatedDays}
-                    onChange={(v) => updateWorkstream(wsIdx, "estimatedDays", v)}
-                    inputClassName="text-[10px] w-12"
-                  />
-                </Badge>
-              </div>
-              <ul className="space-y-1 mt-3">
-                {ws.tasks.map((task, taskIdx) => (
-                  <li key={taskIdx} className="text-xs text-muted-foreground flex items-start gap-1.5 group/task">
-                    <span className="w-1 h-1 rounded-full bg-muted-foreground/40 mt-1.5 shrink-0" />
-                    <EditableText
-                      value={task}
-                      onChange={(v) => updateTask(wsIdx, taskIdx, v)}
-                      className="flex-1 text-muted-foreground"
-                      inputClassName="text-xs"
-                    />
-                    <button
-                      onClick={() => removeTask(wsIdx, taskIdx)}
-                      className="opacity-0 group-hover/task:opacity-100 transition-opacity p-0.5 rounded hover:bg-destructive/10 shrink-0"
-                    >
-                      <X className="w-3 h-3 text-muted-foreground hover:text-destructive" />
-                    </button>
-                  </li>
+            <thead>
+              <tr className="border-b border-border bg-muted/20">
+                {/* Deliverable column */}
+                <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground w-64 min-w-[16rem]">
+                  Deliverable
+                </th>
+
+                {/* Input columns */}
+                {inputColumns.map((col) => (
+                  <th
+                    key={col}
+                    className="px-3 py-2.5 text-center text-xs font-medium text-muted-foreground min-w-[7rem] align-top"
+                  >
+                    <div className="flex items-start justify-center gap-1 group/col">
+                      <span className="break-words text-center leading-snug">{col}</span>
+                      <button
+                        onClick={() => removeColumn(col)}
+                        className="opacity-0 group-hover/col:opacity-100 transition-opacity text-muted-foreground hover:text-foreground shrink-0"
+                      >
+                        <X className="w-2.5 h-2.5" />
+                      </button>
+                    </div>
+                  </th>
                 ))}
-              </ul>
-              <button
-                onClick={() => addTask(wsIdx)}
-                className="flex items-center gap-1 text-[10px] text-muted-foreground hover:text-foreground mt-2 transition-colors"
-              >
-                <Plus className="w-3 h-3" />
-                Add task
-              </button>
-            </Card>
-          ))}
+
+                {/* Add column */}
+                <th className="px-3 py-2.5 text-left min-w-[8rem]">
+                  <AddColumnInput onAdd={addColumn} />
+                </th>
+              </tr>
+            </thead>
+
+            <tbody className="divide-y divide-border">
+              {rows.map(({ ws, d }) => (
+                <tr key={d.id} className="group/row hover:bg-muted/10 transition-colors">
+
+                  {/* Deliverable name + workstream tag */}
+                  <td className="px-4 py-2.5">
+                    <div className="flex items-start gap-2">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-foreground leading-snug truncate">
+                          {d.name}
+                        </p>
+                        <p className={`text-[10px] font-semibold mt-0.5 ${ws.colorClass}`}>
+                          {ws.name}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => removeDeliverable(ws.id, d.id)}
+                        className="opacity-0 group-hover/row:opacity-100 transition-opacity text-muted-foreground hover:text-foreground shrink-0 mt-0.5"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </td>
+
+                  {/* Cells */}
+                  {inputColumns.map((col) => (
+                    <td key={col} className="px-3 py-2.5 h-10 text-center">
+                      <MatrixCell
+                        value={d.inputMap[col] ?? null}
+                        onChange={(val) => setCell(ws.id, d.id, col, val)}
+                      />
+                    </td>
+                  ))}
+
+                  {/* Empty cell under add-column header */}
+                  <td />
+                </tr>
+              ))}
+
+            </tbody>
+
+          </table>
         </div>
       </div>
 
-      {/* Milestones */}
-      <div className="mb-6">
-        <h3 className="text-sm font-semibold text-foreground flex items-center gap-2 mb-3">
-          <Flag className="w-4 h-4 text-primary" />
-          Key Milestones
-        </h3>
-        <Card className="p-4 bg-card">
-          <div className="space-y-2">
-            {milestones.map((ms, idx) => (
-              <div
-                key={idx}
-                className="flex items-center justify-between text-sm py-1.5 border-b border-border last:border-0 group/ms"
-              >
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
-                  <EditableText
-                    value={ms.label}
-                    onChange={(v) => updateMilestone(idx, "label", v)}
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  <EditableText
-                    value={ms.date}
-                    onChange={(v) => updateMilestone(idx, "date", v)}
-                    className="text-xs text-muted-foreground"
-                    inputClassName="text-xs"
-                  />
-                  <Badge
-                    variant={ms.type === "deadline" ? "destructive" : "secondary"}
-                    className="text-[10px]"
-                  >
-                    {ms.type === "deadline"
-                      ? "Hard Deadline"
-                      : ms.type === "key"
-                      ? "Key Date"
-                      : "Recurring"}
-                  </Badge>
-                  <button
-                    onClick={() => removeMilestone(idx)}
-                    className="opacity-0 group-hover/ms:opacity-100 transition-opacity p-0.5 rounded hover:bg-destructive/10"
-                  >
-                    <X className="w-3 h-3 text-muted-foreground hover:text-destructive" />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Card>
-      </div>
-
-      {/* Assumptions */}
-      <div className="mb-8">
-        <h3 className="text-sm font-semibold text-foreground mb-3">Key Assumptions</h3>
-        <Card className="p-4 bg-card">
-          <ul className="space-y-1.5">
-            {assumptions.map((a, idx) => (
-              <li key={idx} className="text-xs text-muted-foreground flex items-start gap-2 group/assum">
-                <span className="text-primary mt-0.5">•</span>
-                <EditableText
-                  value={a}
-                  onChange={(v) => updateAssumption(idx, v)}
-                  className="flex-1 text-muted-foreground"
-                  inputClassName="text-xs"
-                />
-                <button
-                  onClick={() => removeAssumption(idx)}
-                  className="opacity-0 group-hover/assum:opacity-100 transition-opacity p-0.5 rounded hover:bg-destructive/10 shrink-0"
-                >
-                  <X className="w-3 h-3 text-muted-foreground hover:text-destructive" />
-                </button>
-              </li>
-            ))}
-          </ul>
-          <button
-            onClick={() => setAssumptions((prev) => [...prev, "New assumption"])}
-            className="flex items-center gap-1 text-[10px] text-muted-foreground hover:text-foreground mt-2 transition-colors"
-          >
-            <Plus className="w-3 h-3" />
-            Add assumption
-          </button>
-        </Card>
-      </div>
-
-      {/* Approve CTA */}
-      <div className="flex items-center justify-end gap-3 pt-4 border-t border-border">
-        <Button variant="outline" onClick={() => navigate("/scope")}>
-          Edit scope
-        </Button>
+      {/* ── Footer ── */}
+      <div className="flex items-center justify-between pt-2 border-t border-border">
+        <p className="text-xs text-muted-foreground">
+          {totalDeliverables} deliverables · {inputColumns.length} inputs
+        </p>
         <Button
-          onClick={handleApprove}
-          disabled={approved}
+          onClick={() => { advanceScopingStep(3); navigate("/plan"); }}
           className="gap-2"
         >
-          {generating ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Generating plan…
-            </>
-          ) : (
-            <>
-              <CheckCircle2 className="w-4 h-4" />
-              Approve & generate plan
-              <ArrowRight className="w-4 h-4" />
-            </>
-          )}
+          Approve
+          <ArrowRight className="w-4 h-4" />
         </Button>
       </div>
+
     </div>
   );
 }

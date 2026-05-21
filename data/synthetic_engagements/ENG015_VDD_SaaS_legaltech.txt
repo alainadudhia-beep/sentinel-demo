@@ -1,0 +1,49 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-015
+Date: July 2023
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Lantern Growth (sell-side PE, vendor)
+Target: CaseCraft (legal workflow and matter management SaaS, UK mid-market law firms)
+Engagement type: Vendor Due Diligence
+Sector: Technology / SaaS / Legal
+
+COMMERCIAL TERMS
+Planned duration: 5 weeks
+Actual duration: 5 weeks
+Planned fee: £180k
+Actual fee: £180k
+Team: 1 Partner, 1 Manager, 2 Consultants, 1 Analyst
+
+SCOPE
+UK legal tech market (case management, document automation, billing management), CaseCraft ARR quality and growth analysis, competitive positioning vs Clio, LEAP, and legacy on-premise vendors, customer retention and expansion analysis, implementation and switching cost assessment.
+
+Scope addition (week 2): Lantern asked for a section on CaseCraft's AI product roadmap in the context of LLM disruption risk — this was becoming a standard bidder question in legal tech processes. Added a chapter, absorbed within the timeline. This was good scope to add; it came up in every subsequent bidder question list.
+
+EXECUTION NOTES
+Well-run engagement with one interesting complication.
+
+CaseCraft's product was technically strong and the management team were impressive. The CEO had a background in both law and software, and understood buyer questions better than almost any management team we'd worked with. This made sessions very efficient.
+
+The complication: CaseCraft operated in a genuinely disrupted competitive environment. Several new AI-native legal workflow tools had launched in 2022-23, and one of them (a US-backed competitor) had just announced UK market entry. This required us to update our competitive analysis twice during the engagement as new information emerged, which was managed but required agility.
+
+Implementation and switching cost analysis required detailed customer interviews — CaseCraft had unusually strong switching moat but it was not well-documented by management. We conducted 8 customer interviews (agreed as an add-on in initial scoping) which provided the qualitative evidence needed to support this claim credibly.
+
+ARR reconciliation was clean. NRR of 112% validated.
+
+Expert calls: 6 completed, plus 8 customer interviews.
+
+OUTCOME
+VDD completed. Sale process ran competitively with multiple bidders. CaseCraft attracted strong interest partly because the VDD gave bidders confidence on the switching cost question — that was the key value debate in the process.
+
+KEY LESSONS
+- AI disruption risk sections are now standard in any SaaS vertical with clear AI applicability — include by default in VDD scope
+- Customer interviews for switching cost evidence are worth the investment in high-churn-risk markets; plan for 6-8 by default
+- Competitive landscape updates during an engagement are becoming more common in fast-moving tech categories; build flex time into the competitive analysis workstream
+
+RISK FLAGS (materialised)
+- Competitive environment (MEDIUM): New AI-native entrant announced UK entry mid-engagement; required analysis updates.
+
+OVERALL ASSESSMENT
+Clean delivery. Strong work product. Good outcome for client. VDD added demonstrable value in the sale process.

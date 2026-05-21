@@ -1,0 +1,47 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-027
+Date: March 2024
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Lumio (consumer tech startup, smart lighting, pre-Series A)
+Type: Founder strategy — go-to-market
+Engagement type: Strategy
+Sector: Consumer Technology
+
+COMMERCIAL TERMS
+Planned duration: 2 weeks
+Actual duration: 2 weeks
+Planned fee: £75k
+Actual fee: £75k
+Team: 1 Manager, 1 Consultant, 1 Analyst (no Partner lead; Partner review only)
+
+SCOPE
+Go-to-market strategy for UK launch. Scope: channel prioritisation (retail vs DTC vs trade/B2B), launch messaging framework, early customer acquisition strategy, and 12-month revenue model.
+
+No scope changes.
+
+EXECUTION NOTES
+A lean, fast engagement. Lumio was a well-funded startup with a clear product but an underspecified GTM. The founding team were technical and product-oriented; the commercial strategy was their genuine gap.
+
+The engagement ran to schedule. The Manager ran the project with limited Partner involvement (appropriate for the scope and fee level). The team was lean and worked efficiently.
+
+Key analytical insight: Lumio's initial assumption was a direct DTC-first approach. The analysis showed that DTC customer acquisition costs in the smart home category were prohibitively high for a pre-brand business, and that a trade/installer channel would provide faster, lower-CAC volume. The founders were initially resistant but accepted the logic quickly when we modelled the CAC comparison directly.
+
+The 12-month revenue model was built conservatively, using the trade channel as the primary growth driver with DTC as a secondary brand-building exercise. The founders used this directly in their Series A pitch deck.
+
+No expert calls needed for this scope — desk research and team sector knowledge sufficient.
+
+OUTCOME
+Strategy delivered. Founders satisfied. Lumio used the GTM framework for their Series A, which closed 4 months later. Good reference engagement.
+
+KEY LESSONS
+- Consumer tech DTC CAC economics are frequently underestimated by technical founders; make this the first analytical question
+- Short strategy engagements for startups are viable and good for relationship building; accept them selectively based on growth potential
+- Trade/installer channel is underused as a launch route for smart home hardware; build it into default GTM options
+
+RISK FLAGS
+None.
+
+OVERALL ASSESSMENT
+Clean, efficient engagement. Strong impact for a small mandate. Good relationship foundation with founders — follow-on potential as they scale.

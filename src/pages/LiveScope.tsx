@@ -1,223 +1,302 @@
-import { useState, useEffect } from "react";
-import { Mail, Plus, Sparkles, CheckCircle2, Circle, AlertTriangle, Clock, Eye, ShieldCheck, ShieldAlert, Shield } from "lucide-react";
+import { useState, useMemo } from "react";
+import {
+  Mail, Plus, Sparkles, CheckCircle2, Circle,
+  AlertTriangle, Clock, ShieldCheck, ShieldAlert, Shield,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useProject } from "@/context/ProjectContext";
 
-interface ScopeQuestion {
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+interface LiveQuestion {
   id: string;
   question: string;
   workstream: string;
+  workstreamColor: string;
   status: "answered" | "in-progress" | "open" | "new";
   priority: "critical" | "important" | "nice-to-have";
   deadline: string;
   source: string;
-  addedDate: string;
   notes?: string;
   depth?: { level: "high" | "medium" | "low"; note: string };
 }
 
-const INITIAL_QUESTIONS: ScopeQuestion[] = [
-  {
-    id: "q1",
-    question: "What is the current customer churn rate by cohort and what are the primary drivers?",
-    workstream: "Commercial",
+// ─── Demo enrichment ──────────────────────────────────────────────────────────
+// Maps question id → demo status/notes so a subset look in-flight for the demo
+
+const DEMO_ENRICHMENT: Record<string, Partial<LiveQuestion>> = {
+  // ── Market (Priya Sharma off sick — model stalled, at risk) ───────────────
+  "market-q1": {
     status: "answered",
-    priority: "critical",
-    deadline: "28 Mar",
-    source: "Original scope",
-    addedDate: "24 Mar",
-    notes: "Answered via data room — 8.2% annual, primarily driven by pricing sensitivity in SMB segment",
+    notes: "FreshCart holds ~14% share of UK online grocery, up from 11% in 2023. Strong growth in urban delivery corridors. Cross-referenced Kantar, Mintel and VDR data.",
     depth: { level: "high", note: "Cross-referenced with VDR data and expert interviews" },
   },
-  {
-    id: "q2",
-    question: "What is the gross margin profile by product line, and how has it trended over the last 3 years?",
-    workstream: "Internals",
-    status: "answered",
-    priority: "critical",
-    deadline: "31 Mar",
-    source: "Original scope",
-    addedDate: "24 Mar",
-    notes: "CFO interview confirmed 62% blended, trending up 200bps/yr",
-    depth: { level: "medium", note: "Management-supplied data, not independently verified" },
-  },
-  {
-    id: "q3",
-    question: "What is the target's market share and how is it trending?",
-    workstream: "Market",
+  "market-q2": {
     status: "in-progress",
-    priority: "important",
-    deadline: "4 Apr",
-    source: "Original scope",
-    addedDate: "24 Mar",
-    notes: "Iniital estimate 25% and growing",
-    depth: { level: "low", note: "triangulation delayed due to team sickness" },
+    notes: "Initial analysis points to fulfilment speed and dark store density as primary drivers. Expert call triangulation underway — 2 interviews remain.",
+    depth: { level: "medium", note: "Pending 2 remaining expert interviews — at risk due to analyst absence" },
   },
-  {
-    id: "q4",
-    question: "What are the key regulatory risks and compliance requirements in target expansion markets?",
-    workstream: "Market",
+  "market-q3": {
     status: "in-progress",
-    priority: "important",
-    deadline: "4 Apr",
-    source: "Original scope",
-    addedDate: "24 Mar",
+    notes: "Bottom-up TAM model started — early estimate £8.2bn by 2029. Progress blocked by Priya's absence; model handover to Tom in progress.",
+    depth: { level: "medium", note: "Model at risk — Priya off sick, handover to Tom Bradley underway" },
   },
-  {
-    id: "q5",
-    question: "How defensible is the competitive moat — what are the top 3 switching costs for enterprise customers?",
-    workstream: "Commercial",
+  "market-q4": {
     status: "open",
-    priority: "important",
-    deadline: "7 Apr",
-    source: "Original scope",
-    addedDate: "24 Mar",
+    notes: "Segment sizing (urban / suburban / rural) not yet started. Dependent on TAM model completion.",
+    depth: { level: "low", note: "Blocked until market model is complete" },
   },
-  {
-    id: "q6",
-    question: "What is the management team's track record and are there any key-person dependencies?",
-    workstream: "Internals",
-    status: "open",
-    priority: "nice-to-have",
-    deadline: "7 Apr",
-    source: "Original scope",
-    addedDate: "24 Mar",
-  },
-  {
-    id: "q7",
-    question: "What is the net revenue retention rate for enterprise vs. SMB segments?",
-    workstream: "Commercial",
-    status: "in-progress",
-    priority: "critical",
-    deadline: "2 Apr",
-    source: "Original scope",
-    addedDate: "24 Mar",
-    notes: "Currently estimating 66% based on 3 competitors. Data request sent to CFO — expecting response by Wed",
-    depth: { level: "medium", note: "pending — benchmarks only, awaiting management data (requested, not yet received)" },
-  },
-  {
-    id: "q8",
-    question: "What capex is required to support the 3-year growth plan and what is the payback period?",
-    workstream: "Internals",
-    status: "open",
-    priority: "nice-to-have",
-    deadline: "9 Apr",
-    source: "Original scope",
-    addedDate: "24 Mar",
-  },
-];
 
-const NEW_QUESTION_FROM_EMAIL: ScopeQuestion = {
-  id: "q9",
-  question: "Churn is 8% which seems low vs competitors — can we look at price elasticity and model where we can move pricing to drive revenue growth balanced against churn?",
-  workstream: "Commercial",
+  // ── Competitive Landscape (management interview slipped) ──────────────────
+  "competitive-q1": {
+    status: "answered",
+    notes: "Moat is structural — last-mile dark store density and proprietary routing algorithm. Not primarily promotional. Expert interviews confirm 12–18 month replication lag for nearest competitor.",
+    depth: { level: "high", note: "Validated via 4 expert interviews and internal market data" },
+  },
+  "competitive-q2": {
+    status: "in-progress",
+    notes: "Ocado diverging upmarket into B2B logistics. FreshCart gaining share in mid-market. Trajectory analysis 70% complete — pending final Ocado earnings review.",
+    depth: { level: "medium", note: "Pending Ocado Q1 earnings review (published Wed)" },
+  },
+  "competitive-q3": {
+    status: "in-progress",
+    notes: "Supermarket online arms (Tesco, Sainsbury's, Morrisons) are investing but constrained by legacy fulfilment. Initial view formed — requires management interview triangulation.",
+    depth: { level: "medium", note: "Triangulation pending management interview session 2 (Thu)" },
+  },
+  "competitive-q4": {
+    status: "open",
+    notes: "Share movement attribution not yet started. Dependent on completing expert interviews and management session 2.",
+    depth: { level: "low", note: "Open — dependent on expert interview completion and management session 2" },
+  },
+
+  // ── Customer & Commercial (survey delayed — response rate at 62%) ─────────
+  "commercial-q1": {
+    status: "answered",
+    notes: "Retention is genuine — discount dependency declining year-on-year vs 2022 cohorts. NPS data strong. Independently verified with credit card panel data.",
+    depth: { level: "high", note: "Cohort data from VDR, independently verified via credit card panel" },
+  },
+  "commercial-q2": {
+    status: "in-progress",
+    notes: "Cohort curve analysis underway. 2021 cohort: 78% 12-month retention vs 71% for 2020. Survey data pending — panel recruitment at 62% response rate vs 80% target.",
+    depth: { level: "medium", note: "Survey at risk — response rate 62% vs 80% target; panel vendor chasing" },
+  },
+  "commercial-q3": {
+    status: "in-progress",
+    notes: "Unit economics model in early stages. Data room has P&L by channel but dark store-level breakdowns not yet received. LTV/CAC analysis blocked pending survey completion.",
+    depth: { level: "medium", note: "Partially at risk — dark store P&L data not yet in data room" },
+  },
+  "commercial-q4": {
+    status: "open",
+    notes: "Brand perception and switching behaviour analysis not yet started. Dependent on survey completion.",
+    depth: { level: "low", note: "Open — blocked until survey reaches minimum response threshold" },
+  },
+
+  // ── Financials (data room access gaps — at risk) ──────────────────────────
+  "financials-q1": {
+    status: "in-progress",
+    notes: "Independent model build underway. Identified 3 key divergences vs management case — revenue growth, margin trajectory, and capex phasing. Data room access partially granted; W1 folder still locked.",
+    depth: { level: "medium", note: "Model in progress — data room W1 folder access outstanding" },
+  },
+  "financials-q2": {
+    status: "in-progress",
+    notes: "EBITDA margin stress test started. Base case margin of 12% by 2027 appears optimistic — dark store opex assumptions under scrutiny. Awaiting granular cost data from data room.",
+    depth: { level: "medium", note: "Stress test at risk — granular cost data not yet received" },
+  },
+  "financials-q3": {
+    status: "open",
+    notes: "Revenue stress test not yet started. Dependent on resolving CFO's top-line assumptions vs bottom-up model.",
+    depth: { level: "low", note: "Open — dependent on management interview and model completion" },
+  },
+  "financials-q4": {
+    status: "open",
+    notes: "Cash flow and profitability path analysis not yet started. Will follow financial model completion.",
+    depth: { level: "low", note: "Open — downstream of financial model build" },
+  },
+
+  // ── Management (interview session 2 rescheduled to Thu) ───────────────────
+  "management-q1": {
+    status: "answered",
+    notes: "CFO (18-month tenure) has strong operational background from Sainsbury's. Reference checks completed with 2 former colleagues. Track record verified — promoted to CFO role 6 months ahead of schedule.",
+    depth: { level: "high", note: "Reference checks completed; LinkedIn and press cross-check done" },
+  },
+  "management-q2": {
+    status: "in-progress",
+    notes: "Geographic expansion assumptions under review — management's 40% growth assumption for Scotland rollout appears aggressive vs comparable dark store launches. Requires session 2 deep-dive (Thu).",
+    depth: { level: "medium", note: "Pending management interview session 2 (Thu 4 Jun) — slipped from Wed" },
+  },
+  "management-q3": {
+    status: "open",
+    notes: "CEO assessment not yet completed. Initial impression from session 1 positive — strong operator, clear on unit economics. Full write-up post session 2.",
+    depth: { level: "low", note: "Open — awaiting management interview session 2" },
+  },
+  "management-q4": {
+    status: "open",
+    notes: "Management growth plan stress test not started. Dependent on session 2 and financial model.",
+    depth: { level: "low", note: "Open — dependent on management session 2 and financial model" },
+  },
+};
+
+// ─── Email simulation ─────────────────────────────────────────────────────────
+
+const NEW_EMAIL_QUESTION: Omit<LiveQuestion, "workstreamColor"> = {
+  id: "email-q1",
+  question: "FreshCart's dark store rollout plan — can we stress-test the unit economics per dark store and model break-even timing?",
+  workstream: "Customer & Commercial",
   status: "new",
   priority: "important",
-  deadline: "4 Apr",
+  deadline: "Thu 4 Jun",
   source: "Client email — auto-detected",
-  addedDate: "Today",
+  notes: undefined,
 };
 
 const EMAIL_CHAIN = [
   {
     id: "e1",
-    from: "James Morton (Client)",
-    to: "Sarah Chen",
-    time: "Today 8:32 AM",
-    subject: "Re: FreshCart DD — pricing elasticity",
-    body: `Hi Sarah,
+    from: "James Whitfield (CVC Capital Partners)",
+    to: "OC&C Team",
+    time: "Today 9:14 AM",
+    subject: "Re: FreshCart CDD — dark store economics",
+    body: `Hi team,
 
-Interesting that churn is 8%, that seems low vs competitors. Can you look at elasticity and see where we can move our pricing to drive revenue growth balanced against churn?
+One thing we'd like to understand better — FreshCart's dark store rollout is a big part of their growth story. Can you stress-test the unit economics per dark store and model the break-even timing under different volume assumptions?
 
-Would be great to get this into the commercial analysis workstream.
+Would be great to have a view on this for the interim.
 
-Best,
+Thanks,
 James`,
   },
   {
     id: "e2",
     from: "Sentinel",
-    to: "Sarah Chen",
-    time: "Today 8:32 AM",
+    to: "OC&C Team",
+    time: "Today 9:14 AM",
     subject: "🔔 New scope item detected from client email",
-    body: `New scope item detected from James Morton's email:
+    body: `New scope item detected from James Whitfield's email:
 
-"Churn is 8% which seems low vs competitors — can we look at price elasticity and model where we can move pricing to drive revenue growth balanced against churn?"
+"Stress-test dark store unit economics and model break-even timing"
 
-Auto-routed to Commercial workstream
-Sarah Chen notified
-Added to Commercial task list
-
-Priority: High — relates to pricing strategy & revenue growth
+Auto-routed to: Customer & Commercial workstream
+Team notified: Lead consultant assigned
+Priority: Important — relates to core investment thesis
 
 Action: Review and confirm addition to live scope →`,
     isBot: true,
   },
 ];
 
+// ─── Display config ───────────────────────────────────────────────────────────
+
 const statusConfig = {
-  answered: { icon: CheckCircle2, color: "text-rag-green", bg: "bg-rag-green/10", label: "Answered" },
-  "in-progress": { icon: Clock, color: "text-rag-amber", bg: "bg-rag-amber/10", label: "In Progress" },
-  open: { icon: Circle, color: "text-muted-foreground", bg: "bg-muted", label: "Open" },
-  new: { icon: Sparkles, color: "text-primary", bg: "bg-primary/10", label: "New — Auto-detected" },
+  answered:    { icon: CheckCircle2, color: "text-green-600",          bg: "bg-green-50",    label: "Answered"         },
+  "in-progress": { icon: Clock,      color: "text-amber-600",          bg: "bg-amber-50",    label: "In Progress"      },
+  open:        { icon: Circle,       color: "text-muted-foreground",   bg: "bg-muted",       label: "Open"             },
+  new:         { icon: Sparkles,     color: "text-primary",            bg: "bg-primary/10",  label: "New — Auto-detected" },
 };
 
-const priorityConfig: Record<string, { label: string; color: string; bg: string }> = {
-  critical: { label: "Critical", color: "text-rag-red", bg: "bg-rag-red/10" },
-  important: { label: "Important", color: "text-rag-amber", bg: "bg-rag-amber/10" },
-  "nice-to-have": { label: "Nice to Have", color: "text-muted-foreground", bg: "bg-muted" },
+const priorityConfig = {
+  critical:       { label: "Critical",      color: "text-red-700",            bg: "bg-red-50"    },
+  important:      { label: "Important",     color: "text-amber-700",          bg: "bg-amber-50"  },
+  "nice-to-have": { label: "Nice to have",  color: "text-muted-foreground",   bg: "bg-muted"     },
 };
 
-const workstreamColors: Record<string, string> = {
-  Commercial: "bg-blue-500/10 text-blue-600 border-blue-500/20",
-  Internals: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
-  Market: "bg-violet-500/10 text-violet-600 border-violet-500/20",
-};
+// ─── Main ─────────────────────────────────────────────────────────────────────
 
 export default function LiveScope() {
-  const [questions, setQuestions] = useState<ScopeQuestion[]>(INITIAL_QUESTIONS);
+  const { workstreams } = useProject();
+
+  const [extraQuestions, setExtraQuestions] = useState<LiveQuestion[]>([]);
   const [showEmailChain, setShowEmailChain] = useState(false);
   const [emailDetected, setEmailDetected] = useState(false);
   const [questionAdded, setQuestionAdded] = useState(false);
-  
 
-  const handleSimulateEmail = () => {
+  // Build live questions from workstream questions in context
+  const baseQuestions = useMemo<LiveQuestion[]>(() => {
+    return workstreams.flatMap(ws =>
+      ws.questions.map((q, idx) => {
+        const enrichment = DEMO_ENRICHMENT[`${ws.id}-q${idx + 1}`] ?? {};
+        return {
+          id: `${ws.id}-q${idx + 1}`,
+          question: q.text,
+          workstream: ws.name,
+          workstreamColor: ws.colorClass,
+          status: (enrichment.status ?? "open") as LiveQuestion["status"],
+          priority: q.priority,
+          deadline: q.dueBy === "interim" ? "Thu 4 Jun" : "Fri 13 Jun",
+          source: "Original scope",
+          notes: enrichment.notes,
+          depth: enrichment.depth,
+        };
+      })
+    );
+  }, [workstreams]);
+
+  const allQuestions = useMemo(() => {
+    // Colour the email question to match its workstream
+    const emailWs = workstreams.find(ws => ws.name === NEW_EMAIL_QUESTION.workstream);
+    const emailQ: LiveQuestion = {
+      ...NEW_EMAIL_QUESTION,
+      workstreamColor: emailWs?.colorClass ?? "text-primary",
+    };
+    return [...extraQuestions, ...baseQuestions].concat(
+      extraQuestions.some(q => q.id === "email-q1") ? [] : []
+    );
+  }, [baseQuestions, extraQuestions, workstreams]);
+
+  function handleSimulateEmail() {
     setShowEmailChain(true);
-    // After a brief delay, show the "detected" state
-    setTimeout(() => {
-      setEmailDetected(true);
-    }, 1500);
-  };
+    setTimeout(() => setEmailDetected(true), 1500);
+  }
 
-  const handleConfirmAdd = () => {
-    setQuestions((prev) => [NEW_QUESTION_FROM_EMAIL, ...prev]);
+  function handleConfirmAdd() {
+    const emailWs = workstreams.find(ws => ws.name === NEW_EMAIL_QUESTION.workstream);
+    setExtraQuestions(prev => [{
+      ...NEW_EMAIL_QUESTION,
+      workstreamColor: emailWs?.colorClass ?? "text-primary",
+    }, ...prev]);
     setQuestionAdded(true);
-  };
+  }
 
-  const parseDeadline = (d: string) => {
-    const months: Record<string, number> = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
-    const parts = d.split(" ");
-    if (parts.length === 2) return new Date(2025, months[parts[1]] ?? 0, parseInt(parts[0]));
-    return new Date();
-  };
+  // Group by workstream in fixed display order
+  const WS_ORDER = ["Market", "Competitive Landscape", "Customer & Commercial", "Financials", "Management"];
 
-  const sortedQuestions = [...questions].sort((a, b) => parseDeadline(a.deadline).getTime() - parseDeadline(b.deadline).getTime());
-
-  const grouped = sortedQuestions.reduce<Record<string, ScopeQuestion[]>>((acc, q) => {
-    if (!acc[q.workstream]) acc[q.workstream] = [];
-    acc[q.workstream].push(q);
-    return acc;
-  }, {});
+  const grouped = useMemo(() => {
+    const map: Record<string, LiveQuestion[]> = {};
+    // Base questions first (preserves per-workstream question order)
+    baseQuestions.forEach(q => {
+      if (!map[q.workstream]) map[q.workstream] = [];
+      map[q.workstream].push(q);
+    });
+    // Email questions prepended to their workstream
+    extraQuestions.forEach(q => {
+      if (!map[q.workstream]) map[q.workstream] = [];
+      map[q.workstream].unshift(q);
+    });
+    // Return sorted by WS_ORDER
+    return Object.fromEntries(
+      WS_ORDER.filter(ws => map[ws]).map(ws => [ws, map[ws]])
+    );
+  }, [baseQuestions, extraQuestions]);
 
   const counts = {
-    total: questions.length,
-    answered: questions.filter((q) => q.status === "answered").length,
-    inProgress: questions.filter((q) => q.status === "in-progress").length,
-    open: questions.filter((q) => q.status === "open" || q.status === "new").length,
+    total: allQuestions.length + extraQuestions.length,
+    answered: [...allQuestions, ...extraQuestions].filter(q => q.status === "answered").length,
+    inProgress: [...allQuestions, ...extraQuestions].filter(q => q.status === "in-progress").length,
+    open: [...allQuestions, ...extraQuestions].filter(q => q.status === "open" || q.status === "new").length,
+  };
+
+  // Fix counts to use grouped
+  const allGroupedQuestions = Object.values(grouped).flat();
+  const finalCounts = {
+    total: allGroupedQuestions.length,
+    answered: allGroupedQuestions.filter(q => q.status === "answered").length,
+    inProgress: allGroupedQuestions.filter(q => q.status === "in-progress").length,
+    open: allGroupedQuestions.filter(q => q.status === "open" || q.status === "new").length,
   };
 
   return (
     <div className="min-h-[calc(100vh-3.5rem)] bg-background">
-      <div className="max-w-6xl mx-auto px-6 py-10">
+      <div className="max-w-7xl mx-auto px-6 py-10">
+
         {/* Header */}
         <div className="flex items-start justify-between mb-8">
           <div>
@@ -237,11 +316,11 @@ export default function LiveScope() {
         {/* Stats */}
         <div className="grid grid-cols-4 gap-4 mb-8">
           {[
-            { label: "Total Questions", value: counts.total, color: "text-foreground" },
-            { label: "Answered", value: counts.answered, color: "text-rag-green" },
-            { label: "In Progress", value: counts.inProgress, color: "text-rag-amber" },
-            { label: "Open", value: counts.open, color: "text-muted-foreground" },
-          ].map((stat) => (
+            { label: "Total Questions", value: finalCounts.total,      color: "text-foreground"        },
+            { label: "Answered",        value: finalCounts.answered,   color: "text-green-600"         },
+            { label: "In Progress",     value: finalCounts.inProgress, color: "text-amber-600"         },
+            { label: "Open",            value: finalCounts.open,       color: "text-muted-foreground"  },
+          ].map(stat => (
             <div key={stat.label} className="rounded-lg border border-border bg-card p-4">
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{stat.label}</p>
               <p className={`text-2xl font-bold mt-1 ${stat.color}`}>{stat.value}</p>
@@ -250,48 +329,45 @@ export default function LiveScope() {
         </div>
 
         <div className="grid grid-cols-3 gap-6">
-          {/* Question list - 2 cols */}
+
+          {/* Question list */}
           <div className="col-span-2 space-y-6">
             {Object.entries(grouped).map(([workstream, qs]) => (
               <div key={workstream}>
                 <div className="flex items-center gap-2 mb-3">
-                  <span className={`text-xs font-semibold px-2 py-1 rounded-md border ${workstreamColors[workstream] || "bg-muted text-muted-foreground"}`}>
+                  <span className={`text-xs font-semibold ${qs[0]?.workstreamColor ?? "text-foreground"}`}>
                     {workstream}
                   </span>
-                  <span className="text-xs text-muted-foreground">{qs.length} questions</span>
+                  <span className="text-xs text-muted-foreground">· {qs.length} questions</span>
                 </div>
                 <div className="space-y-2">
-                  {qs.map((q) => {
+                  {qs.map(q => {
                     const sc = statusConfig[q.status];
                     const StatusIcon = sc.icon;
-                    
                     const isNew = q.status === "new";
 
                     return (
                       <div
                         key={q.id}
                         className={`rounded-lg border p-4 transition-all ${
-                          isNew ? "border-primary/40 bg-primary/5 ring-1 ring-primary/20" : "border-border bg-card"
+                          isNew
+                            ? "border-primary/40 bg-primary/5 ring-1 ring-primary/20"
+                            : "border-border bg-card"
                         }`}
                       >
                         <div className="flex items-start gap-3">
                           <StatusIcon className={`w-4 h-4 mt-0.5 shrink-0 ${sc.color}`} />
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-start justify-between gap-3">
-                              <p className="text-sm font-medium text-foreground">
-                                {q.question}
-                              </p>
-                            </div>
+                            <p className="text-sm font-medium text-foreground">{q.question}</p>
                             <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-                              <span className={`text-[11px] px-1.5 py-0.5 rounded ${sc.bg} ${sc.color} font-medium`}>
+                              <span className={`text-[11px] px-1.5 py-0.5 rounded font-medium ${sc.bg} ${sc.color}`}>
                                 {sc.label}
                               </span>
                               <span className={`text-[11px] px-1.5 py-0.5 rounded font-medium ${priorityConfig[q.priority].bg} ${priorityConfig[q.priority].color}`}>
                                 {priorityConfig[q.priority].label}
                               </span>
                               <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
-                                <Clock className="w-3 h-3" />
-                                {q.deadline}
+                                <Clock className="w-3 h-3" />{q.deadline}
                               </span>
                               <span className="text-[11px] text-muted-foreground">{q.source}</span>
                             </div>
@@ -307,13 +383,15 @@ export default function LiveScope() {
                             )}
                             {q.depth && (
                               <div className={`mt-2 inline-flex items-center gap-1.5 text-[11px] px-2 py-1 rounded-md font-medium ${
-                                q.depth.level === "high"
-                                  ? "bg-rag-green/10 text-rag-green"
-                                  : q.depth.level === "medium"
-                                  ? "bg-rag-amber/10 text-rag-amber"
-                                  : "bg-rag-red/10 text-rag-red"
+                                q.depth.level === "high"   ? "bg-green-50 text-green-700"
+                                : q.depth.level === "medium" ? "bg-amber-50 text-amber-700"
+                                : "bg-red-50 text-red-700"
                               }`}>
-                                {q.depth.level === "high" ? <ShieldCheck className="w-3 h-3" /> : q.depth.level === "medium" ? <ShieldAlert className="w-3 h-3" /> : <Shield className="w-3 h-3" />}
+                                {q.depth.level === "high"
+                                  ? <ShieldCheck className="w-3 h-3" />
+                                  : q.depth.level === "medium"
+                                  ? <ShieldAlert className="w-3 h-3" />
+                                  : <Shield className="w-3 h-3" />}
                                 Depth: {q.depth.level} — {q.depth.note.toLowerCase()}
                               </div>
                             )}
@@ -327,7 +405,7 @@ export default function LiveScope() {
             ))}
           </div>
 
-          {/* Email chain panel - 1 col */}
+          {/* Email panel */}
           <div className="col-span-1">
             <div className="sticky top-20">
               <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
@@ -363,7 +441,7 @@ export default function LiveScope() {
                           </div>
                           <p className="text-[11px] text-muted-foreground mb-0.5">To: {email.to} · {email.time}</p>
                           <p className="text-xs font-medium text-foreground mb-2">{email.subject}</p>
-                          <div className="text-xs text-muted-foreground whitespace-pre-line leading-relaxed max-h-40 overflow-y-auto">
+                          <div className="text-xs text-muted-foreground whitespace-pre-line leading-relaxed max-h-44 overflow-y-auto">
                             {email.body}
                           </div>
                         </div>
@@ -371,7 +449,6 @@ export default function LiveScope() {
                     </div>
                   ))}
 
-                  {/* Confirm add button */}
                   {emailDetected && !questionAdded && (
                     <div className="animate-in fade-in slide-in-from-bottom-2">
                       <Button onClick={handleConfirmAdd} className="w-full gap-2" size="sm">
@@ -382,13 +459,13 @@ export default function LiveScope() {
                   )}
 
                   {questionAdded && (
-                    <div className="rounded-lg border border-rag-green/30 bg-rag-green/5 p-3 animate-in fade-in">
+                    <div className="rounded-lg border border-green-200 bg-green-50/50 p-3 animate-in fade-in">
                       <div className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-rag-green" />
+                        <CheckCircle2 className="w-4 h-4 text-green-600" />
                         <span className="text-sm font-medium text-foreground">Question added to scope</span>
                       </div>
                       <p className="text-xs text-muted-foreground mt-1">
-                        Added to Commercial workstream. Team notified.
+                        Added to Customer &amp; Commercial workstream. Team notified.
                       </p>
                     </div>
                   )}
@@ -396,6 +473,7 @@ export default function LiveScope() {
               )}
             </div>
           </div>
+
         </div>
       </div>
     </div>

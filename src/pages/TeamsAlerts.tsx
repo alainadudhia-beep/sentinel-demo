@@ -31,20 +31,20 @@ const ALERTS: AlertCard[] = [
     isPersonMessage: true,
     personAvatar: { initials: "JO", bg: "bg-red-500" },
     fields: [
-      { label: "From", value: "J. Okafor · Commercial workstream" },
-      { label: "Slides", value: "Management plan stress test + Commercial risk summary" },
-      { label: "Section", value: "Commercial · 6 done, 2 awaiting review, 2 not started" },
-      { label: "Deadline", value: "Partner sign-off needed before Mon 7 Apr client presentation" },
-      { label: "Note", value: "Can you check my 2 slides please? Flagged for partner review — pipeline coverage ratios not yet independently validated." },
+      { label: "From", value: "J. Okafor · Customer & Commercial workstream" },
+      { label: "Slides", value: "Customer retention cohort analysis + Unit economics model" },
+      { label: "Section", value: "Customer & Commercial · 4 done, 2 awaiting review, 3 not started" },
+      { label: "Deadline", value: "Partner sign-off needed before Thu 4 Jun interim presentation" },
+      { label: "Note", value: "Can you check my 2 slides please? Flagged for partner review — retention figures not yet cross-checked against credit card panel data." },
     ],
     actions: [
       { id: "sr1", label: "✅ Open slides and review now", recommended: true },
-      { id: "sr2", label: "📧 Acknowledge — will review by Fri 4pm" },
+      { id: "sr2", label: "📧 Acknowledge — will review by Wed 4pm" },
       { id: "sr3", label: "↩️ Remind me in 1 hour" },
     ],
     managerResponses: {
       sr1: "Opening slide review. Will approve or flag changes within the hour.",
-      sr2: "Acknowledged. Scheduled for review during the Fri 4pm hold.",
+      sr2: "Acknowledged. Scheduled for review during the Wed 4pm hold.",
       sr3: "Acknowledged. I'll remind you to review these slides in 1 hour.",
     },
   },
@@ -60,7 +60,7 @@ const ALERTS: AlertCard[] = [
       { label: "Project", value: "Project Falcon · FreshCart DD" },
       { label: "Risk", value: "Survey Delayed" },
       { label: "Cause", value: "Panel recruitment delayed 1 day, response rate at 62% of target" },
-      { label: "Impact", value: "Potential +2 day delay → partner review at risk → likely overrun" },
+      { label: "Impact", value: "Potential +2 day delay → Thu 4 Jun interim deck at risk → survey-dependent slides incomplete" },
     ],
     actions: [
       { id: "a1", label: "✅ Recover timeline — priority boost request", recommended: true },
@@ -80,19 +80,19 @@ const ALERTS: AlertCard[] = [
     title: "Partner declined slide review hold",
     emoji: "⚠️",
     shortTitle: "Slide Review Declined",
-    preview: "Thu 11am removed — commercial slides awaiting review",
+    preview: "Wed 3 Jun 11am removed — interim deck awaiting review",
     fields: [
-      { label: "Event", value: "Thu 3 Apr 11am removed · commercial slides still awaiting review" },
-      { label: "What happened", value: "[Partner] declined the Thu 11am hold. 2 commercial slides need sign-off before the Mon 7 client presentation. Fri 4pm hold is the last remaining window." },
-      { label: "Risk if Fri also drops", value: "Slides go to client unreviewed — partner must formally accept this." },
+      { label: "Event", value: "Wed 3 Jun 11am hold removed · Customer & Commercial slides still awaiting sign-off" },
+      { label: "What happened", value: "James Whitfield's team moved the Wed preview slot. 2 interim slides need partner sign-off before Thu 4 Jun client presentation. Thu 8am is the last remaining window." },
+      { label: "Risk if Thu slot also drops", value: "Slides go to client unreviewed — partner must formally accept this risk." },
     ],
     actions: [
-      { id: "b1", label: "📞 Chase EA for time", recommended: true },
+      { id: "b1", label: "📞 Chase EA for Thu 8am slot", recommended: true },
       { id: "b2", label: "📧 Send slides for async review" },
     ],
     managerResponses: {
-      b1: "Approved: Chase EA now. Escalate to me if no slot by 2pm today.",
-      b2: "Approved: Send slides with tracked changes. Flag we need sign-off by EOD Friday.",
+      b1: "Approved: Chase EA now. Escalate to me if no slot confirmed by 2pm today.",
+      b2: "Approved: Send slides with tracked changes. Flag we need sign-off by EOD Wednesday.",
     },
   },
   {
@@ -102,21 +102,21 @@ const ALERTS: AlertCard[] = [
     title: "Market model slides incomplete",
     emoji: "📊",
     shortTitle: "Market Model Slides",
-    preview: "Priya off sick — slides not started for partner review",
+    preview: "Priya off sick — TAM/SAM/SOM not started for interim",
     fields: [
       { label: "Project", value: "Project Falcon · FreshCart DD" },
-      { label: "Cause", value: "Priya off sick since Wednesday — competitor pricing layer and 5-year projections not started" },
-      { label: "Impact", value: "TAM/SAM/SOM section missing for Mon 7 partner review, weakens investment thesis" },
+      { label: "Cause", value: "Priya off sick since Monday — competitor pricing layer and 5-year market projections not started" },
+      { label: "Impact", value: "TAM/SAM/SOM section missing for Thu 4 Jun interim presentation, weakens investment thesis" },
     ],
     actions: [
       { id: "c1", label: "🤖 AI-generate draft slides for review", recommended: true },
       { id: "c2", label: "📁 Pull slides from previous project (Project Echo)" },
-      { id: "c3", label: "📝 Create placeholder slides for interim meeting" },
+      { id: "c3", label: "📝 Create placeholder slides with methodology note" },
     ],
     managerResponses: {
-      c1: "Approved: Generate AI draft. Priya to review when back. Flag as draft in deck.",
+      c1: "Approved: Generate AI draft. Priya to review when back. Flag as draft in interim deck.",
       c2: "Approved: Use Echo slides as baseline. Update figures for FreshCart context.",
-      c3: "Approved: Placeholders with methodology note. Full slides by Wed.",
+      c3: "Approved: Placeholders with methodology note. Full slides by Thu morning.",
     },
   },
   {
@@ -126,23 +126,23 @@ const ALERTS: AlertCard[] = [
     title: "Daily check-in brief",
     emoji: "📋",
     shortTitle: "Daily Check-in",
-    preview: "3 items before your 9am — expert interviews at 6/15",
+    preview: "3 items before your 9am — interim deck at risk",
     fields: [
-      { label: "Project", value: "Project Meridian · Daily check-in brief" },
-      { label: "Date", value: "Wed 2 Apr · 3 items before your 9am" },
-      { label: "Flag", value: "Expert interviews at 6 of 15 — on pace for 12 by Friday, 3 below target. Client needs advance notice before Monday's interim presentation." },
-      { label: "Today", value: "CFO interview confirmed 2pm. Q13 (side-letter) added to guide. CPO rescheduled to Thu 2pm." },
-      { label: "Action needed", value: "Tech & product workstream unassigned — 9 days to deadline. Needs an owner or partner sign-off to descope by end of today." },
+      { label: "Project", value: "Project Falcon · Daily check-in brief" },
+      { label: "Date", value: "Tue 2 Jun · Week 2 · 3 items before your 9am check-in with James Whitfield" },
+      { label: "Flag", value: "Interim findings deck (Thu 4 Jun) at risk — expert interviews only wrapped Mon, survey at 62% response rate. Client needs a heads-up today." },
+      { label: "Today", value: "CFO deep-dive interview confirmed 2pm (Tom Bradley). Management session 2 rescheduled to Thu 9am. Dark store unit economics added to Customer & Commercial scope." },
+      { label: "Action needed", value: "Market model owner absent — TAM/SAM/SOM section unassigned. Needs handover to Tom Bradley or partner sign-off to descope before interim." },
     ],
     actions: [
-      { id: "d1", label: "📧 Draft expert outreach", recommended: true },
-      { id: "d2", label: "⚠️ Warn client re: Mon" },
+      { id: "d1", label: "📧 Draft early warning to James Whitfield", recommended: true },
+      { id: "d2", label: "🔁 Reassign market model to Tom Bradley" },
       { id: "d3", label: "🔺 Escalate to partner" },
     ],
     managerResponses: {
-      d1: "Approved: Draft outreach for remaining 9 experts. Prioritise industry practitioners over academics.",
-      d2: "Approved: Send client a heads-up that interim deck may have gaps in expert section. Frame as draft.",
-      d3: "Approved: Escalating workstream ownership to partner. Set up 15-min call for today.",
+      d1: "Approved: Send early warning to James Whitfield now. Frame interim as near-final with two sections marked provisional.",
+      d2: "Approved: Reassigning market model to Tom. Ask him to prioritise TAM/SAM/SOM for Thu morning.",
+      d3: "Approved: Escalating to partner. Set up 15-min call for 8am today before check-in.",
     },
   },
 ];
@@ -194,7 +194,7 @@ export default function TeamsAlerts() {
 
   return (
     <div className="min-h-[calc(100vh-3.5rem)] bg-background">
-      <div className="max-w-5xl mx-auto px-6 py-10">
+      <div className="max-w-7xl mx-auto px-6 py-10">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-foreground">Teams Interface</h1>
           <p className="text-sm text-muted-foreground mt-1">
@@ -561,7 +561,7 @@ function ScopeChatContent({
                   <div className="text-sm space-y-2">
                     <div>
                       <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">From</span>
-                      <p className="text-foreground font-medium">James Morton (Client)</p>
+                      <p className="text-foreground font-medium">James Whitfield (CVC Capital Partners)</p>
                     </div>
                     <div>
                       <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Subject</span>
@@ -573,7 +573,7 @@ function ScopeChatContent({
 
 Interesting that churn is 8%, that seems low vs competitors. Can you look at elasticity and see where we can move our pricing to drive revenue growth balanced against churn?
 
-Would be great to get this into the commercial analysis workstream.
+Would be great to get this into the Customer & Commercial workstream.
 
 Best,
 James`}</div>
@@ -612,7 +612,7 @@ James`}</div>
                     <div className="grid grid-cols-2 gap-2">
                       <div>
                         <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Workstream</span>
-                        <p className="text-muted-foreground">Commercial</p>
+                        <p className="text-muted-foreground">Customer & Commercial</p>
                       </div>
                       <div>
                         <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Priority</span>
@@ -624,7 +624,7 @@ James`}</div>
                       </div>
                       <div>
                         <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Deadline</span>
-                        <p className="text-muted-foreground">4 Apr</p>
+                        <p className="text-muted-foreground">Thu 4 Jun</p>
                       </div>
                     </div>
                   </div>
@@ -691,7 +691,7 @@ James`}</div>
                 <span className="text-sm font-semibold text-foreground">Sarah Chen</span>
               </div>
               <div className="rounded-lg bg-primary/10 border border-primary/20 p-3 text-sm text-foreground">
-                Confirmed — add pricing elasticity question to Commercial workstream. Flag for J. Okafor to pick up.
+                Confirmed — add pricing elasticity question to Customer & Commercial workstream. Flag for J. Okafor to pick up.
               </div>
             </div>
             <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
@@ -717,7 +717,7 @@ James`}</div>
                   <span className="font-medium">Scope item added</span>
                 </div>
                 <p className="text-muted-foreground text-xs">
-                  Question added to Commercial workstream · Live scope updated · J. Okafor notified · Deadline set: 4 Apr
+                  Question added to Customer & Commercial workstream · Live scope updated · J. Okafor notified · Deadline set: Thu 4 Jun
                 </p>
               </div>
             </div>

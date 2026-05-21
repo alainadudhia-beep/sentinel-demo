@@ -1,0 +1,46 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-007
+Date: April 2023
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Watershed Capital
+Target: The Brief (digital newsletter + events business, B2B professional audience)
+Engagement type: Commercial Due Diligence
+Sector: Media
+
+COMMERCIAL TERMS
+Planned duration: 2 weeks
+Actual duration: 2 weeks
+Planned fee: £90k
+Actual fee: £90k
+Team: 1 Partner, 1 Manager, 1 Consultant, 1 Analyst
+
+SCOPE
+Digital B2B media market assessment, subscriber economics (paid newsletter benchmarking), advertising revenue quality, events contribution margin assessment, competitive positioning vs sector newsletters and broader professional media landscape.
+
+Scope addition: Watershed asked for a view on the sponsorship revenue model as a third revenue stream — not in the original brief. Team absorbed this in the context of the advertising assessment; it didn't materially extend the work.
+
+EXECUTION NOTES
+Tight but well-managed. The Brief was a smaller asset and Watershed knew it — they'd sized the work appropriately for a 2-week sprint.
+
+Subscriber data from Substack was clean and easy to work with. Advertising and sponsorship revenue was less structured — it lived in a combination of spreadsheets and the founder's email threads. Getting clean pipeline data took two days of back-and-forth. The founder was enthusiastic and transparent but not commercially sophisticated; some of the revenue projections in the IM were optimistic in ways that weren't immediately obvious.
+
+Events business: The Brief ran 4 events per year. P&L was available but cost allocation was inconsistent (some overheads recharged, some not). We normalised and found contribution margin was materially lower than presented — this became a significant finding.
+
+Expert calls: 4 completed. Limited pool for specialist B2B newsletters; used broader digital media contacts.
+
+OUTCOME
+Deal proceeded. Recommended proceed with revised revenue model — our normalised events margin was lower than the IM suggested, and we revised the advertising growth assumption down. Watershed incorporated both into their model.
+
+KEY LESSONS
+- Founder-led media businesses often have revenue in email threads and informal agreements — build in discovery time for commercial data
+- Events P&L in media businesses frequently has inconsistent cost allocation; treat it as a standalone rebuild
+- 2-week CDDs on smaller media assets are achievable; keep team lean
+
+RISK FLAGS (materialised)
+- Data quality (LOW-MEDIUM): Advertising/sponsorship data unstructured; required consolidation.
+- Revenue quality (MEDIUM): Events margin overstated in IM due to inconsistent cost allocation. Surfaced and flagged.
+
+OVERALL ASSESSMENT
+Good engagement. Clean delivery within timeline. Watershed were pleased with the events margin finding — it was actionable for them.
