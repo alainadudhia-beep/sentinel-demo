@@ -41,7 +41,7 @@ export default function Intro() {
         <div className="space-y-10">
           {bullets.map((section) => (
             <div key={section.heading}>
-              <h2 className="text-base font-semibold text-foreground mb-3">
+              <h2 className="text-xl font-semibold text-foreground mb-3">
                 {section.heading}
               </h2>
               <ul className="space-y-2">
