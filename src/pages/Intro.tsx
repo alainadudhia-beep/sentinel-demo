@@ -11,7 +11,7 @@ const bullets: { heading: string; items: string[] }[] = [
     ],
   },
   {
-    heading: "What I've been building",
+    heading: "What I've been working on",
     items: [
       "Problem: 25-50% of projects overrun at a cost of £50-100k/week",
       "Cause: In CDDs the cause is structural, not operational",
