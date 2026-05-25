@@ -229,7 +229,7 @@ export default function TopNav() {
   const { pathname } = useLocation();
   const { furthestScopingStep } = useProject();
 
-  if (pathname === "/") return null;
+  if (pathname === "/" || pathname === "/intro") return null;
 
   const isScoping  = scopingPaths.has(pathname);
   const isDelivery = deliveryPaths.has(pathname);

@@ -21,6 +21,7 @@ import Project from "./pages/Project";
 import Milestones from "./pages/Milestones";
 import TeamsAlerts from "./pages/TeamsAlerts";
 import TeamStatus from "./pages/TeamStatus";
+import Intro from "./pages/Intro";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
         <TopNav />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/intro" element={<Intro />} />
           <Route path="/scoping-call" element={<ScopingCall />} />
           <Route path="/scoping-review" element={<ScopingReview />} />
           <Route path="/scope" element={<Scope />} />
