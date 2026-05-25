@@ -3,15 +3,16 @@ import { ArrowRight } from "lucide-react";
 
 const bullets: { heading: string; items: string[] }[] = [
   {
-    heading: "Who I am",
+    heading: "I bring combined consulting and product experience, with a recent focus on transforming workflows with AI",
     items: [
       "Former OC&C Consultant",
       "Strategy Lead and then Senior Product Manager at Vivino",
       "Recently at Antler VC exploring AI-first ventures",
+      "Currently contracting as an AI consultant on workflow transformation",
     ],
   },
   {
-    heading: "What I've been working on",
+    heading: "I've been exploring a solution for reducing the frequency and cost of CDD project overruns",
     items: [
       "<strong>Problem:</strong> 25-50% of projects overrun at a cost of £50-100k/week",
       "<strong>Cause:</strong> In CDDs, it's structurally driven by evolving scopes, underpriced projects and tight timelines - not poor execution",
@@ -20,7 +21,7 @@ const bullets: { heading: string; items: string[] }[] = [
     ],
   },
   {
-    heading: "Today's goal",
+    heading: "Today's goals",
     items: [
       "Walk you through the concept demo",
       "Understand where OC&C is on this problem",
