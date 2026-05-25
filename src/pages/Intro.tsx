@@ -6,7 +6,7 @@ const bullets: { heading: string; items: string[] }[] = [
     heading: "Who I am",
     items: [
       "Former OC&C Consultant",
-      "Later Senior Product Manager at Vivino",
+      "Strategy Lead and then Senior Product Manager at Vivino",
       "Recently at Antler VC exploring AI-first ventures",
     ],
   },
@@ -14,7 +14,7 @@ const bullets: { heading: string; items: string[] }[] = [
     heading: "What I've been working on",
     items: [
       "<strong>Problem:</strong> 25-50% of projects overrun at a cost of £50-100k/week",
-      "<strong>Cause:</strong> In CDDs, it's structural - evolving scopes, under-budgeted projects, tight timelines - not poor execution",
+      "<strong>Cause:</strong> In CDDs, it's structurally driven by evolving scopes, under-budgeted projects and tight timelines - not poor execution",
       "<strong>Validation:</strong> 30+ interviews across consulting (<em>OC&amp;C, Bain, BCG, LEK, CIL, A&amp;M, Monitor-Deloitte, Elixirr, EY-Parthenon</em>), PE funds and AI-native companies",
       "<strong>Solution:</strong> Built a concept demo grounded in that research - a governance layer for CDD engagements from scoping through delivery",
     ],
