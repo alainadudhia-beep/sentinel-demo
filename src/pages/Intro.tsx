@@ -13,10 +13,10 @@ const bullets: { heading: string; items: string[] }[] = [
   {
     heading: "What I've been working on",
     items: [
-      "Problem: 25-50% of projects overrun at a cost of £50-100k/week",
-      "Cause: In CDDs the cause is structural, not operational",
-      "Validation: 30+ interviews across consulting (OC&C, Bain, BCG, LEK, CIL, A&M, Monitor-Deloitte, Elixirr, EY-Parthenon), PE funds and AI-native companies",
-      "Solution: Built a concept demo grounded in that research - a governance layer for CDD engagements from scoping through delivery",
+      "<strong>Problem:</strong> 25-50% of projects overrun at a cost of £50-100k/week",
+      "<strong>Cause:</strong> In CDDs the cause is structural, not operational",
+      "<strong>Validation:</strong> 30+ interviews across consulting (<em>OC&amp;C, Bain, BCG, LEK, CIL, A&amp;M, Monitor-Deloitte, Elixirr, EY-Parthenon</em>), PE funds and AI-native companies",
+      "<strong>Solution:</strong> Built a concept demo grounded in that research - a governance layer for CDD engagements from scoping through delivery",
     ],
   },
   {
@@ -36,23 +36,18 @@ export default function Intro() {
     <div className="min-h-screen bg-background flex items-center justify-center px-6 py-16">
       <div className="w-full max-w-2xl">
 
-        {/* Wordmark */}
-        <p className="text-xs font-semibold tracking-widest uppercase text-muted-foreground mb-12">
-          Sentinel
-        </p>
-
         {/* Sections */}
         <div className="space-y-10">
           {bullets.map((section) => (
             <div key={section.heading}>
-              <h2 className="text-sm font-semibold text-foreground mb-3">
+              <h2 className="text-base font-semibold text-foreground mb-3">
                 {section.heading}
               </h2>
               <ul className="space-y-2">
                 {section.items.map((item) => (
-                  <li key={item} className="flex items-start gap-2.5 text-sm text-muted-foreground">
-                    <span className="mt-[7px] w-1 h-1 rounded-full bg-muted-foreground/50 shrink-0" />
-                    {item}
+                  <li key={item} className="flex items-start gap-2.5 text-base text-muted-foreground">
+                    <span className="mt-[9px] w-1 h-1 rounded-full bg-muted-foreground/50 shrink-0" />
+                    <span dangerouslySetInnerHTML={{ __html: item }} />
                   </li>
                 ))}
               </ul>
