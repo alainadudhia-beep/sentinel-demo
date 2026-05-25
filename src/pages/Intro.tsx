@@ -7,7 +7,7 @@ const bullets: { heading: string; items: string[] }[] = [
     items: [
       "Former OC&C Consultant",
       "Strategy Lead and then Senior Product Manager at Vivino",
-      "Recently at Antler VC exploring AI-first ventures",
+      "Recently at a startup incubator exploring AI-first ventures",
       "Currently contracting as an AI consultant on workflow transformation",
     ],
   },
