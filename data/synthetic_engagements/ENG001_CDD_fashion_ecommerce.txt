@@ -1,0 +1,41 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-001
+Date: March 2023
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Meridian Capital Partners (buy-side PE)
+Target: StyleVault (UK-based online fashion retailer, DTC + marketplace)
+Engagement type: Commercial Due Diligence
+Sector: Retail / E-commerce
+
+COMMERCIAL TERMS
+Planned duration: 3 weeks
+Actual duration: 3 weeks
+Planned fee: £135k
+Actual fee: £135k
+Team: 1 Partner, 1 Manager, 2 Consultants, 1 Analyst
+
+SCOPE
+The mandate covered market sizing and growth trajectory for UK online fashion (mid-market, 25-45 demographic), competitive positioning of StyleVault relative to ASOS, Next, and emerging DTC brands, unit economics validation (CAC, LTV, returns rate), and an assessment of the management team's strategic credibility. Explicitly out of scope: operational deep-dive on fulfilment, technology stack assessment.
+
+EXECUTION NOTES
+The engagement ran cleanly. Client (Meridian) was experienced and responsive — we had a clear brief from day one and they trusted us to get on with it. Data room was well-organised; StyleVault's CFO was cooperative and quick to respond to data requests, though their CRM data required some cleaning before we could build reliable cohort analysis.
+
+We added a workstream mid-project at Meridian's request: a quick view on StyleVault's influencer and affiliate acquisition channels, which had grown significantly in the last 12 months and wasn't in the original brief. The team absorbed this without extending the timeline — the analyst took it on alongside the CAC analysis. It was a sensible addition and didn't compromise quality.
+
+Customer survey was fielded in week 2 (n=400) and came back clean with no surprises. Expert calls: 6 completed, covering former ASOS commercial leads, a returns logistics specialist, and two fashion brand founders.
+
+OUTCOME
+Deal proceeded. We recommended proceed with conditions — primarily around the returns rate trajectory (22% and rising) and customer concentration in the 28-35 cohort. Meridian found our concerns about the affiliate channel helpful as a negotiation lever.
+
+KEY LESSONS / FLAGS FOR FUTURE WORK
+- StyleVault-type assets (DTC fashion, heavy influencer dependency) need CAC analysis broken down by channel from day one — bundled acquisition economics hide a lot
+- Returns rate benchmarking in fashion is harder than it looks; build in extra time or pre-prepare comparator set
+- Meridian are good repeat-work clients; they move quickly and don't over-scope
+
+RISK FLAGS (materialised)
+- Data quality: CRM data required restructuring before cohort analysis could run. Low severity, managed within timeline.
+
+OVERALL ASSESSMENT
+Strong engagement. Clean delivery, good client relationship. Work product quality was high. Would recommend for repeat work.

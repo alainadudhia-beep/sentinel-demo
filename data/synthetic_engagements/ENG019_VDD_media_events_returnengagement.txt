@@ -1,0 +1,56 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-019
+Supersedes: ENG-019a (initial VDD, 5 weeks, completed April 2023)
+Date: September 2023 (return engagement)
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Pemberton Capital (sell-side PE)
+Target: Axiom Events Group (B2B events and conferences, 14 annual events, UK + selected European)
+Engagement type: Vendor Due Diligence (return engagement — process restart after initial deal fell through)
+Sector: Media / Events
+
+COMMERCIAL TERMS (return engagement only)
+Planned duration: 3 weeks (update + refresh of prior VDD)
+Actual duration: 4.5 weeks
+Planned fee: £95k
+Actual fee: £125k
+Team: 1 Manager, 2 Consultants, 1 Analyst (Partner involved in review only)
+
+BACKGROUND
+We completed an initial VDD on Axiom in April 2023 (ENG-019a). The sale process attracted three bidders but fell through at final round — the winning bidder withdrew after heads of terms, citing concerns about post-COVID event attendance recovery trajectory. The VDD from April remained largely valid, but Pemberton relaunched the process in August 2023 with a refined buyer narrative and asked us to update our work to reflect 6 months of additional trading data (including Axiom's strongest-ever autumn event season) and to address the specific concerns raised by the prior bidder.
+
+SCOPE (return engagement)
+Update all financial analysis to current. Rebuild post-COVID attendance trajectory narrative with new data. Address prior bidder's specific concerns (3 identified in their withdrawal letter). Add section on digital/hybrid event revenue (a new product line launched since April). Add international event expansion analysis (Paris and Amsterdam events added to 2024 calendar).
+
+Scope additions: Pemberton asked for a second section specifically on delegate satisfaction benchmarking (post-event surveys) mid-process. Added week 4; absorbed.
+
+EXECUTION NOTES
+The return engagement dynamic creates its own challenges. On the positive side: the team had existing institutional knowledge of the asset (the Manager and one consultant had worked on ENG-019a), which saved significant ramp time. The data room was already structured.
+
+On the negative side: there's a temptation to anchor to prior conclusions rather than genuinely reassessing. We were explicit in team discussions about this risk and specifically identified three areas where the trading data should challenge (not confirm) our April views.
+
+The post-COVID narrative rebuild was the key deliverable. Axiom's autumn 2023 events were genuinely strong — attendance recovery in two anchor events was better than the industry average. We were able to build a credible "recovery complete" narrative that was more defensible than the hedged position in the April VDD.
+
+One complication: the prior bidder's withdrawal letter (which Pemberton shared with us) identified a concern about one specific event (a legal sector conference) whose attendance had declined 3 years running. Addressing this required Axiom management to present a credible recovery plan — they had one but it was underdeveloped. We spent time helping them structure the narrative, which felt like more consulting input than VDD work. Worth noting.
+
+The digital/hybrid revenue section: this product line was generating £180k annual revenue with high margins but tiny relative scale. We were careful to present it as optionality rather than a core thesis driver — which Pemberton pushed back on initially.
+
+Overrun: driven primarily by the management narrative development work (which extended into week 4) and the Q&A cycle from a new set of bidders who hadn't seen the April VDD.
+
+OUTCOME
+Sale process is ongoing at time of writing. Two bidders in final round. Pemberton confident the refreshed narrative addresses prior withdrawal concerns.
+
+KEY LESSONS
+- Return engagements create anchoring risk — explicitly identify hypotheses that should be challenged, not just confirmed, from prior work
+- Prior bidder withdrawal letters are gold; read them carefully and address each concern explicitly and visibly
+- Helping management develop their narrative crosses a line from VDD into consulting; be conscious of this and charge appropriately or don't do it
+- Digital/hybrid event revenue is becoming a standard section in events VDDs — include by default from 2024
+
+RISK FLAGS (materialised)
+- Anchoring bias (MEDIUM): Risk of prior conclusions shaping new analysis; mitigated through explicit team discussion.
+- Scope tension (MEDIUM): Narrative development work extended beyond typical VDD scope.
+- Overrun (MEDIUM): 1.5 weeks over planned; Q&A cycle and narrative work primary drivers.
+
+OVERALL ASSESSMENT
+Challenging engagement with an unusual dynamic (return after prior process failure). Overrun absorbed mostly through good team management. Pemberton relationship strong. Axiom management relationship good.

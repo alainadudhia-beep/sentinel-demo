@@ -1,0 +1,63 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-016
+Date: February 2024
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Vantage Capital Partners (sell-side PE)
+Target: NestWise (smart home hardware + subscription services, UK)
+Engagement type: Vendor Due Diligence
+Sector: Consumer Technology
+
+COMMERCIAL TERMS
+Planned duration: 6 weeks
+Actual duration: 8 weeks
+Planned fee: £215k
+Actual fee: £265k
+Team: 1 Partner, 1 Manager, 3 Consultants, 2 Analysts
+
+SCOPE
+Smart home market dynamics, NestWise hardware + software bundle positioning, subscription revenue quality (attach rate, churn by cohort, device-service linkage), retail channel vs DTC analysis, international opportunity (DACH, Nordics), platform/ecosystem competitive threat (Amazon, Google, Apple).
+
+This was a complex scope and in retrospect should have been 7 weeks from the outset.
+
+Scope changes:
+- Week 2: Vantage asked for a section on B2B/commercial property installation as a growth vector (not in IM, surfaced by management). Added as a new workstream, £20k uplift.
+- Week 4: Following initial bidder engagement, Vantage requested a detailed cohort-level profitability analysis (hardware + software margin by cohort). Required bespoke data build. £15k uplift.
+- Week 6: A US strategic bidder asked for an assessment of NestWise's patent portfolio's commercial relevance. Outside our scope; we provided a framing document only and recommended specialist IP counsel.
+- Week 7: Bidder Q&A round generated 47 questions. Team spent a full week on responses.
+
+EXECUTION NOTES
+This was a punishing engagement and the overrun was partly foreseeable.
+
+The hardware-software bundling model created an unusual unit economics structure that took the team several days to model correctly. Gross margin analysis was complex — hardware margin (negative or low on first device) subsidised by subscription attach; traditional SaaS metrics didn't directly apply. The Manager built a bespoke profitability model that eventually worked well but consumed significant time.
+
+Subscription data quality was good (Stripe + bespoke internal analytics), but the device-level data (which cohort of devices had which subscription states) was in a separate system (a proprietary IoT backend) and required an API data pull. NestWise's engineering team were helpful but slow — each data request took 2-3 days to turn around. This became a bottleneck in weeks 3 and 4.
+
+Client behaviour: Vantage were broadly good clients but increasingly anxious as the process extended. In weeks 6-7 they became more directive — specifying how conclusions should be framed in certain sections. We pushed back on two occasions where the requested framing was inconsistent with the evidence. These conversations were uncomfortable but necessary.
+
+NestWise management were confident, technically sophisticated, and — in two instances — obstructive when questions touched on platform dependency risk (the Amazon Alexa and Google Home integrations accounted for 38% of device activations; if either removed integration this would be material). They answered questions about platform risk with prepared talking points rather than substantive analysis.
+
+Consultant turnover: one consultant left the firm at the end of week 5, mid-engagement. Their replacement needed a week to ramp.
+
+Expert calls: 10 completed. Platform ecosystem specialists, smart home retail buyers, ex-Nest commercial lead.
+
+OUTCOME
+Sale process ongoing at time of writing. VDD report delivered. Multiple bidders in process.
+
+KEY LESSONS
+- Hardware + subscription bundle models need a bespoke unit economics framework built in week 1; don't adapt a SaaS framework
+- IoT backend data requests have long lead times; identify all required data extracts in day 1 kick-off and submit immediately
+- Platform dependency risk in consumer tech is frequently a contentious topic with management; triangulate independently and don't accept talking points
+- 47-question bidder Q&A rounds are common in complex tech VDDs; assume one full week for Q&A at end of process and factor into timeline
+- Consultant attrition mid-project is an underrated operational risk; always have a named backup resource identified
+
+RISK FLAGS (materialised)
+- Data availability (HIGH): IoT backend data requests slow; bottleneck in weeks 3-4.
+- Client behaviour (MEDIUM): Vantage directiveness around conclusion framing in late stages.
+- Management access (MEDIUM): NestWise management deflected on platform dependency risk questions.
+- Team continuity (HIGH): Consultant departure mid-engagement; replacement ramp cost.
+- Scope expansion (HIGH): Four distinct scope additions; timeline extended by 2 weeks.
+
+OVERALL ASSESSMENT
+Material overrun (2 weeks, £50k). Root causes: scope underestimated at outset; IoT data access bottleneck; consultant departure. Work product strong. Client relationship intact.

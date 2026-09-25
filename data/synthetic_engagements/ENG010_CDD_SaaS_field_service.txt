@@ -1,0 +1,46 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-010
+Date: May 2023
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Summit Growth Partners
+Target: FieldOps (field service management SaaS, UK mid-market, plumbing/electrical/HVAC verticals)
+Engagement type: Commercial Due Diligence
+Sector: Technology / SaaS
+
+COMMERCIAL TERMS
+Planned duration: 3 weeks
+Actual duration: 3 weeks
+Planned fee: £125k
+Actual fee: £125k
+Team: 1 Partner, 1 Manager, 2 Consultants, 1 Analyst
+
+SCOPE
+UK field service management software market (TAM, competitive landscape, vertical-specific dynamics), FieldOps product positioning vs Jobber, ServiceTitan, Commusoft, customer cohort analysis (ARR, churn, NRR), ICP definition and go-to-market assessment.
+
+Scope addition: Summit asked for a view on FieldOps's international expansion optionality (Ireland + Australia) in week 2. Not in original brief but limited desk research + two expert calls gave us enough to provide a directional view. Absorbed within existing team capacity.
+
+EXECUTION NOTES
+Well-run engagement. FieldOps had clean Salesforce data and a founder-led finance function that had clearly prepared carefully for the DD process. ARR bridge from year 1 to current was clean and reconcilable.
+
+One interesting dynamic: FieldOps was simultaneously in conversations with two other potential acquirers, which meant the management team were managing multiple DD processes simultaneously. They were polished but occasionally slipped into "mode-switching" — answering questions in ways that felt calibrated for a different buyer profile (likely a trade buyer). Worth flagging for Summit's awareness.
+
+Churn analysis was the key analytical challenge. FieldOps had good logo retention (92%) but when we ran dollar retention it was lower (104% NRR vs the 118% in the IM). The difference was driven by a large cohort of SMB customers who had downgraded rather than churned — the IM presentation had obscured this by combining upgrades and new ARR.
+
+Expert calls: 6 completed. Strong contacts in the trades software space.
+
+OUTCOME
+Deal proceeded. Recommended proceed with revised NRR assumption. Summit incorporated the revised NRR into their model and it affected the price paid. Good outcome for the client.
+
+KEY LESSONS
+- Multi-process management teams need to be understood as such — their answers are calibrated for a composite audience. Push for specificity.
+- ARR bridge analysis should always reconcile to a dollar retention calculation, not just a logo retention figure
+- IM presentations of NRR sometimes obscure downgrade cohorts — rebuild from transactional data, don't accept the summary
+
+RISK FLAGS (materialised)
+- Deal process (LOW): Target running parallel process; management behaviour slightly calibrated away from buy-side framing.
+- Revenue quality (MEDIUM): NRR in IM overstated due to downgrade treatment. Corrected in analysis.
+
+OVERALL ASSESSMENT
+Clean delivery. Strong work product with a material finding (NRR revision) that provided direct value to the client. Good engagement.

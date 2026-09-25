@@ -1,0 +1,59 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-009
+Date: August 2023
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Solent Capital
+Target: LocalMart Group (convenience retail, 110 stores, UK, mix of company-owned and franchised)
+Engagement type: Commercial Due Diligence
+Sector: Retail
+
+COMMERCIAL TERMS
+Planned duration: 4 weeks
+Actual duration: 6 weeks
+Planned fee: £165k
+Actual fee: £210k
+Team: 1 Partner, 1 Manager, 2 Consultants, 2 Analysts (1 added in week 3)
+
+SCOPE
+UK convenience retail market (structural growth, format dynamics, competition from discounters and online grocery), LocalMart competitive positioning, estate quality assessment (basket data, margin by format, geography), franchisee relationship assessment, supply chain and buying terms.
+
+This was a large and complex scope for a CDD and should arguably have been scoped as a 5-week engagement from the outset.
+
+Scope changes:
+- Week 2: Solent requested deep-dive on the franchisee model — specifically franchisee economics, contract terms, and churn. Added as a standalone workstream. £25k uplift.
+- Week 3: Management presented a new format concept ("LocalMart Express") mid-project. Solent wanted us to assess the concept's commercial viability. Agreed a limited assessment (2 days of work).
+- Week 4: Solent's debt team asked for a trading sensitivity analysis as inputs to their model — 1.5 days of analyst work, absorbed.
+
+EXECUTION NOTES
+This engagement tested the team significantly. A few compounding issues:
+
+LocalMart's data was fragmented across their company-owned stores (SAP instance, reasonable quality) and the franchisee network (no central system — franchisees reported weekly via spreadsheets, inconsistently). Building a coherent picture of estate economics took the better part of week 2. The CFO was cooperative but the finance team was thinly resourced and often slow to respond to data requests.
+
+The franchisee assessment (scope change 1) revealed some concerning dynamics: 18% of franchisees had not renewed their last contract review on the standard terms, suggesting the franchisor relationship was under strain. Three franchisees we spoke to on background were openly critical of the support model. This became one of the key findings.
+
+Management were generally accessible but somewhat defensive in sessions — particularly around questions of franchise support investment and why the new Express format hadn't been rolled out faster. The CEO had clearly been through a DD process before and was skilled at giving complete-sounding answers that didn't quite address the underlying question.
+
+We added an analyst resource in week 3 to manage the volume. The new analyst was strong but was coming straight off another engagement and had a slightly rough first week.
+
+Expert calls: 12 completed (convenience retail operators, supply chain specialists, ex-Co-op commercial lead, franchise law specialist).
+
+OUTCOME
+Deal proceeded after a two-week delay caused by extended report revision cycles. We recommended proceed with conditions — franchise model needed investment and the new format concept was not sufficiently developed to support the growth model in the IM. Solent used our findings extensively in SPA negotiations.
+
+KEY LESSONS
+- Franchise + company-owned hybrid models are a data architecture challenge; always ask about reporting systems before scoping
+- Franchisee sentiment should be assessed through direct conversation, not just document review — the formal metrics understated relationship strain
+- 110-site convenience estates are too complex for 4 weeks without a clear scope triage (prioritise the big movers, sample the rest)
+- Sophisticated management teams can be harder to diligence than unsophisticated ones — they answer the question asked, not the question meant
+- Report revision cycles should be time-boxed and agreed upfront
+
+RISK FLAGS (materialised)
+- Data quality (HIGH): Franchisee data fragmented and inconsistent. Significant data consolidation effort.
+- Client/management behaviour (MEDIUM): Management skilled at deflecting — required careful follow-up questioning.
+- Scope expansion (HIGH): Three distinct scope additions, only one partially charged.
+- Timeline (HIGH): Two-week overrun due to data issues + report revision cycles.
+
+OVERALL ASSESSMENT
+Significant overrun (2 weeks, £45k over). Work product strong and well-received by client. Execution was stretched — should have pushed harder on the initial scope and resourcing ask. Lesson for future engagements of this complexity.

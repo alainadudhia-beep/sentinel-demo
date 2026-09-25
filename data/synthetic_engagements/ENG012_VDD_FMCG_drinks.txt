@@ -1,0 +1,48 @@
+PROJECT CLOSURE NOTE
+Engagement Reference: ENG-012
+Date: March 2022
+Prepared by: Engagement Manager
+
+CLIENT & MANDATE
+Client: Thornfield Capital (sell-side PE, vendor)
+Target: Highland Brew Co (premium RTD and spirits brand, UK + selective export)
+Engagement type: Vendor Due Diligence
+Sector: FMCG / Drinks
+
+COMMERCIAL TERMS
+Planned duration: 4 weeks
+Actual duration: 4 weeks
+Planned fee: £155k
+Actual fee: £155k
+Team: 1 Partner, 1 Manager, 2 Consultants, 1 Analyst
+
+SCOPE
+UK premium spirits and RTD market (growth dynamics, premiumisation trend, on-trade vs off-trade channel shifts), Highland Brew brand equity assessment, customer and channel analysis, direct-to-consumer segment assessment, export market opportunity (US, Nordics), management credibility and growth plan.
+
+Scope additions: Thornfield asked us to include a view on the sustainability credentials of the product (packaging, provenance claims) in week 2 — increasingly relevant to premium buyers. We built this into the brand equity section without extending scope. Also added a quick section on influencer marketing ROI at management's request — absorbed.
+
+EXECUTION NOTES
+A well-prepared VDD. Thornfield had done a previous VDD process with us (ENG-019 equivalent, different deal) and knew what to expect. They were experienced sellers — this was the right cultural starting point.
+
+Highland Brew's data was in reasonable shape. Nielsen/Kantar data available for off-trade; on-trade data was spottier (industry standard). The brand team were enthusiastic and thorough in their preparation.
+
+One notable feature: the CEO was clearly the dominant personality and had strong views on how the brand should be positioned in the VDD. He was helpful and credible but occasionally cut across the CFO in financial sessions, which required careful management. The CFO was more conservative in her growth assumptions than the CEO; we anchored to her figures where there was divergence.
+
+The US market was described enthusiastically in the IM but actual evidence was limited to a 6-month trial via a single US distributor. We scoped the export opportunity carefully and were conservative — this required a calibration conversation with Thornfield, who had anchored the process on a US growth story.
+
+Expert calls: 7 completed. Good contacts for spirits and RTD category.
+
+OUTCOME
+Sale process completed at a good price. The conservative US market treatment was initially resisted but Thornfield came to appreciate it as a credibility-builder with bidders. The deal lead at the winning bidder specifically mentioned the VDD quality in post-process feedback.
+
+KEY LESSONS
+- CEO-CFO financial assumption divergence is always revealing; where it exists, anchor to the more conservative figure and document the gap
+- VDD export opportunity sections need to distinguish between aspiration and evidence; bidders will scrutinise the difference
+- Second-time VDD clients (PE vendors who've sold before) are much smoother to work with
+- Sustainability credentials are becoming table stakes in premium FMCG VDDs — include by default
+
+RISK FLAGS (materialised)
+- Revenue quality (LOW): CEO/CFO assumption divergence on growth; resolved by anchoring to CFO view.
+
+OVERALL ASSESSMENT
+Clean engagement, on time and on budget. Good outcome for the client. Strong VDD to use as benchmark.
